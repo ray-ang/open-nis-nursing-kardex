@@ -12,12 +12,15 @@ function rja_page_add_patient_header()
 {
 
     $error = array();
-    if ( empty($_POST['room']) ) $error[] = 'Room is a required field.';
-    if ( empty($_POST['patient-name']) ) $error[] = 'Name is a required field.';
-    if ( empty($_POST['age']) ) $error[] = 'Age is a required field.';
-    if ( empty($_POST['sex']) ) $error[] = 'Sex is a required field.';
-    if ( empty($_POST['admission-date']) ) $error[] = 'Date of admission is a required field.';
-    if ( empty($_POST['history']) ) $error[] = 'History is a required field.';
+    if ( empty($_POST['room']) || preg_match('/[<>*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
+    if ( empty($_POST['patient-name']) || preg_match('/[<>*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
+    if ( empty($_POST['age']) || preg_match('/[<>*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
+    if ( empty($_POST['sex']) || preg_match('/[<>*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
+    if ( empty($_POST['admission-date']) || preg_match('/[<>*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
+    if ( empty($_POST['reason']) || preg_match('/[<>*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
+    if ( empty($_POST['history']) || preg_match('/[<>*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
+    if ( empty($_POST['medical-notes']) || preg_match('/[<>*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
+    if ( empty($_POST['nursing-plan']) || preg_match('/[<>*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
 
 	if ( isset($_POST['add-patient']) && empty($error) ) {
 
@@ -33,9 +36,11 @@ function rja_page_add_patient_header()
         add_metadata( 'post', $pid, 'patient_age', $_POST['age'] );
         add_metadata( 'post', $pid, 'patient_sex', $_POST['sex'] );
         add_metadata( 'post', $pid, 'patient_date_admission', $_POST['admission-date'] );
+        add_metadata( 'post', $pid, 'patient_reason', $_POST['reason'] );
         add_metadata( 'post', $pid, 'patient_history', $_POST['history'] );
+        add_metadata( 'post', $pid, 'patient_medical_notes', $_POST['medical-notes'] );
+        add_metadata( 'post', $pid, 'patient_nursing_plan', $_POST['nursing-plan'] );
 
-        // Redirect to new patient
         $link = get_permalink( $pid );
         wp_redirect($link);
 
@@ -53,12 +58,15 @@ function rja_page_add_patient()
     <?php if ( current_user_can('administrator') || current_user_can('nurse') ): ?>
     <?php
     $error = array();
-    if ( empty($_POST['room']) ) $error[] = 'Room is a required field.';
-    if ( empty($_POST['patient-name']) ) $error[] = 'Name is a required field.';
-    if ( empty($_POST['age']) ) $error[] = 'Age is a required field.';
-    if ( empty($_POST['sex']) ) $error[] = 'Sex is a required field.';
-    if ( empty($_POST['admission-date']) ) $error[] = 'Date of admission is a required field.';
-    if ( empty($_POST['history']) ) $error[] = 'History is a required field.';
+    if ( empty($_POST['room']) || preg_match('/[<>*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
+    if ( empty($_POST['patient-name']) || preg_match('/[<>*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
+    if ( empty($_POST['age']) || preg_match('/[<>*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
+    if ( empty($_POST['sex']) || preg_match('/[<>*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
+    if ( empty($_POST['admission-date']) || preg_match('/[<>*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
+    if ( empty($_POST['reason']) || preg_match('/[<>*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
+    if ( empty($_POST['history']) || preg_match('/[<>*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
+    if ( empty($_POST['medical-notes']) || preg_match('/[<>*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
+    if ( empty($_POST['nursing-plan']) || preg_match('/[<>*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
     ?>
     <?php if ( isset($_POST['add-patient']) && ! empty($error) ) echo '<p class="error">' . implode("<br/>", $error) . '</p>'; ?>
     <div>
@@ -70,19 +78,28 @@ function rja_page_add_patient()
             	<input type="text" id="patient-name" name="patient-name" required pattern="^[a-zA-Z ]+$"></input><br/>
             </p>
             <p><label for="age">Age</label><br/>
-            	<input type="number" id="age" name="age" required></input>
+            	<input type="number" id="age" name="age" required pattern="^[0-9]+$"></input>
             </p>
             <p><label for="sex">Sex</label><br/>
-                <select id="sex" name="sex" size="2" required>
+                <select id="sex" name="sex" size="2" required patter="^[MF]+$">
                 	<option value="M">Male</option>
     			    <option value="F">Female</option>
                 </select>
             </p>
             <p><label for="admission-date">Date of Admission</label><br/>
-        		<input type="date" id="admission-date" name="admission-date" required></input>
+        		<input type="date" id="admission-date" name="admission-date" required pattern="^[0-9_-]+$"></input>
+            </p>
+            <p><label for="reason">Reason for Admission</label><br/>
+                <input type="text" id="reason" name="reason" required pattern="^[a-zA-Z0-9 _.,\/-]+$"></input><br/>
             </p>
             <p><label for="history">History</label><br/>
                 <textarea id="history" name="history" required></textarea>
+            </p>
+            <p><label for="medical-notes">Medical Notes</label><br/>
+                <textarea id="medical-notes" name="medical-notes" required></textarea>
+            </p>
+            <p><label for="nursing-plan">Nursing Plan of Care</label><br/>
+                <textarea id="nursing-plan" name="nursing-plan" required></textarea>
             </p>
             <p align="right"><input type="submit" value="Add Patient" tabindex="6" id="add-patient" name="add-patient" /></p>
             <p align="right"><input type="reset" value="Reset Form" tabindex="6" id="reset-form" name="reset-form"></p>

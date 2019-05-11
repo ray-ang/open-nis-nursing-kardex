@@ -48,13 +48,16 @@ function rja_single_patient_content_header()
 
 {
 
-	$error = array();
-	if ( empty($_POST['room']) ) $error[] = 'Room is a required field.';
-	if ( empty($_POST['patient-name']) ) $error[] = 'Name is a required field.';
-	if ( empty($_POST['age']) ) $error[] = 'Age is a required field.';
-	if ( empty($_POST['sex']) ) $error[] = 'Sex is a required field.';
-	if ( empty($_POST['admission-date']) ) $error[] = 'Date of admission is a required field.';
-	if ( empty($_POST['history']) ) $error[] = 'History is a required field.';
+    $error = array();
+    if ( empty($_POST['room']) || preg_match('/[<>*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
+    if ( empty($_POST['patient-name']) || preg_match('/[<>*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
+    if ( empty($_POST['age']) || preg_match('/[<>*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
+    if ( empty($_POST['sex']) || preg_match('/[<>*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
+    if ( empty($_POST['admission-date']) || preg_match('/[<>*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
+    if ( empty($_POST['reason']) || preg_match('/[<>*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
+    if ( empty($_POST['history']) || preg_match('/[<>*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
+    if ( empty($_POST['medical-notes']) || preg_match('/[<>*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
+    if ( empty($_POST['nursing-plan']) || preg_match('/[<>*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
 
 	if ( isset($_POST['edit-patient']) && empty($error) ) {	
 
@@ -70,7 +73,10 @@ function rja_single_patient_content_header()
 		update_metadata( 'post', $pid, 'patient_age', $_POST['age']);
 		update_metadata( 'post', $pid, 'patient_sex', $_POST['sex']);
 		update_metadata( 'post', $pid, 'patient_date_admission', $_POST['admission-date']);
+		update_metadata( 'post', $pid, 'patient_reason', $_POST['reason']);
 		update_metadata( 'post', $pid, 'patient_history', $_POST['history']);
+		update_metadata( 'post', $pid, 'patient_medical_notes', $_POST['medical-notes']);
+		update_metadata( 'post', $pid, 'patient_nursing_plan', $_POST['nursing-plan']);
 
 		$link = get_permalink($pid);
 		wp_redirect($link);
@@ -80,16 +86,14 @@ function rja_single_patient_content_header()
 	if ( isset($_POST['delete-patient']) ) {
 
 		wp_delete_post(get_the_ID());
-
-		// Redirect to homepage after delete
 		wp_redirect(home_url());
 
 	}
 
 }
 
-// Include Javascript to open and close Patient edit form
-add_action( 'wp_enqueue_scripts', 'rja_single_patient_content_script' );
+// Include Javascript and CSS scripts
+add_action( 'wp_head', 'rja_single_patient_content_script' );
 
 function rja_single_patient_content_script() {
 	?>
@@ -103,6 +107,11 @@ function rja_single_patient_content_script() {
 		  }
 		}
 	</script>
+	<style type="text/css">
+		@media print {
+		    .site-header, .site-navigation, .main-navigation, .entry-header, .entry-title, #no-print, .widget-area, .site-footer {display: none;}
+	}
+	</style>
 	<?php
 }
 
@@ -123,15 +132,21 @@ function rja_single_patient_content()
 			$patient_age = $patient['patient_age'][0];
 			if ( $patient['patient_sex'][0] == 'M' ) { $patient_sex = 'Male'; } else { $patient_sex = 'Female'; }
 			$patient_date_admission = $patient['patient_date_admission'][0];
+			$patient_reason = $patient['patient_reason'][0];
 			$patient_history = $patient['patient_history'][0];
+			$patient_medical_notes = $patient['patient_medical_notes'][0];
+			$patient_nursing_plan = $patient['patient_nursing_plan'][0];
 
 			$error = array();
-			if ( empty($_POST['room']) ) $error[] = 'Room is a required field.';
-			if ( empty($_POST['patient-name']) ) $error[] = 'Name is a required field.';
-			if ( empty($_POST['age']) ) $error[] = 'Age is a required field.';
-			if ( empty($_POST['sex']) ) $error[] = 'Sex is a required field.';
-			if ( empty($_POST['admission-date']) ) $error[] = 'Date of admission is a required field.';
-			if ( empty($_POST['history']) ) $error[] = 'History is a required field.';
+			if ( empty($_POST['room']) || preg_match('/[<>*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
+			if ( empty($_POST['patient-name']) || preg_match('/[<>*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
+			if ( empty($_POST['age']) || preg_match('/[<>*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
+			if ( empty($_POST['sex']) || preg_match('/[<>*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
+			if ( empty($_POST['admission-date']) || preg_match('/[<>*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
+			if ( empty($_POST['reason']) || preg_match('/[<>*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
+			if ( empty($_POST['history']) || preg_match('/[<>*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
+			if ( empty($_POST['medical-notes']) || preg_match('/[<>*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
+			if ( empty($_POST['nursing-plan']) || preg_match('/[<>*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
 
 			if ( isset($_POST['edit-patient']) && ! empty($error) ) echo '<p class="error">' . implode("<br/>", $error) . '</p>';
 			?>
@@ -140,38 +155,52 @@ function rja_single_patient_content()
 			Age: <?php echo $patient_age; ?><br/>
 			Sex: <?php echo $patient_sex; ?></p>
 			<p>Admission Date: <?php echo $patient_date_admission; ?><br/>
-			History:<br/><?php echo nl2br($patient_history); ?></p>
-			<h2>Edit Information</h2>
-			<button onclick="editPatientForm()">Edit Form</button>
-			<div id="editPatient" style="display: none;">
-				<p></p>
-				<form method="post">
-			    	<p><label for="room">Room</label><br/>
-	       				<input type="text" id="room" name="room" value="<?php the_title(); ?>" required pattern="^[a-zA-Z0-9 _#-]+$"></input>
-			        </p>
-			    	<p><label for="name">Name</label><br/>
-		       			<input type="text" id="patient-name" name="patient-name" value="<?php echo $patient_name; ?>" required pattern="^[a-zA-Z ]+$"></input>
-			        </p>
-			        <p><label for="age">Age</label><br/>
-			        	<input type="number" id="age" name="age" value="<?php echo $patient_age; ?>" required></input>
-			        </p>
-			        <p><label for="sex">Sex</label><br/>
-			            <select id="sex" name="sex" size="2" required>
-			            	<option value="M" <?php if ($patient['patient_sex'][0]=='M') echo 'selected="selected"'; ?>>Male</option>
-						    <option value="F" <?php if ($patient['patient_sex'][0]=='F') echo 'selected="selected"'; ?>>Female</option>
-			            </select>
-			        </p>
-			        <p><label for="admission-date">Date of Admission</label><br/>
-			    		<input type="date" id="admission-date" name="admission-date" value="<?php echo $patient_date_admission; ?>" required></input>
-			        </p>
-			        <p><label for="history">History</label><br/>
-			            <textarea id="history" name="history" required><?php echo $patient_history; ?></textarea>
-			        </p>
-			        <p><input type="submit" value="Edit Patient" id="edit-patient" name="edit-patient" /></p>
-		        	<p><input type="submit" value="Delete Patient" id="delete-patient" name="delete-patient" onclick="return confirm('Are you sure you want to delete this patient?');" /></p>
-			        <button onclick="editPatientForm()">Close Form</button>
-			        <?php wp_nonce_field( 'token', 'token' ); ?>
-				</form>
+			Reason: <?php echo $patient_reason; ?></p>
+			<p>History:<br/><?php echo nl2br(esc_html($patient_history)); ?></p>
+			<p>Medical Notes:<br/><?php echo nl2br(esc_html($patient_medical_notes)); ?></p>
+			<p>Nursing Plan of Care:<br/><?php echo nl2br(esc_html($patient_nursing_plan)); ?></p>
+			<div id="no-print">
+				<h2>Edit Information</h2>
+				<button onclick="editPatientForm()">Edit Form</button>
+				<div id="editPatient" style="display: none;">
+					<p></p>
+					<form method="post">
+				    	<p><label for="room">Room</label><br/>
+								<input type="text" id="room" name="room" value="<?php the_title(); ?>" required pattern="^[a-zA-Z0-9 _#-]+$"></input>
+				        </p>
+				    	<p><label for="name">Name</label><br/>
+				   			<input type="text" id="patient-name" name="patient-name" value="<?php echo $patient_name; ?>" required pattern="^[a-zA-Z ]+$"></input>
+				        </p>
+				        <p><label for="age">Age</label><br/>
+				        	<input type="number" id="age" name="age" value="<?php echo $patient_age; ?>" required></input>
+				        </p>
+				        <p><label for="sex">Sex</label><br/>
+				            <select id="sex" name="sex" size="2" required>
+				            	<option value="M" <?php if ($patient['patient_sex'][0]=='M') echo 'selected="selected"'; ?>>Male</option>
+							    <option value="F" <?php if ($patient['patient_sex'][0]=='F') echo 'selected="selected"'; ?>>Female</option>
+				            </select>
+				        </p>
+				        <p><label for="admission-date">Date of Admission</label><br/>
+				    		<input type="date" id="admission-date" name="admission-date" value="<?php echo $patient_date_admission; ?>" required></input>
+				        </p>
+				        <p><label for="reason">Reason for Admission</label><br/>
+				            <input type="text" id="reason" name="reason" value="<?php echo $patient_reason;?>" required pattern="^[a-zA-Z0-9 _.,\/-]+$"></input><br/>
+				        </p>
+				        <p><label for="history">History</label><br/>
+				            <textarea id="history" name="history" required><?php echo esc_html($patient_history); ?></textarea>
+				        </p>
+						<p><label for="medical-notes">Medical Notes</label><br/>
+						    <textarea id="medical-notes" name="medical-notes" required><?php echo esc_html($patient_medical_notes); ?></textarea>
+						</p>
+						<p><label for="nursing-plan">Nursing Plan of Care</label><br/>
+						    <textarea id="nursing-plan" name="nursing-plan" required><?php echo esc_html($patient_nursing_plan); ?></textarea>
+						</p>
+				        <p><input type="submit" value="Edit Patient" id="edit-patient" name="edit-patient" /></p>
+				    	<p><input type="submit" value="Delete Patient" id="delete-patient" name="delete-patient" onclick="return confirm('Are you sure you want to delete this patient?');" /></p>
+				        <button onclick="editPatientForm()">Close Form</button>
+				        <?php wp_nonce_field( 'token', 'token' ); ?>
+					</form>
+				</div>
 			</div>
 			<?php			
 		} else {
