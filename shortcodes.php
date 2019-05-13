@@ -8,19 +8,18 @@
 add_action( 'template_redirect', 'rja_page_add_patient_header' );
 
 function rja_page_add_patient_header()
-
 {
 
     $error = array();
-    if ( empty($_POST['room']) || preg_match('/[<>*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
-    if ( empty($_POST['patient-name']) || preg_match('/[<>*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
-    if ( empty($_POST['age']) || preg_match('/[<>*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
-    if ( empty($_POST['sex']) || preg_match('/[<>*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
-    if ( empty($_POST['admission-date']) || preg_match('/[<>*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
-    if ( empty($_POST['reason']) || preg_match('/[<>*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
-    if ( empty($_POST['history']) || preg_match('/[<>*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
-    if ( empty($_POST['medical-notes']) || preg_match('/[<>*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
-    if ( empty($_POST['nursing-plan']) || preg_match('/[<>*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
+    if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
+    if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
+    if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
+    if ( empty($_POST['sex']) || preg_match('/[<>{};*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
+    if ( empty($_POST['admission-date']) || preg_match('/[<>{};*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
+    if ( empty($_POST['reason']) || preg_match('/[<>{};*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
+    if ( empty($_POST['history']) || preg_match('/[<>{};*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
+    if ( empty($_POST['medical-notes']) || preg_match('/[<>{};*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
+    if ( empty($_POST['nursing-plan']) || preg_match('/[<>{};*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
 
 	if ( isset($_POST['add-patient']) && empty($error) ) {
 
@@ -52,57 +51,56 @@ function rja_page_add_patient_header()
 add_shortcode( 'open-nis-add-patient', 'rja_page_add_patient' );
 
 function rja_page_add_patient()
-
 {
     ?>
     <?php if ( current_user_can('administrator') || current_user_can('nurse') ): ?>
     <?php
     $error = array();
-    if ( empty($_POST['room']) || preg_match('/[<>*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
-    if ( empty($_POST['patient-name']) || preg_match('/[<>*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
-    if ( empty($_POST['age']) || preg_match('/[<>*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
-    if ( empty($_POST['sex']) || preg_match('/[<>*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
-    if ( empty($_POST['admission-date']) || preg_match('/[<>*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
-    if ( empty($_POST['reason']) || preg_match('/[<>*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
-    if ( empty($_POST['history']) || preg_match('/[<>*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
-    if ( empty($_POST['medical-notes']) || preg_match('/[<>*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
-    if ( empty($_POST['nursing-plan']) || preg_match('/[<>*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
+    if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
+    if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
+    if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
+    if ( empty($_POST['sex']) || preg_match('/[<>{};*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
+    if ( empty($_POST['admission-date']) || preg_match('/[<>{};*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
+    if ( empty($_POST['reason']) || preg_match('/[<>{};*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
+    if ( empty($_POST['history']) || preg_match('/[<>{};*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
+    if ( empty($_POST['medical-notes']) || preg_match('/[<>{};*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
+    if ( empty($_POST['nursing-plan']) || preg_match('/[<>{};*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
     ?>
-    <?php if ( isset($_POST['add-patient']) && ! empty($error) ) echo '<p class="error">' . implode("<br/>", $error) . '</p>'; ?>
+    <?php if ( isset($_POST['add-patient']) && ! empty($error) ) echo '<p class="error">' . implode("<br />", $error) . '</p>'; ?>
     <div>
         <form method="post">
-        	<p><label for="room">Room</label><br/>
-           		<input type="text" id="room" name="room" required pattern="^[a-zA-Z0-9 _#-]+$"></input><br/>
+        	<p><label for="room">Room</label><br />
+           		<input type="text" id="room" name="room" required pattern="^[a-zA-Z0-9 _#-]+$" /><br />
             </p>
-            <p><label for="name">Name</label><br/>
-            	<input type="text" id="patient-name" name="patient-name" required pattern="^[a-zA-Z ]+$"></input><br/>
+            <p><label for="name">Name</label><br />
+            	<input type="text" id="patient-name" name="patient-name" required pattern="^[a-zA-Z ]+$" /><br />
             </p>
-            <p><label for="age">Age</label><br/>
-            	<input type="number" id="age" name="age" required pattern="^[0-9]+$"></input>
+            <p><label for="age">Age</label><br />
+            	<input type="number" id="age" name="age" required pattern="^[0-9]+$" />
             </p>
-            <p><label for="sex">Sex</label><br/>
-                <select id="sex" name="sex" size="2" required patter="^[MF]+$">
+            <p><label for="sex">Sex</label><br />
+                <select id="sex" name="sex" size="2" required patter="^[MF]+$" />
                 	<option value="M">Male</option>
     			    <option value="F">Female</option>
                 </select>
             </p>
-            <p><label for="admission-date">Date of Admission</label><br/>
-        		<input type="date" id="admission-date" name="admission-date" required pattern="^[0-9_-]+$"></input>
+            <p><label for="admission-date">Date of Admission</label><br />
+        		<input type="date" id="admission-date" name="admission-date" required pattern="^[0-9-]+$" />
             </p>
-            <p><label for="reason">Reason for Admission</label><br/>
-                <input type="text" id="reason" name="reason" required pattern="^[a-zA-Z0-9 _.,\/-]+$"></input><br/>
+            <p><label for="reason">Reason for Admission</label><br />
+                <input type="text" id="reason" name="reason" required pattern="^[a-zA-Z0-9 _.,-]+$" /><br />
             </p>
-            <p><label for="history">History</label><br/>
+            <p><label for="history">History</label><br />
                 <textarea id="history" name="history" required></textarea>
             </p>
-            <p><label for="medical-notes">Medical Notes</label><br/>
+            <p><label for="medical-notes">Medical Notes</label><br />
                 <textarea id="medical-notes" name="medical-notes" required></textarea>
             </p>
-            <p><label for="nursing-plan">Nursing Plan of Care</label><br/>
+            <p><label for="nursing-plan">Nursing Plan of Care</label><br />
                 <textarea id="nursing-plan" name="nursing-plan" required></textarea>
             </p>
-            <p align="right"><input type="submit" value="Add Patient" tabindex="6" id="add-patient" name="add-patient" /></p>
-            <p align="right"><input type="reset" value="Reset Form" tabindex="6" id="reset-form" name="reset-form"></p>
+            <p align="right"><input type="submit" value="Add Patient" id="add-patient" name="add-patient" /></p>
+            <p align="right"><input type="reset" value="Reset Form" id="reset-form" name="reset-form" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
         </form>
     </div>
@@ -119,7 +117,6 @@ function rja_page_add_patient()
 add_shortcode( 'open-nis-search-patient', 'rja_page_search_patient' );
 
 function rja_page_search_patient()
-
 {
 
     // Search by Room
@@ -141,6 +138,7 @@ function rja_page_search_patient()
         );
 
         $patient = get_posts($args);
+        
     }
 
     // Search by Name
@@ -169,14 +167,14 @@ function rja_page_search_patient()
     ?>
     <div>
         <form method="post">
-            <p><label for="patient-room">Room</label><br/>
+            <p><label for="patient-room">Room</label><br />
                 <input type="text" id="patient-room" name="patient-room" pattern="^[a-zA-Z0-9 _#-]+$" />
                 <input type="submit" id="search-room" name="search-room" value="Search Room" />
             </p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
         </form>
         <form method="post">
-            <p><label for="patient-name">Name</label><br/>
+            <p><label for="patient-name">Name</label><br />
                 <input type="text" id="patient-name" name="patient-name" pattern="^[a-zA-Z]+$" />
                 <input type="submit" id="search-name" name="search-name" value="Search Name" />
             </p>

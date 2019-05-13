@@ -7,7 +7,8 @@
 // Register Patient Custom Post Type and Configuration
 add_action( 'init', 'rja_register_patient_cpt' );
 
-function rja_register_patient_cpt() {
+function rja_register_patient_cpt()
+{	
 	$labels = array(
 	    'name'				=> _x( 'Patients', 'Post type general name', 'open-nis' ),
 	    'singular_name'		=> _x( 'Patient', 'Post type singular name', 'open-nis' ),
@@ -45,19 +46,18 @@ function rja_register_patient_cpt() {
 add_action( 'template_redirect', 'rja_single_patient_content_header' );
 
 function rja_single_patient_content_header()
-
 {
 
     $error = array();
-    if ( empty($_POST['room']) || preg_match('/[<>*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
-    if ( empty($_POST['patient-name']) || preg_match('/[<>*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
-    if ( empty($_POST['age']) || preg_match('/[<>*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
-    if ( empty($_POST['sex']) || preg_match('/[<>*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
-    if ( empty($_POST['admission-date']) || preg_match('/[<>*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
-    if ( empty($_POST['reason']) || preg_match('/[<>*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
-    if ( empty($_POST['history']) || preg_match('/[<>*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
-    if ( empty($_POST['medical-notes']) || preg_match('/[<>*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
-    if ( empty($_POST['nursing-plan']) || preg_match('/[<>*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
+    if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
+    if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
+    if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
+    if ( empty($_POST['sex']) || preg_match('/[<>{};*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
+    if ( empty($_POST['admission-date']) || preg_match('/[<>{};*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
+    if ( empty($_POST['reason']) || preg_match('/[<>{};*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
+    if ( empty($_POST['history']) || preg_match('/[<>{};*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
+    if ( empty($_POST['medical-notes']) || preg_match('/[<>{};*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
+    if ( empty($_POST['nursing-plan']) || preg_match('/[<>{};*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
 
 	if ( isset($_POST['edit-patient']) && empty($error) ) {	
 
@@ -93,9 +93,10 @@ function rja_single_patient_content_header()
 }
 
 // Include Javascript and CSS scripts
-add_action( 'wp_head', 'rja_single_patient_content_script' );
+add_action( 'wp_head', 'rja_single_patient_header_script' );
 
-function rja_single_patient_content_script() {
+function rja_single_patient_header_script()
+{
 	?>
 	<script>
 		function editPatientForm() {
@@ -110,7 +111,7 @@ function rja_single_patient_content_script() {
 	<style type="text/css">
 		@media print {
 		    .site-header, .site-navigation, .main-navigation, .entry-header, .entry-title, #no-print, .widget-area, .site-footer {display: none;}
-	}
+		}
 	</style>
 	<?php
 }
@@ -119,7 +120,6 @@ function rja_single_patient_content_script() {
 add_filter( 'the_content', 'rja_single_patient_content' );
 
 function rja_single_patient_content()
-
 {
 
 	if ( get_post_type() == 'patient' ) {
@@ -138,61 +138,61 @@ function rja_single_patient_content()
 			$patient_nursing_plan = $patient['patient_nursing_plan'][0];
 
 			$error = array();
-			if ( empty($_POST['room']) || preg_match('/[<>*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
-			if ( empty($_POST['patient-name']) || preg_match('/[<>*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
-			if ( empty($_POST['age']) || preg_match('/[<>*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
-			if ( empty($_POST['sex']) || preg_match('/[<>*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
-			if ( empty($_POST['admission-date']) || preg_match('/[<>*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
-			if ( empty($_POST['reason']) || preg_match('/[<>*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
-			if ( empty($_POST['history']) || preg_match('/[<>*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
-			if ( empty($_POST['medical-notes']) || preg_match('/[<>*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
-			if ( empty($_POST['nursing-plan']) || preg_match('/[<>*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
+			if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
+			if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
+			if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
+			if ( empty($_POST['sex']) || preg_match('/[<>{};*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
+			if ( empty($_POST['admission-date']) || preg_match('/[<>{};*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
+			if ( empty($_POST['reason']) || preg_match('/[<>{};*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
+			if ( empty($_POST['history']) || preg_match('/[<>{};*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
+			if ( empty($_POST['medical-notes']) || preg_match('/[<>{};*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
+			if ( empty($_POST['nursing-plan']) || preg_match('/[<>{};*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
 
-			if ( isset($_POST['edit-patient']) && ! empty($error) ) echo '<p class="error">' . implode("<br/>", $error) . '</p>';
+			if ( isset($_POST['edit-patient']) && ! empty($error) ) echo '<p class="error">' . implode("<br />", $error) . '</p>';
 			?>
-			<h3>Room: <?php the_title(); ?></h3>
-			<p>Name: <?php echo $patient_name; ?><br/>
-			Age: <?php echo $patient_age; ?><br/>
-			Sex: <?php echo $patient_sex; ?></p>
-			<p>Admission Date: <?php echo $patient_date_admission; ?><br/>
-			Reason: <?php echo $patient_reason; ?></p>
-			<p>History:<br/><?php echo nl2br(esc_html($patient_history)); ?></p>
-			<p>Medical Notes:<br/><?php echo nl2br(esc_html($patient_medical_notes)); ?></p>
-			<p>Nursing Plan of Care:<br/><?php echo nl2br(esc_html($patient_nursing_plan)); ?></p>
+			<h3>Room: <?php esc_html(the_title()); ?></h3>
+			<p>Name: <?php echo esc_html($patient_name); ?><br />
+			Age: <?php echo esc_html($patient_age); ?><br />
+			Sex: <?php echo esc_html($patient_sex); ?></p>
+			<p>Admission Date: <?php echo esc_html($patient_date_admission); ?><br />
+			Reason: <?php echo esc_html($patient_reason); ?></p>
+			<p>History:<br /><?php echo nl2br(esc_html($patient_history)); ?></p>
+			<p>Medical Notes:<br /><?php echo nl2br(esc_html($patient_medical_notes)); ?></p>
+			<p>Nursing Plan of Care:<br /><?php echo nl2br(esc_html($patient_nursing_plan)); ?></p>
 			<div id="no-print">
 				<h2>Edit Information</h2>
 				<button onclick="editPatientForm()">Edit Form</button>
 				<div id="editPatient" style="display: none;">
 					<p></p>
 					<form method="post">
-				    	<p><label for="room">Room</label><br/>
-								<input type="text" id="room" name="room" value="<?php the_title(); ?>" required pattern="^[a-zA-Z0-9 _#-]+$"></input>
+				    	<p><label for="room">Room</label><br />
+							<input type="text" id="room" name="room" value="<?php esc_html(the_title()); ?>" required pattern="^[a-zA-Z0-9 _#-]+$" />
 				        </p>
-				    	<p><label for="name">Name</label><br/>
-				   			<input type="text" id="patient-name" name="patient-name" value="<?php echo $patient_name; ?>" required pattern="^[a-zA-Z ]+$"></input>
+				    	<p><label for="name">Name</label><br />
+				   			<input type="text" id="patient-name" name="patient-name" value="<?php echo esc_html($patient_name); ?>" required pattern="^[a-zA-Z ]+$" />
 				        </p>
-				        <p><label for="age">Age</label><br/>
-				        	<input type="number" id="age" name="age" value="<?php echo $patient_age; ?>" required></input>
+				        <p><label for="age">Age</label><br />
+				        	<input type="number" id="age" name="age" value="<?php echo esc_html($patient_age); ?>" required pattern="^[0-9]+$" />
 				        </p>
-				        <p><label for="sex">Sex</label><br/>
-				            <select id="sex" name="sex" size="2" required>
+				        <p><label for="sex">Sex</label><br />
+				            <select id="sex" name="sex" size="2" required patter="^[MF]+$"/>
 				            	<option value="M" <?php if ($patient['patient_sex'][0]=='M') echo 'selected="selected"'; ?>>Male</option>
 							    <option value="F" <?php if ($patient['patient_sex'][0]=='F') echo 'selected="selected"'; ?>>Female</option>
 				            </select>
 				        </p>
-				        <p><label for="admission-date">Date of Admission</label><br/>
-				    		<input type="date" id="admission-date" name="admission-date" value="<?php echo $patient_date_admission; ?>" required></input>
+				        <p><label for="admission-date">Date of Admission</label><br />
+				    		<input type="date" id="admission-date" name="admission-date" value="<?php echo esc_html($patient_date_admission); ?>" required pattern="^[0-9-]+$" />
 				        </p>
-				        <p><label for="reason">Reason for Admission</label><br/>
-				            <input type="text" id="reason" name="reason" value="<?php echo $patient_reason;?>" required pattern="^[a-zA-Z0-9 _.,\/-]+$"></input><br/>
+				        <p><label for="reason">Reason for Admission</label><br />
+				            <input type="text" id="reason" name="reason" value="<?php echo esc_html($patient_reason);?>" required pattern="^[a-zA-Z0-9 _.,-]+$" /><br />
 				        </p>
-				        <p><label for="history">History</label><br/>
+				        <p><label for="history">History</label><br />
 				            <textarea id="history" name="history" required><?php echo esc_html($patient_history); ?></textarea>
 				        </p>
-						<p><label for="medical-notes">Medical Notes</label><br/>
+						<p><label for="medical-notes">Medical Notes</label><br />
 						    <textarea id="medical-notes" name="medical-notes" required><?php echo esc_html($patient_medical_notes); ?></textarea>
 						</p>
-						<p><label for="nursing-plan">Nursing Plan of Care</label><br/>
+						<p><label for="nursing-plan">Nursing Plan of Care</label><br />
 						    <textarea id="nursing-plan" name="nursing-plan" required><?php echo esc_html($patient_nursing_plan); ?></textarea>
 						</p>
 				        <p><input type="submit" value="Edit Patient" id="edit-patient" name="edit-patient" /></p>
@@ -208,7 +208,7 @@ function rja_single_patient_content()
 			<style>
 				.entry-header {display: none;}
 			</style>
-			<p>You do not have permission to view patients.</p>
+			<p>You do not have permission to view patient.</p>
 			<?php
 		}
 
