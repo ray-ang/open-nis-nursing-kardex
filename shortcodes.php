@@ -165,6 +165,7 @@ function rja_page_search_patient()
         
     }
     ?>
+    <?php if ( current_user_can('administrator') || current_user_can('nurse') ): ?>
     <div>
         <form method="post">
             <p><label for="patient-room">Room</label><br />
@@ -187,6 +188,12 @@ function rja_page_search_patient()
         <?php endforeach?>
         <?php elseif ( ( isset($_POST['search-room']) && $patient !== true ) || ( isset($_POST['search-name']) && $patient !== true ) ): ?>
         <p>No patient was found on search.</p>
+    <?php endif ?>
+    <?php else: ?>
+        <style>
+            .entry-header {display: none;}
+        </style>
+        <p>You do not have permission to search patients.</p>
     <?php endif ?>
     <?php
 }
