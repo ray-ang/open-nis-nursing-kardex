@@ -99,8 +99,8 @@ function rja_page_add_patient()
             <p><label for="nursing-plan">Nursing Plan of Care</label><br />
                 <textarea id="nursing-plan" name="nursing-plan" required></textarea>
             </p>
-            <p align="right"><input type="submit" value="Add Patient" id="add-patient" name="add-patient" /></p>
-            <p align="right"><input type="reset" value="Reset Form" id="reset-form" name="reset-form" /></p>
+            <div style="float: left; margin-right: 20px;"><input type="submit" value="Add Patient" id="add-patient" name="add-patient" /></div>
+            <div style="float: left;"><input type="reset" value="Reset Form" id="reset-form" name="reset-form" /></div>
             <?php wp_nonce_field( 'token', 'token' ); ?>
         </form>
     </div>
@@ -170,15 +170,15 @@ function rja_page_search_patient()
         <form method="post">
             <p><label for="patient-room">Room</label><br />
                 <input type="text" id="patient-room" name="patient-room" pattern="^[a-zA-Z0-9 _#-]+$" />
-                <input type="submit" id="search-room" name="search-room" value="Search Room" />
             </p>
+            <p><input type="submit" id="search-room" name="search-room" value="Search Room" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
         </form>
         <form method="post">
             <p><label for="patient-name">Name</label><br />
                 <input type="text" id="patient-name" name="patient-name" pattern="^[a-zA-Z]+$" />
-                <input type="submit" id="search-name" name="search-name" value="Search Name" />
             </p>
+            <p><input type="submit" id="search-name" name="search-name" value="Search Name" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
         </form>
     </div>
