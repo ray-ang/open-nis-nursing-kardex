@@ -31,14 +31,14 @@ function rja_page_add_patient_header()
 
         $pid = wp_insert_post($patient);
 
-        add_metadata( 'post', $pid, 'patient_name', $_POST['patient-name'] );
-        add_metadata( 'post', $pid, 'patient_age', $_POST['age'] );
-        add_metadata( 'post', $pid, 'patient_sex', $_POST['sex'] );
-        add_metadata( 'post', $pid, 'patient_date_admission', $_POST['admission-date'] );
-        add_metadata( 'post', $pid, 'patient_reason', $_POST['reason'] );
-        add_metadata( 'post', $pid, 'patient_history', $_POST['history'] );
-        add_metadata( 'post', $pid, 'patient_medical_notes', $_POST['medical-notes'] );
-        add_metadata( 'post', $pid, 'patient_nursing_plan', $_POST['nursing-plan'] );
+        add_metadata( 'post', $pid, 'patient_name', rja_encrypt($_POST['patient-name']) );
+        add_metadata( 'post', $pid, 'patient_age', rja_encrypt($_POST['age']) );
+        add_metadata( 'post', $pid, 'patient_sex', rja_encrypt($_POST['sex']) );
+        add_metadata( 'post', $pid, 'patient_date_admission', rja_encrypt($_POST['admission-date']) );
+        add_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
+        add_metadata( 'post', $pid, 'patient_history', rja_encrypt($_POST['history']) );
+        add_metadata( 'post', $pid, 'patient_medical_notes', rja_encrypt($_POST['medical-notes']) );
+        add_metadata( 'post', $pid, 'patient_nursing_plan', rja_encrypt($_POST['nursing-plan']) );
 
         $link = get_permalink( $pid );
         wp_redirect($link);
@@ -155,7 +155,7 @@ function rja_page_search_patient()
             'include'           => array(),
             'exclude'           => array(),
             'meta_key'          => 'patient_name',
-            'meta_value'        => $_POST['patient-name'],
+            'meta_value'        => rja_encrypt($_POST['patient-name']),
             'meta_compare'      => 'LIKE',
             'post_type'         => 'patient',
             'suppress_filters'  => true
@@ -174,17 +174,17 @@ function rja_page_search_patient()
             <p><input type="submit" id="search-room" name="search-room" value="Search Room" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
         </form>
-        <form method="post">
+        <!--<form method="post">
             <p><label for="patient-name">Name</label><br />
                 <input type="text" id="patient-name" name="patient-name" pattern="^[a-zA-Z]+$" />
             </p>
             <p><input type="submit" id="search-name" name="search-name" value="Search Name" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
-        </form>
+        </form>-->
     </div>
     <?php if ( $patient == true ): ?>
         <?php foreach( $patient as $patient ): ?>
-            <p>Room Number: <a href="<?php echo get_the_permalink($patient->ID); ?>"><?php echo $patient->post_title; ?></a> - Patient Name: <?php echo $patient->patient_name;?></p>
+            <p>Room Number: <a href="<?php echo get_the_permalink($patient->ID); ?>"><?php echo $patient->post_title; ?></a> - Patient Name: <?php echo rja_decrypt($patient->patient_name);?></p>
         <?php endforeach?>
         <?php elseif ( ( isset($_POST['search-room']) && $patient !== true ) || ( isset($_POST['search-name']) && $patient !== true ) ): ?>
         <p>No patient was found on search.</p>

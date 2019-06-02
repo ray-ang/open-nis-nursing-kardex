@@ -69,14 +69,14 @@ function rja_single_patient_content_header()
 
 		$pid = wp_update_post($patient);
 
-		update_metadata( 'post', $pid, 'patient_name', $_POST['patient-name']);
-		update_metadata( 'post', $pid, 'patient_age', $_POST['age']);
-		update_metadata( 'post', $pid, 'patient_sex', $_POST['sex']);
-		update_metadata( 'post', $pid, 'patient_date_admission', $_POST['admission-date']);
-		update_metadata( 'post', $pid, 'patient_reason', $_POST['reason']);
-		update_metadata( 'post', $pid, 'patient_history', $_POST['history']);
-		update_metadata( 'post', $pid, 'patient_medical_notes', $_POST['medical-notes']);
-		update_metadata( 'post', $pid, 'patient_nursing_plan', $_POST['nursing-plan']);
+		update_metadata( 'post', $pid, 'patient_name', rja_encrypt($_POST['patient-name']) );
+		update_metadata( 'post', $pid, 'patient_age', rja_encrypt($_POST['age']) );
+		update_metadata( 'post', $pid, 'patient_sex', rja_encrypt($_POST['sex']) );
+		update_metadata( 'post', $pid, 'patient_date_admission', rja_encrypt($_POST['admission-date']) );
+		update_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
+		update_metadata( 'post', $pid, 'patient_history', rja_encrypt($_POST['history']) );
+		update_metadata( 'post', $pid, 'patient_medical_notes', rja_encrypt($_POST['medical-notes']) );
+		update_metadata( 'post', $pid, 'patient_nursing_plan', rja_encrypt($_POST['nursing-plan']) );
 
 		$link = get_permalink($pid);
 		wp_redirect($link);
@@ -128,14 +128,14 @@ function rja_single_patient_content()
 
 			$patient = get_metadata( 'post', get_the_ID() );
 
-			$patient_name = $patient['patient_name'][0];
-			$patient_age = $patient['patient_age'][0];
-			if ( $patient['patient_sex'][0] == 'M' ) { $patient_sex = 'Male'; } else { $patient_sex = 'Female'; }
-			$patient_date_admission = $patient['patient_date_admission'][0];
-			$patient_reason = $patient['patient_reason'][0];
-			$patient_history = $patient['patient_history'][0];
-			$patient_medical_notes = $patient['patient_medical_notes'][0];
-			$patient_nursing_plan = $patient['patient_nursing_plan'][0];
+			$patient_name = rja_decrypt($patient['patient_name'][0]);
+			$patient_age = rja_decrypt($patient['patient_age'][0]);
+			if ( rja_decrypt($patient['patient_sex'][0]) == 'M' ) { $patient_sex = 'Male'; } else { $patient_sex = 'Female'; }
+			$patient_date_admission = rja_decrypt($patient['patient_date_admission'][0]);
+			$patient_reason = rja_decrypt($patient['patient_reason'][0]);
+			$patient_history = rja_decrypt($patient['patient_history'][0]);
+			$patient_medical_notes = rja_decrypt($patient['patient_medical_notes'][0]);
+			$patient_nursing_plan = rja_decrypt($patient['patient_nursing_plan'][0]);
 
 			$error = array();
 			if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
@@ -176,8 +176,8 @@ function rja_single_patient_content()
 				        </p>
 				        <p><label for="sex">Sex</label><br />
 				            <select id="sex" name="sex" size="2" required patter="^[MF]+$"/>
-				            	<option value="M" <?php if ($patient['patient_sex'][0]=='M') echo 'selected="selected"'; ?>>Male</option>
-							    <option value="F" <?php if ($patient['patient_sex'][0]=='F') echo 'selected="selected"'; ?>>Female</option>
+				            	<option value="M" <?php if (rja_decrypt($patient['patient_sex'][0])=='M') echo 'selected="selected"'; ?>>Male</option>
+							    <option value="F" <?php if (rja_decrypt($patient['patient_sex'][0])=='F') echo 'selected="selected"'; ?>>Female</option>
 				            </select>
 				        </p>
 				        <p><label for="admission-date">Date of Admission</label><br />

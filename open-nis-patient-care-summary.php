@@ -24,6 +24,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
+// Define contant 'PASS_CODE', and place in wp-config.php file.
+define('PASS_CODE', 'nursing-kardex');
+
+// Core functions
+require_once 'functions.php';
+
 // Patient custom post type configuration and template
 require_once 'patient.php';
 
