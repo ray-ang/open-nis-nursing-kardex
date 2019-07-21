@@ -176,8 +176,8 @@ function rja_single_patient_content()
 				        </p>
 				        <p><label for="sex">Sex</label><br />
 				            <select id="sex" name="sex" size="2" required patter="^[MF]+$"/>
-				            	<option value="M" <?php if (rja_decrypt($patient['patient_sex'][0])=='M') echo 'selected="selected"'; ?>>Male</option>
-							    <option value="F" <?php if (rja_decrypt($patient['patient_sex'][0])=='F') echo 'selected="selected"'; ?>>Female</option>
+								<option value="M" <?php if (rja_decrypt($patient['patient_sex'][0])=='M') echo 'selected="selected"'; ?>>Male</option>
+								<option value="F" <?php if (rja_decrypt($patient['patient_sex'][0])=='F') echo 'selected="selected"'; ?>>Female</option>
 				            </select>
 				        </p>
 				        <p><label for="admission-date">Date of Admission</label><br />

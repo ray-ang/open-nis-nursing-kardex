@@ -80,8 +80,8 @@ function rja_page_add_patient()
             </p>
             <p><label for="sex">Sex</label><br />
                 <select id="sex" name="sex" size="2" required patter="^[MF]+$" />
-                	<option value="M">Male</option>
-    			    <option value="F">Female</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
                 </select>
             </p>
             <p><label for="admission-date">Date of Admission</label><br />
