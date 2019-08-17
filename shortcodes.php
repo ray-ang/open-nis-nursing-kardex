@@ -169,7 +169,7 @@ function rja_page_search_patient()
     <div>
         <form method="post">
             <p><label for="patient-room">Room</label><br />
-                <input type="text" id="patient-room" name="patient-room" pattern="^[a-zA-Z0-9 _#-]+$" />
+                <input type="text" id="patient-room" name="patient-room" value="<?php if (isset($_POST['patient-room'])) echo $_POST['patient-room']; ?>" pattern="^[a-zA-Z0-9 _#-]+$" />
             </p>
             <p><input type="submit" id="search-room" name="search-room" value="Search Room" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
