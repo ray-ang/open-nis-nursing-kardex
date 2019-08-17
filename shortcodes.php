@@ -70,34 +70,34 @@ function rja_page_add_patient()
     <div>
         <form method="post">
         	<p><label for="room">Room</label><br />
-           		<input type="text" id="room" name="room" required pattern="^[a-zA-Z0-9 _#-]+$" /><br />
+           		<input type="text" id="room" name="room" value="<?php if (isset($_POST['room'])) echo $_POST['room']; ?>" required pattern="^[a-zA-Z0-9 _#-]+$" /><br />
             </p>
             <p><label for="name">Name</label><br />
-            	<input type="text" id="patient-name" name="patient-name" required pattern="^[a-zA-Z ]+$" /><br />
+            	<input type="text" id="patient-name" name="patient-name" value="<?php if (isset($_POST['patient-name'])) echo $_POST['patient-name']; ?>" required pattern="^[a-zA-Z ]+$" /><br />
             </p>
             <p><label for="age">Age</label><br />
-            	<input type="number" id="age" name="age" required pattern="^[0-9]+$" />
+            	<input type="number" id="age" name="age" value="<?php if (isset($_POST['age'])) echo $_POST['age']; ?>" required pattern="^[0-9]+$" />
             </p>
             <p><label for="sex">Sex</label><br />
                 <select id="sex" name="sex" size="2" required patter="^[MF]+$" />
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
+                    <option value="M" <?php if ( isset($_POST['sex']) && $_POST['sex'] == 'M' ) echo 'selected="selected"'; ?>>Male</option>
+                    <option value="F" <?php if ( isset($_POST['sex']) && $_POST['sex'] == 'F' ) echo 'selected="selected"'; ?>>Female</option>
                 </select>
             </p>
             <p><label for="admission-date">Date of Admission</label><br />
-        		<input type="date" id="admission-date" name="admission-date" required pattern="^[0-9-]+$" />
+        		<input type="date" id="admission-date" name="admission-date" value="<?php if (isset($_POST['admission-date'])) echo $_POST['admission-date']; ?>" required pattern="^[0-9-]+$" />
             </p>
             <p><label for="reason">Reason for Admission</label><br />
-                <input type="text" id="reason" name="reason" required pattern="^[a-zA-Z0-9 _.,-]+$" /><br />
+                <input type="text" id="reason" name="reason" value="<?php if (isset($_POST['reason'])) echo $_POST['reason']; ?>" required pattern="^[a-zA-Z0-9 _.,-]+$" /><br />
             </p>
             <p><label for="history">History</label><br />
-                <textarea id="history" name="history" required></textarea>
+                <textarea id="history" name="history" required><?php if (isset($_POST['history'])) echo $_POST['history']; ?></textarea>
             </p>
             <p><label for="medical-notes">Medical Notes</label><br />
-                <textarea id="medical-notes" name="medical-notes" required></textarea>
+                <textarea id="medical-notes" name="medical-notes" required><?php if (isset($_POST['medical-notes'])) echo $_POST['medical-notes']; ?></textarea>
             </p>
             <p><label for="nursing-plan">Nursing Plan of Care</label><br />
-                <textarea id="nursing-plan" name="nursing-plan" required></textarea>
+                <textarea id="nursing-plan" name="nursing-plan" required><?php if (isset($_POST['nursing-plan'])) echo $_POST['nursing-plan']; ?></textarea>
             </p>
             <div style="float: left; margin-right: 20px;"><input type="submit" value="Add Patient" id="add-patient" name="add-patient" /></div>
             <div style="float: left;"><input type="reset" value="Reset Form" id="reset-form" name="reset-form" /></div>
