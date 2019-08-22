@@ -11,6 +11,7 @@ function rja_page_add_patient_header()
 {
 
     $error = array();
+    if ( ! wp_verify_nonce($_POST['token'], 'token') ) $error[] = 'There is alteration in the CSRF token.';
     if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
     if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
     if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
@@ -56,6 +57,7 @@ function rja_page_add_patient()
     <?php if ( current_user_can('administrator') || current_user_can('nurse') ): ?>
     <?php
     $error = array();
+    if ( ! wp_verify_nonce($_POST['token'], 'token') ) $error[] = 'There is alteration in the CSRF token.';
     if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
     if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
     if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';

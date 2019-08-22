@@ -48,7 +48,8 @@ add_action( 'template_redirect', 'rja_single_patient_content_header' );
 function rja_single_patient_content_header()
 {
 
-    $error = array();
+	$error = array();
+	if ( ! wp_verify_nonce($_POST['token'], 'token') ) $error[] = 'There is alteration in the CSRF token.';
     if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
     if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
     if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
@@ -138,6 +139,7 @@ function rja_single_patient_content()
 			$patient_nursing_plan = rja_decrypt($patient['patient_nursing_plan'][0]);
 
 			$error = array();
+			if ( ! wp_verify_nonce($_POST['token'], 'token') ) $error[] = 'There is alteration in the CSRF token.';
 			if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
 			if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
 			if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
