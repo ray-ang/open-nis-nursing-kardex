@@ -9,8 +9,8 @@ function rja_encrypt($plaintext)
 {
 
 	$cipher = 'aes-256-cbc';
-	$key = hash('sha256', PASS_CODE);
-	$key_hmac = hash( 'sha256', md5(PASS_CODE) );
+	$key = hash('sha256', AUTH_KEY);
+	$key_hmac = hash( 'sha256', md5(AUTH_KEY) );
 	$iv = random_bytes(16);
 
 	$ciphertext = openssl_encrypt($plaintext, $cipher, $key, 0, $iv);
@@ -25,8 +25,8 @@ function rja_decrypt($encrypted)
 {
 
 	$cipher = 'aes-256-cbc';
-	$key = hash('sha256', PASS_CODE);
-	$key_hmac = hash( 'sha256', md5(PASS_CODE) );
+	$key = hash('sha256', AUTH_KEY);
+	$key_hmac = hash( 'sha256', md5(AUTH_KEY) );
 
 	list($ciphertext, $hash, $iv) = explode( '::', base64_decode($encrypted) );
 	$digest = hash_hmac('sha256', $ciphertext, $key_hmac);

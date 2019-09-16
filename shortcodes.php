@@ -10,19 +10,7 @@ add_action( 'template_redirect', 'rja_page_add_patient_header' );
 function rja_page_add_patient_header()
 {
 
-    $error = array();
-    if ( ! wp_verify_nonce($_POST['token'], 'token') ) $error[] = 'There is alteration in the CSRF token.';
-    if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
-    if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
-    if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
-    if ( empty($_POST['sex']) || preg_match('/[<>{};*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
-    if ( empty($_POST['admission-date']) || preg_match('/[<>{};*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
-    if ( empty($_POST['reason']) || preg_match('/[<>{};*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
-    if ( empty($_POST['history']) || preg_match('/[<>{};*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
-    if ( empty($_POST['medical-notes']) || preg_match('/[<>{};*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
-    if ( empty($_POST['nursing-plan']) || preg_match('/[<>{};*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
-
-	if ( isset($_POST['add-patient']) && empty($error) ) {
+	if (isset($_POST['add-patient'])) {
 
         $patient = array(
             'post_title' => $_POST['room'],
@@ -55,42 +43,28 @@ function rja_page_add_patient()
 {
     ?>
     <?php if ( current_user_can('administrator') || current_user_can('nurse') ): ?>
-    <?php
-    $error = array();
-    if ( ! wp_verify_nonce($_POST['token'], 'token') ) $error[] = 'There is alteration in the CSRF token.';
-    if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
-    if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
-    if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
-    if ( empty($_POST['sex']) || preg_match('/[<>{};*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
-    if ( empty($_POST['admission-date']) || preg_match('/[<>{};*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
-    if ( empty($_POST['reason']) || preg_match('/[<>{};*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
-    if ( empty($_POST['history']) || preg_match('/[<>{};*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
-    if ( empty($_POST['medical-notes']) || preg_match('/[<>{};*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
-    if ( empty($_POST['nursing-plan']) || preg_match('/[<>{};*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
-    ?>
-    <?php if ( isset($_POST['add-patient']) && ! empty($error) ) echo '<p class="error">' . implode("<br />", $error) . '</p>'; ?>
     <div>
         <form method="post">
         	<p><label for="room">Room</label><br />
-           		<input type="text" id="room" name="room" value="<?php if (isset($_POST['room'])) echo $_POST['room']; ?>" required pattern="^[a-zA-Z0-9 _#-]+$" /><br />
+           		<input type="text" id="room" name="room" value="<?php if (isset($_POST['room'])) echo $_POST['room']; ?>" required /><br />
             </p>
             <p><label for="name">Name</label><br />
-            	<input type="text" id="patient-name" name="patient-name" value="<?php if (isset($_POST['patient-name'])) echo $_POST['patient-name']; ?>" required pattern="^[a-zA-Z ]+$" /><br />
+            	<input type="text" id="patient-name" name="patient-name" value="<?php if (isset($_POST['patient-name'])) echo $_POST['patient-name']; ?>" required /><br />
             </p>
             <p><label for="age">Age</label><br />
-            	<input type="number" id="age" name="age" value="<?php if (isset($_POST['age'])) echo $_POST['age']; ?>" required pattern="^[0-9]+$" />
+            	<input type="number" id="age" name="age" value="<?php if (isset($_POST['age'])) echo $_POST['age']; ?>" required />
             </p>
             <p><label for="sex">Sex</label><br />
-                <select id="sex" name="sex" size="2" required patter="^[MF]+$" />
+                <select id="sex" name="sex" size="2" required />
                     <option value="M" <?php if ( isset($_POST['sex']) && $_POST['sex'] == 'M' ) echo 'selected="selected"'; ?>>Male</option>
                     <option value="F" <?php if ( isset($_POST['sex']) && $_POST['sex'] == 'F' ) echo 'selected="selected"'; ?>>Female</option>
                 </select>
             </p>
             <p><label for="admission-date">Date of Admission</label><br />
-        		<input type="date" id="admission-date" name="admission-date" value="<?php if (isset($_POST['admission-date'])) echo $_POST['admission-date']; ?>" required pattern="^[0-9-]+$" />
+        		<input type="date" id="admission-date" name="admission-date" value="<?php if (isset($_POST['admission-date'])) echo $_POST['admission-date']; ?>" required />
             </p>
             <p><label for="reason">Reason for Admission</label><br />
-                <input type="text" id="reason" name="reason" value="<?php if (isset($_POST['reason'])) echo $_POST['reason']; ?>" required pattern="^[a-zA-Z0-9 _.,-]+$" /><br />
+                <input type="text" id="reason" name="reason" value="<?php if (isset($_POST['reason'])) echo $_POST['reason']; ?>" required /><br />
             </p>
             <p><label for="history">History</label><br />
                 <textarea id="history" name="history" required><?php if (isset($_POST['history'])) echo $_POST['history']; ?></textarea>
@@ -171,14 +145,14 @@ function rja_page_search_patient()
     <div>
         <form method="post">
             <p><label for="patient-room">Room</label><br />
-                <input type="text" id="patient-room" name="patient-room" value="<?php if (isset($_POST['patient-room'])) echo $_POST['patient-room']; ?>" pattern="^[a-zA-Z0-9 _#-]+$" />
+                <input type="text" id="patient-room" name="patient-room" value="<?php if (isset($_POST['patient-room'])) echo $_POST['patient-room']; ?>" />
             </p>
             <p><input type="submit" id="search-room" name="search-room" value="Search Room" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
         </form>
         <!--<form method="post">
             <p><label for="patient-name">Name</label><br />
-                <input type="text" id="patient-name" name="patient-name" pattern="^[a-zA-Z]+$" />
+                <input type="text" id="patient-name" name="patient-name" />
             </p>
             <p><input type="submit" id="search-name" name="search-name" value="Search Name" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>

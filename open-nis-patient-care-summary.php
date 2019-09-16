@@ -24,45 +24,44 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-/* Define contant 'PASS_CODE' in wp-config.php file before the MySQL settings. */
-// define('PASS_CODE', 'nursing-kardex');
+/*
+|--------------------------------------------------------------------------
+| Deny input with blacklisted characters in $_POST global variable array.
+|--------------------------------------------------------------------------
+*/
 
-if ( defined('PASS_CODE') ) {
+$regex_blacklist = "\<\>\{\}\[\]\_\;\*\=\+\'\&\#\%\\$";
 
-	// Core functions
-	require_once 'functions.php';
+$regex_array = explode('\\', $regex_blacklist);
 
-	// Patient custom post type configuration and template
-	require_once 'patient.php';
+if (isset($_POST) && preg_match('/[' . $regex_blacklist . '\\\]/i', implode('/', $_POST)) ) {
 
-	// Shortcodes
-	require_once 'shortcodes.php';
+	header($_SERVER["SERVER_PROTOCOL"]." 400 Bad Request");
+	exit('<h1>Submitted data should NOT contain the following characters:</h1><h3><ul>' . implode('<li>', $regex_array) . '<li>\</ul></h3>');
+	
+}
 
-	// Add "Nurse" role on plugin activation
-	register_activation_hook( __FILE__, 'rja_add_nurse_role' );
+// Core functions
+require_once 'functions.php';
 
-	function rja_add_nurse_role()
-	{
-		add_role( 'nurse', 'Nurse', array( 'read' => true ) );
-	}
+// Patient custom post type configuration and template
+require_once 'patient.php';
 
-	// Remove "Nurse" role on plugin deactivation
-	register_deactivation_hook( __FILE__, 'rja_remove_nurse_role' );
+// Shortcodes
+require_once 'shortcodes.php';
 
-	function rja_remove_nurse_role()
-	{
-		remove_role( 'nurse' );
-	}
+// Add "Nurse" role on plugin activation
+register_activation_hook( __FILE__, 'rja_add_nurse_role' );
 
-} else {
+function rja_add_nurse_role()
+{
+	add_role( 'nurse', 'Nurse', array( 'read' => true ) );
+}
 
-	// Display warning in content area if 'PASS_CODE' is not defined.
-	add_filter( 'the_content', 'pass_code_not_defined' );
+// Remove "Nurse" role on plugin deactivation
+register_deactivation_hook( __FILE__, 'rja_remove_nurse_role' );
 
-	function pass_code_not_defined()
-	{
-		echo '<p>Define PASS_CODE constant in wp_config.php file before the MySQL settings.<br /> Example can be found below.</p>';
-		echo "<p>define('PASS_CODE', 'nursing-kardex');</p>";
-	}
-
+function rja_remove_nurse_role()
+{
+	remove_role( 'nurse' );
 }

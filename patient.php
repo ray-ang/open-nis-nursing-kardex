@@ -48,19 +48,7 @@ add_action( 'template_redirect', 'rja_single_patient_content_header' );
 function rja_single_patient_content_header()
 {
 
-	$error = array();
-	if ( ! wp_verify_nonce($_POST['token'], 'token') ) $error[] = 'There is alteration in the CSRF token.';
-    if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
-    if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
-    if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
-    if ( empty($_POST['sex']) || preg_match('/[<>{};*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
-    if ( empty($_POST['admission-date']) || preg_match('/[<>{};*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
-    if ( empty($_POST['reason']) || preg_match('/[<>{};*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
-    if ( empty($_POST['history']) || preg_match('/[<>{};*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
-    if ( empty($_POST['medical-notes']) || preg_match('/[<>{};*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
-    if ( empty($_POST['nursing-plan']) || preg_match('/[<>{};*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
-
-	if ( isset($_POST['edit-patient']) && empty($error) ) {	
+	if (isset($_POST['edit-patient'])) {	
 
 		$patient = array(
 			'post_title' => $_POST['room'],
@@ -138,19 +126,6 @@ function rja_single_patient_content()
 			$patient_medical_notes = rja_decrypt($patient['patient_medical_notes'][0]);
 			$patient_nursing_plan = rja_decrypt($patient['patient_nursing_plan'][0]);
 
-			$error = array();
-			if ( ! wp_verify_nonce($_POST['token'], 'token') ) $error[] = 'There is alteration in the CSRF token.';
-			if ( empty($_POST['room']) || preg_match('/[<>{};*=\/]/i', $_POST['room']) ) $error[] = 'Room is a required field and should be valid.';
-			if ( empty($_POST['patient-name']) || preg_match('/[<>{};*=\/]/i', $_POST['patient-name']) ) $error[] = 'Name is a required field and should be valid.';
-			if ( empty($_POST['age']) || preg_match('/[<>{};*=\/]/i', $_POST['age']) ) $error[] = 'Age is a required field and should be valid.';
-			if ( empty($_POST['sex']) || preg_match('/[<>{};*=\/]/i', $_POST['sex']) ) $error[] = 'Sex is a required field and should be valid.';
-			if ( empty($_POST['admission-date']) || preg_match('/[<>{};*=\/]/i', $_POST['admission-date']) ) $error[] = 'Date of admission is a required field and should be valid.';
-			if ( empty($_POST['reason']) || preg_match('/[<>{};*=\/]/i', $_POST['reason']) ) $error[] = 'Reason for admission is a required field and should be valid.';
-			if ( empty($_POST['history']) || preg_match('/[<>{};*=\/]/i', $_POST['history']) ) $error[] = 'History is a required field and should be valid.';
-			if ( empty($_POST['medical-notes']) || preg_match('/[<>{};*=\/]/i', $_POST['medical-notes']) ) $error[] = 'Medical notes is a required field and should be valid.';
-			if ( empty($_POST['nursing-plan']) || preg_match('/[<>{};*=\/]/i', $_POST['nursing-plan']) ) $error[] = 'Nursing plan is a required field and should be valid.';
-
-			if ( isset($_POST['edit-patient']) && ! empty($error) ) echo '<p class="error">' . implode("<br />", $error) . '</p>';
 			?>
 			<h3>Room: <?php esc_html(the_title()); ?></h3>
 			<p>Name: <?php echo esc_html($patient_name); ?><br />
@@ -168,25 +143,25 @@ function rja_single_patient_content()
 					<p></p>
 					<form method="post">
 				    	<p><label for="room">Room</label><br />
-							<input type="text" id="room" name="room" value="<?php esc_html(the_title()); ?>" required pattern="^[a-zA-Z0-9 _#-]+$" />
+							<input type="text" id="room" name="room" value="<?php esc_html(the_title()); ?>" required />
 				        </p>
 				    	<p><label for="name">Name</label><br />
-				   			<input type="text" id="patient-name" name="patient-name" value="<?php echo esc_html($patient_name); ?>" required pattern="^[a-zA-Z ]+$" />
+				   			<input type="text" id="patient-name" name="patient-name" value="<?php echo esc_html($patient_name); ?>" required />
 				        </p>
 				        <p><label for="age">Age</label><br />
-				        	<input type="number" id="age" name="age" value="<?php echo esc_html($patient_age); ?>" required pattern="^[0-9]+$" />
+				        	<input type="number" id="age" name="age" value="<?php echo esc_html($patient_age); ?>" required />
 				        </p>
 				        <p><label for="sex">Sex</label><br />
-				            <select id="sex" name="sex" size="2" required patter="^[MF]+$"/>
+				            <select id="sex" name="sex" size="2" required />
 								<option value="M" <?php if (rja_decrypt($patient['patient_sex'][0])=='M') echo 'selected="selected"'; ?>>Male</option>
 								<option value="F" <?php if (rja_decrypt($patient['patient_sex'][0])=='F') echo 'selected="selected"'; ?>>Female</option>
 				            </select>
 				        </p>
 				        <p><label for="admission-date">Date of Admission</label><br />
-				    		<input type="date" id="admission-date" name="admission-date" value="<?php echo esc_html($patient_date_admission); ?>" required pattern="^[0-9-]+$" />
+				    		<input type="date" id="admission-date" name="admission-date" value="<?php echo esc_html($patient_date_admission); ?>" required />
 				        </p>
 				        <p><label for="reason">Reason for Admission</label><br />
-				            <input type="text" id="reason" name="reason" value="<?php echo esc_html($patient_reason);?>" required pattern="^[a-zA-Z0-9 _.,-]+$" /><br />
+				            <input type="text" id="reason" name="reason" value="<?php echo esc_html($patient_reason);?>" required /><br />
 				        </p>
 				        <p><label for="history">History</label><br />
 				            <textarea id="history" name="history" required><?php echo esc_html($patient_history); ?></textarea>
