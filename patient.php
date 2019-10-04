@@ -50,7 +50,7 @@ add_action( 'template_redirect', 'rja_single_patient_content_header' );
 function rja_single_patient_content_header()
 {
 
-	if (isset($_POST['edit-patient'])) {	
+	if (isset($_POST['edit-patient']) && wp_verify_nonce($_POST['token'], 'token')) {	
 
 		$patient = array(
 			'post_title' => $_POST['room'],

@@ -1,8 +1,10 @@
 <?php
 
-/**
- * Open-NIS Patient Care Summary Shortcodes
- */
+/*
+|--------------------------------------------------------------------------
+| Open-NIS Patient Care Summary Shortcodes
+|--------------------------------------------------------------------------
+*/
 
 // Add Patient Page - Before Header
 add_action( 'template_redirect', 'rja_page_add_patient_header' );
@@ -10,7 +12,7 @@ add_action( 'template_redirect', 'rja_page_add_patient_header' );
 function rja_page_add_patient_header()
 {
 
-	if (isset($_POST['add-patient'])) {
+	if (isset($_POST['add-patient']) && wp_verify_nonce($_POST['token'], 'token')) {
 
         $patient = array(
             'post_title' => $_POST['room'],
@@ -29,7 +31,7 @@ function rja_page_add_patient_header()
         add_metadata( 'post', $pid, 'patient_medical_notes', rja_encrypt($_POST['medical-notes']) );
         add_metadata( 'post', $pid, 'patient_nursing_plan', rja_encrypt($_POST['nursing-plan']) );
 
-        $link = get_permalink( $pid );
+        $link = get_permalink($pid);
         wp_redirect($link);
 
     }
@@ -160,7 +162,7 @@ function rja_page_search_patient()
     </div>
     <?php if ( $patient == true ): ?>
         <?php foreach( $patient as $patient ): ?>
-            <p>Room Number: <a href="<?php echo get_the_permalink($patient->ID); ?>"><?php echo $patient->post_title; ?></a> - Patient Name: <?php echo rja_decrypt($patient->patient_name);?></p>
+            <p>Room Number: <a href="<?= get_the_permalink($patient->ID); ?>"><?= $patient->post_title; ?></a> - Patient Name: <?= rja_decrypt($patient->patient_name);?></p>
         <?php endforeach?>
         <?php elseif ( ( isset($_POST['search-room']) && $patient !== true ) || ( isset($_POST['search-name']) && $patient !== true ) ): ?>
         <p>No patient was found on search.</p>
