@@ -1,8 +1,10 @@
 <?php
 
-/**
- * Patient Custom Post Type
- */
+/*
+|--------------------------------------------------------------------------
+| Patient Custom Post Type
+|--------------------------------------------------------------------------
+*/
 
 // Register Patient Custom Post Type and Configuration
 add_action( 'init', 'rja_register_patient_cpt' );
@@ -128,14 +130,14 @@ function rja_single_patient_content()
 
 			?>
 			<h3>Room: <?php esc_html(the_title()); ?></h3>
-			<p>Name: <?php echo esc_html($patient_name); ?><br />
-			Age: <?php echo esc_html($patient_age); ?><br />
-			Sex: <?php echo esc_html($patient_sex); ?></p>
-			<p>Admission Date: <?php echo esc_html($patient_date_admission); ?><br />
-			Reason: <?php echo esc_html($patient_reason); ?></p>
-			<p>History:<br /><?php echo nl2br(esc_html($patient_history)); ?></p>
-			<p>Medical Notes:<br /><?php echo nl2br(esc_html($patient_medical_notes)); ?></p>
-			<p>Nursing Plan of Care:<br /><?php echo nl2br(esc_html($patient_nursing_plan)); ?></p>
+			<p>Name: <?= esc_html($patient_name); ?><br />
+			Age: <?= esc_html($patient_age); ?><br />
+			Sex: <?= esc_html($patient_sex); ?></p>
+			<p>Admission Date: <?= esc_html($patient_date_admission); ?><br />
+			Reason: <?= esc_html($patient_reason); ?></p>
+			<p>History:<br /><?= nl2br(esc_html($patient_history)); ?></p>
+			<p>Medical Notes:<br /><?= nl2br(esc_html($patient_medical_notes)); ?></p>
+			<p>Nursing Plan of Care:<br /><?= nl2br(esc_html($patient_nursing_plan)); ?></p>
 			<div id="no-print">
 				<h2>Edit Information</h2>
 				<button onclick="editPatientForm()">Edit Form</button>
@@ -146,10 +148,10 @@ function rja_single_patient_content()
 							<input type="text" id="room" name="room" value="<?php esc_html(the_title()); ?>" required />
 				        </p>
 				    	<p><label for="name">Name</label><br />
-				   			<input type="text" id="patient-name" name="patient-name" value="<?php echo esc_html($patient_name); ?>" required />
+				   			<input type="text" id="patient-name" name="patient-name" value="<?= esc_html($patient_name); ?>" required />
 				        </p>
 				        <p><label for="age">Age</label><br />
-				        	<input type="number" id="age" name="age" value="<?php echo esc_html($patient_age); ?>" required />
+				        	<input type="number" id="age" name="age" value="<?= esc_html($patient_age); ?>" required />
 				        </p>
 				        <p><label for="sex">Sex</label><br />
 				            <select id="sex" name="sex" size="2" required />
@@ -158,19 +160,19 @@ function rja_single_patient_content()
 				            </select>
 				        </p>
 				        <p><label for="admission-date">Date of Admission</label><br />
-				    		<input type="date" id="admission-date" name="admission-date" value="<?php echo esc_html($patient_date_admission); ?>" required />
+				    		<input type="date" id="admission-date" name="admission-date" value="<?= esc_html($patient_date_admission); ?>" required />
 				        </p>
 				        <p><label for="reason">Reason for Admission</label><br />
-				            <input type="text" id="reason" name="reason" value="<?php echo esc_html($patient_reason);?>" required /><br />
+				            <input type="text" id="reason" name="reason" value="<?= esc_html($patient_reason);?>" required /><br />
 				        </p>
 				        <p><label for="history">History</label><br />
-				            <textarea id="history" name="history" required><?php echo esc_html($patient_history); ?></textarea>
+				            <textarea id="history" name="history" required><?= esc_html($patient_history); ?></textarea>
 				        </p>
 						<p><label for="medical-notes">Medical Notes</label><br />
-						    <textarea id="medical-notes" name="medical-notes" required><?php echo esc_html($patient_medical_notes); ?></textarea>
+						    <textarea id="medical-notes" name="medical-notes" required><?= esc_html($patient_medical_notes); ?></textarea>
 						</p>
 						<p><label for="nursing-plan">Nursing Plan of Care</label><br />
-						    <textarea id="nursing-plan" name="nursing-plan" required><?php echo esc_html($patient_nursing_plan); ?></textarea>
+						    <textarea id="nursing-plan" name="nursing-plan" required><?= esc_html($patient_nursing_plan); ?></textarea>
 						</p>
 				        <p><input type="submit" value="Edit Patient" id="edit-patient" name="edit-patient" /></p>
 				    	<p><input type="submit" value="Delete Patient" id="delete-patient" name="delete-patient" onclick="return confirm('Are you sure you want to delete this patient?');" /></p>
