@@ -3,7 +3,7 @@
 Plugin Name: Open-NIS Patient Care Summary
 Plugin URI: https://open-nis.org/
 Description: A WordPress-based electronic patient care summary, or electronic nursing kardex
-Version: 0.9
+Version: 0.9.1
 Author: Raymund John Ang
 License: GPL v2 or later
 Text Domain: open-nis
@@ -24,25 +24,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-/*
-|--------------------------------------------------------------------------
-| Deny input with blacklisted characters in $_POST global variable array.
-|--------------------------------------------------------------------------
-*/
-
-$regex_blacklist = "\<\>\{\}\[\]\_\;\*\=\+\'\&\#\%\\$";
-
-$regex_array = explode('\\', $regex_blacklist);
-
-if (isset($_POST) && preg_match('/[' . $regex_blacklist . '\\\]/i', implode('/', $_POST)) ) {
-
-	header($_SERVER["SERVER_PROTOCOL"]." 400 Bad Request");
-	exit('<h1>Submitted data should NOT contain the following characters:</h1><h3><ul>' . implode('<li>', $regex_array) . '<li>\</ul></h3>');
-	
-}
+// Configuration file
+require_once 'config.php';
 
 // Core functions
 require_once 'functions.php';
+
+// Firewall
+rja_firewall();
 
 // Patient custom post type configuration and template
 require_once 'patient.php';
