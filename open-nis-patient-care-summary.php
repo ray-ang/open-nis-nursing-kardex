@@ -3,7 +3,7 @@
 Plugin Name: Open-NIS Patient Care Summary
 Plugin URI: https://open-nis.org/
 Description: A WordPress-based electronic patient care summary, or electronic nursing kardex
-Version: 0.9.1
+Version: 0.9.2
 Author: Raymund John Ang
 License: GPL v2 or later
 Text Domain: open-nis
