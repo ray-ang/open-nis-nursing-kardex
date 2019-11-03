@@ -141,6 +141,7 @@ function rja_single_patient_content()
 			<div id="no-print">
 				<h2>Edit Information</h2>
 				<button onclick="editPatientForm()">Edit Form</button>
+				<button onclick="window.print()">Print</button>
 				<div id="editPatient" style="display: none;">
 					<p></p>
 					<form method="post">
