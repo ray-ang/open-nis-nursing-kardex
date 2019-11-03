@@ -27,6 +27,7 @@ function rja_page_add_patient_header()
         add_metadata( 'post', $pid, 'patient_sex', rja_encrypt($_POST['sex']) );
         add_metadata( 'post', $pid, 'patient_date_admission', rja_encrypt($_POST['admission-date']) );
         add_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
+        add_metadata( 'post', $pid, 'patient_diet', rja_encrypt($_POST['diet']) );
         add_metadata( 'post', $pid, 'patient_history', rja_encrypt($_POST['history']) );
         add_metadata( 'post', $pid, 'patient_medical_notes', rja_encrypt($_POST['medical-notes']) );
         add_metadata( 'post', $pid, 'patient_nursing_plan', rja_encrypt($_POST['nursing-plan']) );
@@ -67,6 +68,9 @@ function rja_page_add_patient()
             </p>
             <p><label for="reason">Reason for Admission</label><br />
                 <input type="text" id="reason" name="reason" value="<?php if (isset($_POST['reason'])) echo $_POST['reason']; ?>" required /><br />
+            </p>
+            <p><label for="diet">Diet</label><br />
+                <input type="text" id="diet" name="diet" value="<?php if (isset($_POST['diet'])) echo $_POST['diet']; ?>" required /><br />
             </p>
             <p><label for="history">History</label><br />
                 <textarea id="history" name="history" required><?php if (isset($_POST['history'])) echo $_POST['history']; ?></textarea>
