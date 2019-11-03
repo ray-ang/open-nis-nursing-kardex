@@ -65,6 +65,7 @@ function rja_single_patient_content_header()
 		update_metadata( 'post', $pid, 'patient_sex', rja_encrypt($_POST['sex']) );
 		update_metadata( 'post', $pid, 'patient_date_admission', rja_encrypt($_POST['admission-date']) );
 		update_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
+		update_metadata( 'post', $pid, 'patient_allergy', rja_encrypt($_POST['allergy']) );
 		update_metadata( 'post', $pid, 'patient_diet', rja_encrypt($_POST['diet']) );
 		update_metadata( 'post', $pid, 'patient_history', rja_encrypt($_POST['history']) );
 		update_metadata( 'post', $pid, 'patient_medical_notes', rja_encrypt($_POST['medical-notes']) );
@@ -125,6 +126,7 @@ function rja_single_patient_content()
 			if ( rja_decrypt($patient['patient_sex'][0]) == 'M' ) { $patient_sex = 'Male'; } else { $patient_sex = 'Female'; }
 			$patient_date_admission = rja_decrypt($patient['patient_date_admission'][0]);
 			$patient_reason = rja_decrypt($patient['patient_reason'][0]);
+			$patient_allergy = rja_decrypt($patient['patient_allergy'][0]);
 			$patient_diet = rja_decrypt($patient['patient_diet'][0]);
 			$patient_history = rja_decrypt($patient['patient_history'][0]);
 			$patient_medical_notes = rja_decrypt($patient['patient_medical_notes'][0]);
@@ -137,6 +139,7 @@ function rja_single_patient_content()
 			Sex: <?= esc_html($patient_sex); ?></p>
 			<p>Admission Date: <?= esc_html($patient_date_admission); ?><br />
 			Reason: <?= esc_html($patient_reason); ?><br />
+			Allergy: <?= esc_html($patient_allergy); ?><br />
 			Diet: <?= esc_html($patient_diet); ?></p>
 			<p>History:<br /><?= nl2br(esc_html($patient_history)); ?></p>
 			<p>Medical Notes:<br /><?= nl2br(esc_html($patient_medical_notes)); ?></p>
@@ -169,6 +172,9 @@ function rja_single_patient_content()
 				        <p><label for="reason">Reason for Admission</label><br />
 				            <input type="text" id="reason" name="reason" value="<?= esc_html($patient_reason);?>" required /><br />
 				        </p>
+						<p><label for="allergy">Allergy</label><br />
+							<input type="text" id="allergy" name="allergy" value="<?= esc_html($patient_allergy);?>" required /><br />
+						</p>
 				        <p><label for="diet">Diet</label><br />
 				            <input type="text" id="diet" name="diet" value="<?= esc_html($patient_diet);?>" required /><br />
 				        </p>
