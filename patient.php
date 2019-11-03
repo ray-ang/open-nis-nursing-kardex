@@ -141,9 +141,9 @@ function rja_single_patient_content()
 			Reason: <?= esc_html($patient_reason); ?><br />
 			Allergy: <?= esc_html($patient_allergy); ?><br />
 			Diet: <?= esc_html($patient_diet); ?></p>
-			<p>History:<br /><?= nl2br(esc_html($patient_history)); ?></p>
-			<p>Medical Notes:<br /><?= nl2br(esc_html($patient_medical_notes)); ?></p>
-			<p>Nursing Plan of Care:<br /><?= nl2br(esc_html($patient_nursing_plan)); ?></p>
+			<p><em>History:</em><br /><?= nl2br(esc_html($patient_history)); ?></p>
+			<p><em>Medical Notes:</em><br /><?= nl2br(esc_html($patient_medical_notes)); ?></p>
+			<p><em>Nursing Plan of Care:</em><br /><?= nl2br(esc_html($patient_nursing_plan)); ?></p>
 			<div id="no-print">
 				<h2>Edit Information</h2>
 				<button onclick="editPatientForm()">Edit Form</button>
