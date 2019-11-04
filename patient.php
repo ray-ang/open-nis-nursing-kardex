@@ -67,6 +67,9 @@ function rja_single_patient_content_header()
 		update_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
 		update_metadata( 'post', $pid, 'patient_allergy', rja_encrypt($_POST['allergy']) );
 		update_metadata( 'post', $pid, 'patient_diet', rja_encrypt($_POST['diet']) );
+		update_metadata( 'post', $pid, 'patient_iv_access', rja_encrypt($_POST['iv-access']) );
+		update_metadata( 'post', $pid, 'patient_urine', rja_encrypt($_POST['urine']) );
+		update_metadata( 'post', $pid, 'patient_bowel', rja_encrypt($_POST['bowel']) );
 		update_metadata( 'post', $pid, 'patient_history', rja_encrypt($_POST['history']) );
 		update_metadata( 'post', $pid, 'patient_medical_notes', rja_encrypt($_POST['medical-notes']) );
 		update_metadata( 'post', $pid, 'patient_nursing_plan', rja_encrypt($_POST['nursing-plan']) );
@@ -128,6 +131,9 @@ function rja_single_patient_content()
 			$patient_reason = rja_decrypt($patient['patient_reason'][0]);
 			$patient_allergy = rja_decrypt($patient['patient_allergy'][0]);
 			$patient_diet = rja_decrypt($patient['patient_diet'][0]);
+			$patient_iv_access = rja_decrypt($patient['patient_iv_access'][0]);
+			$patient_urine = rja_decrypt($patient['patient_urine'][0]);
+			$patient_bowel = rja_decrypt($patient['patient_bowel'][0]);
 			$patient_history = rja_decrypt($patient['patient_history'][0]);
 			$patient_medical_notes = rja_decrypt($patient['patient_medical_notes'][0]);
 			$patient_nursing_plan = rja_decrypt($patient['patient_nursing_plan'][0]);
@@ -141,6 +147,9 @@ function rja_single_patient_content()
 			Reason: <?= esc_html($patient_reason); ?><br />
 			Allergy: <?= esc_html($patient_allergy); ?><br />
 			Diet: <?= esc_html($patient_diet); ?></p>
+			<p>IV Access: <?= esc_html($patient_iv_access); ?><br />
+			Urine: <?= esc_html($patient_urine); ?><br />
+			Bowel Movement: <?= esc_html($patient_bowel); ?></p>
 			<p><em>History:</em><br /><?= nl2br(esc_html($patient_history)); ?></p>
 			<p><em>Medical Notes:</em><br /><?= nl2br(esc_html($patient_medical_notes)); ?></p>
 			<p><em>Nursing Plan of Care:</em><br /><?= nl2br(esc_html($patient_nursing_plan)); ?></p>
@@ -178,6 +187,15 @@ function rja_single_patient_content()
 				        <p><label for="diet">Diet</label><br />
 				            <input type="text" id="diet" name="diet" value="<?= esc_html($patient_diet);?>" required /><br />
 				        </p>
+						<p><label for="iv-access">IV Access</label><br />
+							<input type="text" id="iv-access" name="iv-access" value="<?= esc_html($patient_iv_access);?>" required /><br />
+						</p>
+						<p><label for="urine">Urine</label><br />
+							<input type="text" id="urine" name="urine" value="<?= esc_html($patient_urine);?>" required /><br />
+						</p>
+						<p><label for="bowel">Bowel Movement</label><br />
+							<input type="text" id="bowel" name="bowel" value="<?= esc_html($patient_bowel);?>" required /><br />
+						</p>
 				        <p><label for="history">History</label><br />
 				            <textarea id="history" name="history" required><?= esc_html($patient_history); ?></textarea>
 				        </p>

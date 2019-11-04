@@ -29,6 +29,9 @@ function rja_page_add_patient_header()
         add_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
         add_metadata( 'post', $pid, 'patient_allergy', rja_encrypt($_POST['allergy']) );
         add_metadata( 'post', $pid, 'patient_diet', rja_encrypt($_POST['diet']) );
+        add_metadata( 'post', $pid, 'patient_iv_access', rja_encrypt($_POST['iv-access']) );
+        add_metadata( 'post', $pid, 'patient_urine', rja_encrypt($_POST['urine']) );
+        add_metadata( 'post', $pid, 'patient_bowel', rja_encrypt($_POST['bowel']) );
         add_metadata( 'post', $pid, 'patient_history', rja_encrypt($_POST['history']) );
         add_metadata( 'post', $pid, 'patient_medical_notes', rja_encrypt($_POST['medical-notes']) );
         add_metadata( 'post', $pid, 'patient_nursing_plan', rja_encrypt($_POST['nursing-plan']) );
@@ -75,6 +78,15 @@ function rja_page_add_patient()
             </p>
             <p><label for="diet">Diet</label><br />
                 <input type="text" id="diet" name="diet" value="<?php if (isset($_POST['diet'])) echo $_POST['diet']; ?>" required /><br />
+            </p>
+            <p><label for="iv-access">IV Access</label><br />
+                <input type="text" id="iv-access" name="iv-access" value="<?php if (isset($_POST['iv-access'])) echo $_POST['iv-access']; ?>" required /><br />
+            </p>
+            <p><label for="urine">Urine</label><br />
+                <input type="text" id="urine" name="urine" value="<?php if (isset($_POST['urine'])) echo $_POST['urine']; ?>" required /><br />
+            </p>
+            <p><label for="bowel">Bowel Movement</label><br />
+                <input type="text" id="bowel" name="bowel" value="<?php if (isset($_POST['bowel'])) echo $_POST['bowel']; ?>" required /><br />
             </p>
             <p><label for="history">History</label><br />
                 <textarea id="history" name="history" required><?php if (isset($_POST['history'])) echo $_POST['history']; ?></textarea>
