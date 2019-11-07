@@ -16,12 +16,12 @@ function rja_firewall()
 	if (FIREWALL_ON == TRUE) {
 
 		// Allow only access from whitelisted IP addresses
-		if (! in_array($_SERVER['REMOTE_ADDR'], ALLOWED_IP_ADDR)) {
+		// if (! in_array($_SERVER['REMOTE_ADDR'], ALLOWED_IP_ADDR)) {
 
-			header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
-			exit('<p>You are not allowed to access the application using your IP address.</p>');
+		// 	header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
+		// 	exit('<p>You are not allowed to access the application using your IP address.</p>');
 
-		}
+		// }
 
 		// Allow only URI_WHITELISTED characters on the Request URI.
 		if (! empty(URI_WHITELISTED)) {
