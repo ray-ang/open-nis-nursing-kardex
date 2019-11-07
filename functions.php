@@ -95,6 +95,8 @@ function rja_encrypt($plaintext)
 function rja_decrypt($encrypted)
 {
 
+	if (! isset($encrypted) || empty($encrypted)) { return ''; }
+	
 	$cipher = 'aes-256-cbc';
 	$key = hash('sha256', AUTH_KEY);
 	$key_hmac = hash( 'sha256', md5(AUTH_KEY) );
