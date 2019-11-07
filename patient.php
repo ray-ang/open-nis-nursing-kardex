@@ -68,6 +68,7 @@ function rja_single_patient_content_header()
 		update_metadata( 'post', $pid, 'patient_allergy', rja_encrypt($_POST['allergy']) );
 		update_metadata( 'post', $pid, 'patient_diet', rja_encrypt($_POST['diet']) );
 		update_metadata( 'post', $pid, 'patient_iv_access', rja_encrypt($_POST['iv-access']) );
+		update_metadata( 'post', $pid, 'patient_monitoring', rja_encrypt($_POST['monitoring']) );
 		update_metadata( 'post', $pid, 'patient_urine', rja_encrypt($_POST['urine']) );
 		update_metadata( 'post', $pid, 'patient_bowel', rja_encrypt($_POST['bowel']) );
 		update_metadata( 'post', $pid, 'patient_history', rja_encrypt($_POST['history']) );
@@ -132,6 +133,7 @@ function rja_single_patient_content()
 			$patient_allergy = rja_decrypt($patient['patient_allergy'][0]);
 			$patient_diet = rja_decrypt($patient['patient_diet'][0]);
 			$patient_iv_access = rja_decrypt($patient['patient_iv_access'][0]);
+			$patient_monitoring = rja_decrypt($patient['patient_monitoring'][0]);
 			$patient_urine = rja_decrypt($patient['patient_urine'][0]);
 			$patient_bowel = rja_decrypt($patient['patient_bowel'][0]);
 			$patient_history = rja_decrypt($patient['patient_history'][0]);
@@ -148,6 +150,7 @@ function rja_single_patient_content()
 			Allergy: <?= esc_html($patient_allergy); ?><br />
 			Diet: <?= esc_html($patient_diet); ?></p>
 			<p>IV Access: <?= esc_html($patient_iv_access); ?><br />
+			Monitoring: <?= esc_html($patient_monitoring); ?><br />
 			Urine: <?= esc_html($patient_urine); ?><br />
 			Bowel Movement: <?= esc_html($patient_bowel); ?></p>
 			<p><em>History:</em><br /><?= nl2br(esc_html($patient_history)); ?></p>
@@ -190,6 +193,9 @@ function rja_single_patient_content()
 						<p><label for="iv-access">IV Access</label><br />
 							<input type="text" id="iv-access" name="iv-access" value="<?= esc_html($patient_iv_access);?>" required /><br />
 						</p>
+						<p><label for="monitoring">Monitoring</label><br />
+							<input type="text" id="monitoring" name="monitoring" value="<?= esc_html($patient_monitoring);?>" required /><br />
+						</p>
 						<p><label for="urine">Urine</label><br />
 							<input type="text" id="urine" name="urine" value="<?= esc_html($patient_urine);?>" required /><br />
 						</p>
@@ -206,7 +212,9 @@ function rja_single_patient_content()
 						    <textarea id="nursing-plan" name="nursing-plan" required><?= esc_html($patient_nursing_plan); ?></textarea>
 						</p>
 				        <p><input type="submit" value="Edit Patient" id="edit-patient" name="edit-patient" /></p>
-				    	<p><input type="submit" value="Delete Patient" id="delete-patient" name="delete-patient" onclick="return confirm('Are you sure you want to delete this patient?');" /></p>
+						<?php if (current_user_can('administrator')) : ?>
+						<p><input type="submit" value="Delete Patient" id="delete-patient" name="delete-patient" onclick="return confirm('Are you sure you want to delete this patient?');" /></p>
+						<?php endif; ?>
 				        <button onclick="editPatientForm()">Close Form</button>
 				        <?php wp_nonce_field( 'token', 'token' ); ?>
 					</form>
