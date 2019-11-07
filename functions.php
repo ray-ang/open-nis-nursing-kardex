@@ -15,16 +15,20 @@ function rja_firewall()
 
 	if (FIREWALL_ON == TRUE) {
 
-		// Allow only access from whitelisted IP addresses
-		// if (! in_array($_SERVER['REMOTE_ADDR'], ALLOWED_IP_ADDR)) {
+		if (ENABLE_WHITELISTED_IP == TRUE) {
+			
+			// Allow only access from whitelisted IP addresses
+			if (! in_array($_SERVER['REMOTE_ADDR'], ALLOWED_IP_ADDR)) {
 
-		// 	header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
-		// 	exit('<p>You are not allowed to access the application using your IP address.</p>');
+				header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
+				exit('<p>You are not allowed to access the application using your IP address.</p>');
 
-		// }
+			}
+
+		}
 
 		// Allow only URI_WHITELISTED characters on the Request URI.
-		if (! empty(URI_WHITELISTED)) {
+		if (ENABLE_WHITELISTED_URI == TRUE && ! empty(URI_WHITELISTED)) {
 
 			$regex_array = str_replace('w', 'alphanumeric', URI_WHITELISTED);
 			$regex_array = explode('\\', $regex_array);
@@ -39,7 +43,7 @@ function rja_firewall()
 		}
 
 		// Deny POST_BLACKLISTED characters in $_POST and post body.
-		if (! empty(POST_BLACKLISTED)) {
+		if (ENABLE_BLACKLISTED_POST == TRUE && ! empty(POST_BLACKLISTED)) {
 
 			$regex_array = explode('\\', POST_BLACKLISTED);
 
