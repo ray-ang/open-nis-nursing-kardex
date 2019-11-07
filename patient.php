@@ -214,7 +214,7 @@ function rja_single_patient_content()
 				        <p><input type="submit" value="Edit Patient" id="edit-patient" name="edit-patient" /></p>
 						<?php if (current_user_can('administrator')) : ?>
 						<p><input type="submit" value="Delete Patient" id="delete-patient" name="delete-patient" onclick="return confirm('Are you sure you want to delete this patient?');" /></p>
-						<?php endif; ?>
+						<?php endif ?>
 						<button onclick="editPatientForm()">Close Form</button>
 				        <?php wp_nonce_field( 'token', 'token' ); ?>
 					</form>
