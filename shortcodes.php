@@ -26,6 +26,7 @@ function rja_page_add_patient_header()
         add_metadata( 'post', $pid, 'patient_age', rja_encrypt($_POST['age']) );
         add_metadata( 'post', $pid, 'patient_sex', rja_encrypt($_POST['sex']) );
         add_metadata( 'post', $pid, 'patient_date_admission', rja_encrypt($_POST['admission-date']) );
+        add_metadata( 'post', $pid, 'patient_doctor', rja_encrypt($_POST['doctor']) );
         add_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
         add_metadata( 'post', $pid, 'patient_allergy', rja_encrypt($_POST['allergy']) );
         add_metadata( 'post', $pid, 'patient_diet', rja_encrypt($_POST['diet']) );
@@ -69,6 +70,9 @@ function rja_page_add_patient()
             </p>
             <p><label for="admission-date">Date of Admission</label><br />
         		<input type="date" id="admission-date" name="admission-date" value="<?php if (isset($_POST['admission-date'])) echo $_POST['admission-date']; ?>" required />
+            </p>
+            <p><label for="doctor">Doctor</label><br />
+                <input type="text" id="doctor" name="doctor" value="<?php if (isset($_POST['doctor'])) echo $_POST['doctor']; ?>" required /><br />
             </p>
             <p><label for="reason">Reason for Admission</label><br />
                 <input type="text" id="reason" name="reason" value="<?php if (isset($_POST['reason'])) echo $_POST['reason']; ?>" required /><br />

@@ -64,6 +64,7 @@ function rja_single_patient_content_header()
 		update_metadata( 'post', $pid, 'patient_age', rja_encrypt($_POST['age']) );
 		update_metadata( 'post', $pid, 'patient_sex', rja_encrypt($_POST['sex']) );
 		update_metadata( 'post', $pid, 'patient_date_admission', rja_encrypt($_POST['admission-date']) );
+		update_metadata( 'post', $pid, 'patient_doctor', rja_encrypt($_POST['doctor']) );
 		update_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
 		update_metadata( 'post', $pid, 'patient_allergy', rja_encrypt($_POST['allergy']) );
 		update_metadata( 'post', $pid, 'patient_diet', rja_encrypt($_POST['diet']) );
@@ -129,6 +130,7 @@ function rja_single_patient_content()
 			$patient_age = rja_decrypt($patient['patient_age'][0]);
 			if ( rja_decrypt($patient['patient_sex'][0]) == 'M' ) { $patient_sex = 'Male'; } else { $patient_sex = 'Female'; }
 			$patient_date_admission = rja_decrypt($patient['patient_date_admission'][0]);
+			$patient_doctor = rja_decrypt($patient['patient_doctor'][0]);
 			$patient_reason = rja_decrypt($patient['patient_reason'][0]);
 			$patient_allergy = rja_decrypt($patient['patient_allergy'][0]);
 			$patient_diet = rja_decrypt($patient['patient_diet'][0]);
@@ -146,6 +148,7 @@ function rja_single_patient_content()
 			Age: <?= esc_html($patient_age); ?><br />
 			Sex: <?= esc_html($patient_sex); ?></p>
 			<p>Admission Date: <?= esc_html($patient_date_admission); ?><br />
+			Doctor: <?= esc_html($patient_doctor); ?><br />
 			Reason: <?= esc_html($patient_reason); ?><br />
 			Allergy: <?= esc_html($patient_allergy); ?><br />
 			Diet: <?= esc_html($patient_diet); ?></p>
@@ -181,6 +184,9 @@ function rja_single_patient_content()
 				        <p><label for="admission-date">Date of Admission</label><br />
 				    		<input type="date" id="admission-date" name="admission-date" value="<?= esc_html($patient_date_admission); ?>" required />
 				        </p>
+						<p><label for="doctor">Doctor</label><br />
+							<input type="text" id="doctor" name="doctor" value="<?= esc_html($patient_doctor);?>" required /><br />
+						</p>
 				        <p><label for="reason">Reason for Admission</label><br />
 				            <input type="text" id="reason" name="reason" value="<?= esc_html($patient_reason);?>" required /><br />
 				        </p>
