@@ -23,7 +23,7 @@ function rja_register_patient_cpt()
 	    'view_item'			=> __( 'View Patient', 'open-nis' ),
 	    'all_items'			=> __( 'All Patients', 'open-nis' ),
 	    'search_items'		=> __( 'Search Patients', 'open-nis' ),
-	    'not_found'			=> __( 'No patients found.', 'open-nis' ),
+	    'not_found'			=> __( 'No patients found.', 'open-nis' )
 	);
 
 	$args = array(
@@ -38,7 +38,7 @@ function rja_register_patient_cpt()
 	    'has_archive'        => true,
 	    'hierarchical'       => true,
 	    'menu_position'      => null,
-	    'supports'           => array( 'title', 'editor', 'author' ),
+	    'supports'           => array( 'title', 'editor', 'author', 'custom-fields' )
 	);
 
 	register_post_type( 'patient', $args );
