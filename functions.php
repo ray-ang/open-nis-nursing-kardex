@@ -79,6 +79,7 @@ function rja_encrypt($plaintext)
 {
 
 	$cipher = 'aes-256-cbc';
+	$prefix = 'wp-enc';
 	$key = hash('sha256', AUTH_KEY);
 	$key_hmac = hash( 'sha256', md5(AUTH_KEY) );
 	$iv = random_bytes(16);
@@ -86,7 +87,7 @@ function rja_encrypt($plaintext)
 	$ciphertext = openssl_encrypt($plaintext, $cipher, $key, 0, $iv);
 	$hash = hash_hmac('sha256', $ciphertext, $key_hmac);
 
-	return base64_encode($ciphertext . '::' . $hash . '::' . $iv);
+	return base64_encode($prefix . '::' . $ciphertext . '::' . $hash . '::' . $iv);
 
 }
 
@@ -105,13 +106,15 @@ function rja_decrypt($encrypted)
 	$key = hash('sha256', AUTH_KEY);
 	$key_hmac = hash( 'sha256', md5(AUTH_KEY) );
 
-	list($ciphertext, $hash, $iv) = explode( '::', base64_decode($encrypted) );
+	list($prefix, $ciphertext, $hash, $iv) = explode( '::', base64_decode($encrypted) );
 	$digest = hash_hmac('sha256', $ciphertext, $key_hmac);
 
-	if ( hash_equals($hash, $digest) ) {
-		return openssl_decrypt($ciphertext, $cipher, $key, 0, $iv);
+	if ($prefix == 'wp-enc') {
+		if ( hash_equals($hash, $digest) ) {
+			return openssl_decrypt($ciphertext, $cipher, $key, 0, $iv);
+		}
 	} else {
-		return 'Ciphertext has been compromised.';
+		return $encrypted;
 	}
 
 }
