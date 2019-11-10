@@ -38,7 +38,7 @@ function rja_register_patient_cpt()
 	    'has_archive'        => true,
 	    'hierarchical'       => true,
 	    'menu_position'      => null,
-	    'supports'           => array( 'title', 'editor', 'author', 'custom-fields' )
+	    'supports'           => array( 'title', /*'editor',*/ 'author', 'custom-fields' )
 	);
 
 	register_post_type( 'patient', $args );
