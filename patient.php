@@ -28,15 +28,15 @@ function rja_register_patient_cpt()
 
 	$args = array(
 	    'labels'             => $labels,
-	    'public'             => true,
-	    'publicly_queryable' => true,
-	    'show_ui'            => true,
-	    'show_in_menu'       => true,
-	    'query_var'          => true,
+	    'public'             => TRUE,
+	    'publicly_queryable' => TRUE,
+	    'show_ui'            => TRUE,
+	    'show_in_menu'       => TRUE,
+	    'query_var'          => TRUE,
 	    'rewrite'            => array( 'slug' => 'patient' ),
 	    'capability_type'    => 'post',
-	    'has_archive'        => true,
-	    'hierarchical'       => true,
+	    'has_archive'        => TRUE,
+	    'hierarchical'       => TRUE,
 	    'menu_position'      => null,
 	    'supports'           => array( 'title', /*'editor',*/ 'author', 'custom-fields' )
 	);
@@ -50,7 +50,7 @@ add_action( 'template_redirect', 'rja_single_patient_content_header' );
 function rja_single_patient_content_header()
 {
 
-	if (isset($_POST['edit-patient']) && wp_verify_nonce($_POST['token'], 'token')) {	
+	if ( isset($_POST['edit-patient']) && wp_verify_nonce($_POST['token'], 'token') ) {	
 
 		$patient = array(
 			'post_title' => $_POST['room'],
@@ -83,8 +83,8 @@ function rja_single_patient_content_header()
 
 	if ( isset($_POST['delete-patient']) ) {
 
-		wp_delete_post(get_the_ID());
-		wp_redirect(home_url());
+		wp_delete_post( get_the_ID() );
+		wp_redirect( home_url() );
 
 	}
 

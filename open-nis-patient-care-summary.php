@@ -44,7 +44,7 @@ register_activation_hook( __FILE__, 'rja_add_nurse_role' );
 
 function rja_add_nurse_role()
 {
-	add_role( 'nurse', 'Nurse', array( 'read' => true ) );
+	add_role( 'nurse', 'Nurse', array( 'read' => TRUE ) );
 }
 
 // Remove "Nurse" role on plugin deactivation

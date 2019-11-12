@@ -12,7 +12,7 @@ add_action( 'template_redirect', 'rja_page_add_patient_header' );
 function rja_page_add_patient_header()
 {
 
-	if (isset($_POST['add-patient']) && wp_verify_nonce($_POST['token'], 'token')) {
+	if ( isset($_POST['add-patient']) && wp_verify_nonce($_POST['token'], 'token') ) {
 
         $patient = array(
             'post_title' => $_POST['room'],
@@ -55,13 +55,13 @@ function rja_page_add_patient()
     <div>
         <form method="post">
         	<p><label for="room">Room</label><br />
-           		<input type="text" id="room" name="room" value="<?php if (isset($_POST['room'])) echo $_POST['room']; ?>" required /><br />
+           		<input type="text" id="room" name="room" value="<?php if ( isset($_POST['room']) ) echo $_POST['room']; ?>" required /><br />
             </p>
             <p><label for="name">Name</label><br />
-            	<input type="text" id="patient-name" name="patient-name" value="<?php if (isset($_POST['patient-name'])) echo $_POST['patient-name']; ?>" required /><br />
+            	<input type="text" id="patient-name" name="patient-name" value="<?php if ( isset($_POST['patient-name']) ) echo $_POST['patient-name']; ?>" required /><br />
             </p>
             <p><label for="age">Age</label><br />
-            	<input type="number" id="age" name="age" value="<?php if (isset($_POST['age'])) echo $_POST['age']; ?>" required />
+            	<input type="number" id="age" name="age" value="<?php if ( isset($_POST['age']) ) echo $_POST['age']; ?>" required />
             </p>
             <p><label for="sex">Sex</label><br />
                 <select id="sex" name="sex" size="2" required />
@@ -70,40 +70,40 @@ function rja_page_add_patient()
                 </select>
             </p>
             <p><label for="admission-date">Date of Admission</label><br />
-        		<input type="date" id="admission-date" name="admission-date" value="<?php if (isset($_POST['admission-date'])) echo $_POST['admission-date']; ?>" required />
+        		<input type="date" id="admission-date" name="admission-date" value="<?php if ( isset($_POST['admission-date']) ) echo $_POST['admission-date']; ?>" required />
             </p>
             <p><label for="doctor">Doctor</label><br />
-                <input type="text" id="doctor" name="doctor" value="<?php if (isset($_POST['doctor'])) echo $_POST['doctor']; ?>" required /><br />
+                <input type="text" id="doctor" name="doctor" value="<?php if ( isset($_POST['doctor']) ) echo $_POST['doctor']; ?>" required /><br />
             </p>
             <p><label for="reason">Reason for Admission</label><br />
-                <input type="text" id="reason" name="reason" value="<?php if (isset($_POST['reason'])) echo $_POST['reason']; ?>" required /><br />
+                <input type="text" id="reason" name="reason" value="<?php if ( isset($_POST['reason']) ) echo $_POST['reason']; ?>" required /><br />
             </p>
             <p><label for="allergy">Allergy</label><br />
-                <input type="text" id="allergy" name="allergy" value="<?php if (isset($_POST['allergy'])) echo $_POST['allergy']; ?>" required /><br />
+                <input type="text" id="allergy" name="allergy" value="<?php if ( isset($_POST['allergy']) ) echo $_POST['allergy']; ?>" required /><br />
             </p>
             <p><label for="diet">Diet</label><br />
-                <input type="text" id="diet" name="diet" value="<?php if (isset($_POST['diet'])) echo $_POST['diet']; ?>" required /><br />
+                <input type="text" id="diet" name="diet" value="<?php if ( isset($_POST['diet']) ) echo $_POST['diet']; ?>" required /><br />
             </p>
             <p><label for="iv-access">IV Access</label><br />
-                <input type="text" id="iv-access" name="iv-access" value="<?php if (isset($_POST['iv-access'])) echo $_POST['iv-access']; ?>" required /><br />
+                <input type="text" id="iv-access" name="iv-access" value="<?php if ( isset($_POST['iv-access']) ) echo $_POST['iv-access']; ?>" required /><br />
             </p>
             <p><label for="monitoring">Monitoring</label><br />
-                <input type="text" id="monitoring" name="monitoring" value="<?php if (isset($_POST['monitoring'])) echo $_POST['monitoring']; ?>" required /><br />
+                <input type="text" id="monitoring" name="monitoring" value="<?php if ( isset($_POST['monitoring']) ) echo $_POST['monitoring']; ?>" required /><br />
             </p>
             <p><label for="urine">Urine</label><br />
-                <input type="text" id="urine" name="urine" value="<?php if (isset($_POST['urine'])) echo $_POST['urine']; ?>" required /><br />
+                <input type="text" id="urine" name="urine" value="<?php if ( isset($_POST['urine']) ) echo $_POST['urine']; ?>" required /><br />
             </p>
             <p><label for="bowel">Bowel Movement</label><br />
-                <input type="text" id="bowel" name="bowel" value="<?php if (isset($_POST['bowel'])) echo $_POST['bowel']; ?>" required /><br />
+                <input type="text" id="bowel" name="bowel" value="<?php if ( isset($_POST['bowel']) ) echo $_POST['bowel']; ?>" required /><br />
             </p>
             <p><label for="history">History</label><br />
-                <textarea id="history" name="history" required><?php if (isset($_POST['history'])) echo $_POST['history']; ?></textarea>
+                <textarea id="history" name="history" required><?php if ( isset($_POST['history']) ) echo $_POST['history']; ?></textarea>
             </p>
             <p><label for="medical-notes">Medical Notes</label><br />
-                <textarea id="medical-notes" name="medical-notes" required><?php if (isset($_POST['medical-notes'])) echo $_POST['medical-notes']; ?></textarea>
+                <textarea id="medical-notes" name="medical-notes" required><?php if ( isset($_POST['medical-notes']) ) echo $_POST['medical-notes']; ?></textarea>
             </p>
             <p><label for="nursing-plan">Nursing Plan of Care</label><br />
-                <textarea id="nursing-plan" name="nursing-plan" required><?php if (isset($_POST['nursing-plan'])) echo $_POST['nursing-plan']; ?></textarea>
+                <textarea id="nursing-plan" name="nursing-plan" required><?php if ( isset($_POST['nursing-plan']) ) echo $_POST['nursing-plan']; ?></textarea>
             </p>
             <div style="float: left; margin-right: 20px;"><input type="submit" value="Add Patient" id="add-patient" name="add-patient" /></div>
             <div style="float: left;"><input type="reset" value="Reset Form" id="reset-form" name="reset-form" /></div>
@@ -126,7 +126,7 @@ function rja_page_search_patient()
 {
 
     // Search by Room
-    if ( isset($_POST['search-room']) && ! empty($_POST['patient-room']) && preg_match( '/[a-zA-Z0-9 _#-]/i', $_POST['patient-room'] ) ) {
+    if ( isset($_POST['search-room']) && ! empty($_POST['patient-room']) && preg_match('/[a-zA-Z0-9 _#-]/i', $_POST['patient-room']) ) {
 
         $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
@@ -140,7 +140,7 @@ function rja_page_search_patient()
             'include'           => array(),
             'exclude'           => array(),
             'post_type'         => 'patient',
-            'suppress_filters'  => true
+            'suppress_filters'  => TRUE
         );
 
         $patient = get_posts($args);
@@ -148,7 +148,7 @@ function rja_page_search_patient()
     }
 
     // Search by Name
-    if ( isset($_POST['search-name']) && ! empty($_POST['patient-name']) && stristr( $_POST['patient-name'], ' ' ) == false && preg_match( '/[a-zA-Z]/i', $_POST['patient-name'] ) ) {
+    if ( isset($_POST['search-name']) && ! empty($_POST['patient-name']) && stristr($_POST['patient-name'], ' ') == false && preg_match('/[a-zA-Z]/i', $_POST['patient-name']) ) {
 
         $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
@@ -164,7 +164,7 @@ function rja_page_search_patient()
             'meta_value'        => rja_encrypt($_POST['patient-name']),
             'meta_compare'      => 'LIKE',
             'post_type'         => 'patient',
-            'suppress_filters'  => true
+            'suppress_filters'  => TRUE
         );
 
         $patient = get_posts($args);
@@ -175,7 +175,7 @@ function rja_page_search_patient()
     <div>
         <form method="post">
             <p><label for="patient-room">Room</label><br />
-                <input type="text" id="patient-room" name="patient-room" value="<?php if (isset($_POST['patient-room'])) echo $_POST['patient-room']; ?>" />
+                <input type="text" id="patient-room" name="patient-room" value="<?php if ( isset($_POST['patient-room']) ) echo $_POST['patient-room']; ?>" />
             </p>
             <p><input type="submit" id="search-room" name="search-room" value="Search Room" /></p>
             <?php wp_nonce_field( 'token', 'token' ); ?>
@@ -188,11 +188,11 @@ function rja_page_search_patient()
             <?php wp_nonce_field( 'token', 'token' ); ?>
         </form>-->
     </div>
-    <?php if ( $patient == true ): ?>
+    <?php if ( $patient == TRUE ): ?>
         <?php foreach( $patient as $patient ): ?>
             <p>Room Number: <a href="<?= get_the_permalink($patient->ID); ?>"><?= $patient->post_title; ?></a> - Patient Name: <?= rja_decrypt($patient->patient_name);?></p>
-        <?php endforeach?>
-        <?php elseif ( ( isset($_POST['search-room']) && $patient !== true ) || ( isset($_POST['search-name']) && $patient !== true ) ): ?>
+        <?php endforeach ?>
+        <?php elseif ( ( isset($_POST['search-room']) && $patient !== TRUE ) || ( isset($_POST['search-name']) && $patient !== TRUE ) ): ?>
         <p>No patient was found on search.</p>
     <?php endif ?>
     <?php else: ?>
