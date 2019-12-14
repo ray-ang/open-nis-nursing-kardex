@@ -22,21 +22,21 @@ function rja_page_add_patient_header()
 
         $pid = wp_insert_post($patient);
 
-        add_metadata( 'post', $pid, 'patient_name', rja_encrypt($_POST['patient-name']) );
-        add_metadata( 'post', $pid, 'patient_age', rja_encrypt($_POST['age']) );
-        add_metadata( 'post', $pid, 'patient_sex', rja_encrypt($_POST['sex']) );
-        add_metadata( 'post', $pid, 'patient_date_admission', rja_encrypt($_POST['admission-date']) );
-        add_metadata( 'post', $pid, 'patient_doctor', rja_encrypt($_POST['doctor']) );
-        add_metadata( 'post', $pid, 'patient_reason', rja_encrypt($_POST['reason']) );
-        add_metadata( 'post', $pid, 'patient_allergy', rja_encrypt($_POST['allergy']) );
-        add_metadata( 'post', $pid, 'patient_diet', rja_encrypt($_POST['diet']) );
-        add_metadata( 'post', $pid, 'patient_iv_access', rja_encrypt($_POST['iv-access']) );
-        add_metadata( 'post', $pid, 'patient_monitoring', rja_encrypt($_POST['monitoring']) );
-        add_metadata( 'post', $pid, 'patient_urine', rja_encrypt($_POST['urine']) );
-        add_metadata( 'post', $pid, 'patient_bowel', rja_encrypt($_POST['bowel']) );
-        add_metadata( 'post', $pid, 'patient_history', rja_encrypt($_POST['history']) );
-        add_metadata( 'post', $pid, 'patient_medical_notes', rja_encrypt($_POST['medical-notes']) );
-        add_metadata( 'post', $pid, 'patient_nursing_plan', rja_encrypt($_POST['nursing-plan']) );
+        add_metadata( 'post', $pid, 'patient_name', encrypt($_POST['patient-name']) );
+        add_metadata( 'post', $pid, 'patient_age', encrypt($_POST['age']) );
+        add_metadata( 'post', $pid, 'patient_sex', encrypt($_POST['sex']) );
+        add_metadata( 'post', $pid, 'patient_date_admission', encrypt($_POST['admission-date']) );
+        add_metadata( 'post', $pid, 'patient_doctor', encrypt($_POST['doctor']) );
+        add_metadata( 'post', $pid, 'patient_reason', encrypt($_POST['reason']) );
+        add_metadata( 'post', $pid, 'patient_allergy', encrypt($_POST['allergy']) );
+        add_metadata( 'post', $pid, 'patient_diet', encrypt($_POST['diet']) );
+        add_metadata( 'post', $pid, 'patient_iv_access', encrypt($_POST['iv-access']) );
+        add_metadata( 'post', $pid, 'patient_monitoring', encrypt($_POST['monitoring']) );
+        add_metadata( 'post', $pid, 'patient_urine', encrypt($_POST['urine']) );
+        add_metadata( 'post', $pid, 'patient_bowel', encrypt($_POST['bowel']) );
+        add_metadata( 'post', $pid, 'patient_history', encrypt($_POST['history']) );
+        add_metadata( 'post', $pid, 'patient_medical_notes', encrypt($_POST['medical-notes']) );
+        add_metadata( 'post', $pid, 'patient_nursing_plan', encrypt($_POST['nursing-plan']) );
 
         $link = get_permalink($pid);
         wp_redirect($link);
@@ -161,7 +161,7 @@ function rja_page_search_patient()
             'include'           => array(),
             'exclude'           => array(),
             'meta_key'          => 'patient_name',
-            'meta_value'        => rja_encrypt($_POST['patient-name']),
+            'meta_value'        => encrypt($_POST['patient-name']),
             'meta_compare'      => 'LIKE',
             'post_type'         => 'patient',
             'suppress_filters'  => TRUE
@@ -190,7 +190,7 @@ function rja_page_search_patient()
     </div>
     <?php if ( $patient == TRUE ): ?>
         <?php foreach( $patient as $patient ): ?>
-            <p>Room Number: <a href="<?= get_the_permalink($patient->ID); ?>"><?= $patient->post_title; ?></a> - Patient Name: <?= rja_decrypt($patient->patient_name);?></p>
+            <p>Room Number: <a href="<?= get_the_permalink($patient->ID); ?>"><?= $patient->post_title; ?></a> - Patient Name: <?= decrypt($patient->patient_name);?></p>
         <?php endforeach ?>
         <?php elseif ( ( isset($_POST['search-room']) && $patient !== TRUE ) || ( isset($_POST['search-name']) && $patient !== TRUE ) ): ?>
         <p>No patient was found on search.</p>
