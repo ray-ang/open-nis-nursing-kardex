@@ -53,28 +53,28 @@ function rja_single_patient_content_header()
 	if ( isset($_POST['edit-patient']) && wp_verify_nonce($_POST['token'], 'token') ) {	
 
 		$patient = array(
-			'post_title' => $_POST['room'],
+			'post_title' => esc_html($_POST['room']),
 			'post_type' => 'patient',
 			'post_status' => 'Publish'
 			);	
 
 		$pid = wp_update_post($patient);
 
-		update_metadata( 'post', $pid, 'patient_name', cp_encrypt($_POST['patient-name']) );
-		update_metadata( 'post', $pid, 'patient_age', cp_encrypt($_POST['age']) );
-		update_metadata( 'post', $pid, 'patient_sex', cp_encrypt($_POST['sex']) );
-		update_metadata( 'post', $pid, 'patient_date_admission', cp_encrypt($_POST['admission-date']) );
-		update_metadata( 'post', $pid, 'patient_doctor', cp_encrypt($_POST['doctor']) );
-		update_metadata( 'post', $pid, 'patient_reason', cp_encrypt($_POST['reason']) );
-		update_metadata( 'post', $pid, 'patient_allergy', cp_encrypt($_POST['allergy']) );
-		update_metadata( 'post', $pid, 'patient_diet', cp_encrypt($_POST['diet']) );
-		update_metadata( 'post', $pid, 'patient_iv_access', cp_encrypt($_POST['iv-access']) );
-		update_metadata( 'post', $pid, 'patient_monitoring', cp_encrypt($_POST['monitoring']) );
-		update_metadata( 'post', $pid, 'patient_urine', cp_encrypt($_POST['urine']) );
-		update_metadata( 'post', $pid, 'patient_bowel', cp_encrypt($_POST['bowel']) );
-		update_metadata( 'post', $pid, 'patient_history', cp_encrypt($_POST['history']) );
-		update_metadata( 'post', $pid, 'patient_medical_notes', cp_encrypt($_POST['medical-notes']) );
-		update_metadata( 'post', $pid, 'patient_nursing_plan', cp_encrypt($_POST['nursing-plan']) );
+		update_metadata( 'post', $pid, 'patient_name', Basic::encrypt($_POST['patient-name']) );
+		update_metadata( 'post', $pid, 'patient_age', Basic::encrypt($_POST['age']) );
+		update_metadata( 'post', $pid, 'patient_sex', Basic::encrypt($_POST['sex']) );
+		update_metadata( 'post', $pid, 'patient_date_admission', Basic::encrypt($_POST['admission-date']) );
+		update_metadata( 'post', $pid, 'patient_doctor', Basic::encrypt($_POST['doctor']) );
+		update_metadata( 'post', $pid, 'patient_reason', Basic::encrypt($_POST['reason']) );
+		update_metadata( 'post', $pid, 'patient_allergy', Basic::encrypt($_POST['allergy']) );
+		update_metadata( 'post', $pid, 'patient_diet', Basic::encrypt($_POST['diet']) );
+		update_metadata( 'post', $pid, 'patient_iv_access', Basic::encrypt($_POST['iv-access']) );
+		update_metadata( 'post', $pid, 'patient_monitoring', Basic::encrypt($_POST['monitoring']) );
+		update_metadata( 'post', $pid, 'patient_urine', Basic::encrypt($_POST['urine']) );
+		update_metadata( 'post', $pid, 'patient_bowel', Basic::encrypt($_POST['bowel']) );
+		update_metadata( 'post', $pid, 'patient_history', Basic::encrypt($_POST['history']) );
+		update_metadata( 'post', $pid, 'patient_medical_notes', Basic::encrypt($_POST['medical-notes']) );
+		update_metadata( 'post', $pid, 'patient_nursing_plan', Basic::encrypt($_POST['nursing-plan']) );
 
 		$link = get_permalink($pid);
 		wp_redirect($link);
@@ -91,7 +91,7 @@ function rja_single_patient_content_header()
 }
 
 // Include Javascript and CSS scripts
-add_action( 'wp_head', 'rja_single_patient_header_script' );
+add_action( 'wp_footer', 'rja_single_patient_header_script' );
 
 function rja_single_patient_header_script()
 {
@@ -126,21 +126,21 @@ function rja_single_patient_content()
 
 			$patient = get_metadata( 'post', get_the_ID() );
 
-			$patient_name = cp_decrypt($patient['patient_name'][0]);
-			$patient_age = cp_decrypt($patient['patient_age'][0]);
-			if ( cp_decrypt($patient['patient_sex'][0]) == 'M' ) { $patient_sex = 'Male'; } else { $patient_sex = 'Female'; }
-			$patient_date_admission = cp_decrypt($patient['patient_date_admission'][0]);
-			$patient_doctor = cp_decrypt($patient['patient_doctor'][0]);
-			$patient_reason = cp_decrypt($patient['patient_reason'][0]);
-			$patient_allergy = cp_decrypt($patient['patient_allergy'][0]);
-			$patient_diet = cp_decrypt($patient['patient_diet'][0]);
-			$patient_iv_access = cp_decrypt($patient['patient_iv_access'][0]);
-			$patient_monitoring = cp_decrypt($patient['patient_monitoring'][0]);
-			$patient_urine = cp_decrypt($patient['patient_urine'][0]);
-			$patient_bowel = cp_decrypt($patient['patient_bowel'][0]);
-			$patient_history = cp_decrypt($patient['patient_history'][0]);
-			$patient_medical_notes = cp_decrypt($patient['patient_medical_notes'][0]);
-			$patient_nursing_plan = cp_decrypt($patient['patient_nursing_plan'][0]);
+			$patient_name = Basic::decrypt($patient['patient_name'][0]);
+			$patient_age = Basic::decrypt($patient['patient_age'][0]);
+			if ( Basic::decrypt($patient['patient_sex'][0]) == 'M' ) { $patient_sex = 'Male'; } else { $patient_sex = 'Female'; }
+			$patient_date_admission = Basic::decrypt($patient['patient_date_admission'][0]);
+			$patient_doctor = Basic::decrypt($patient['patient_doctor'][0]);
+			$patient_reason = Basic::decrypt($patient['patient_reason'][0]);
+			$patient_allergy = Basic::decrypt($patient['patient_allergy'][0]);
+			$patient_diet = Basic::decrypt($patient['patient_diet'][0]);
+			$patient_iv_access = Basic::decrypt($patient['patient_iv_access'][0]);
+			$patient_monitoring = Basic::decrypt($patient['patient_monitoring'][0]);
+			$patient_urine = Basic::decrypt($patient['patient_urine'][0]);
+			$patient_bowel = Basic::decrypt($patient['patient_bowel'][0]);
+			$patient_history = Basic::decrypt($patient['patient_history'][0]);
+			$patient_medical_notes = Basic::decrypt($patient['patient_medical_notes'][0]);
+			$patient_nursing_plan = Basic::decrypt($patient['patient_nursing_plan'][0]);
 
 			?>
 			<h3>Room: <?php esc_html(the_title()); ?></h3>
@@ -177,8 +177,8 @@ function rja_single_patient_content()
 				        </p>
 				        <p><label for="sex">Sex</label><br />
 				            <select id="sex" name="sex" size="2" required />
-								<option value="M" <?php if (cp_decrypt($patient['patient_sex'][0])=='M') echo 'selected="selected"'; ?>>Male</option>
-								<option value="F" <?php if (cp_decrypt($patient['patient_sex'][0])=='F') echo 'selected="selected"'; ?>>Female</option>
+								<option value="M" <?php if (Basic::decrypt($patient['patient_sex'][0])=='M') echo 'selected="selected"'; ?>>Male</option>
+								<option value="F" <?php if (Basic::decrypt($patient['patient_sex'][0])=='F') echo 'selected="selected"'; ?>>Female</option>
 				            </select>
 				        </p>
 				        <p><label for="admission-date">Date of Admission</label><br />

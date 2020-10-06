@@ -3,7 +3,7 @@
 Plugin Name: Open-NIS Patient Care Summary
 Plugin URI: https://open-nis.org/
 Description: A WordPress-based electronic patient care summary, or electronic nursing kardex
-Version: 0.9.4
+Version: 0.9.5
 Author: Raymund John Ang
 License: GPL v2 or later
 Text Domain: open-nis
@@ -24,32 +24,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-/** Show warning if ClassicPress Encryption plugin is not activated */
-add_filter( 'the_content', 'check_classicpress_encryption' );
-function check_classicpress_encryption() {
+// /** Show warning if ClassicPress Encryption plugin is not activated */
+// add_filter( 'the_content', 'check_classicpress_encryption' );
+// function check_classicpress_encryption() {
 
-	if ( ! function_exists( 'cp_encrypt' ) ) {
-		exit ('<strong>Warning: </strong>You need to install and activate <a href="https://github.com/ClassicPress-research/encryption-functions">ClassicPress Encryption</a> plugin.');
-	}
+// 	if ( ! function_exists( 'cp_encrypt' ) ) {
+// 		exit ('<strong>Warning: </strong>You need to install and activate <a href="https://github.com/ClassicPress-research/encryption-functions">ClassicPress Encryption</a> plugin.');
+// 	}
 
-}
+// }
 
-// Patient custom post type configuration and template
-require_once 'patient.php';
+require_once 'Basic.php'; // BasicPHP
+require_once 'patient.php'; // Patient custom post type and template
+require_once 'shortcodes.php'; // Shortcodes
 
-// Shortcodes
-require_once 'shortcodes.php';
-
-/** Add "Nurse" role on plugin activation */
-register_activation_hook( __FILE__, 'rja_add_nurse_role' );
+register_activation_hook( __FILE__, 'rja_add_nurse_role' ); // Add "Nurse" role on activation
 
 function rja_add_nurse_role()
 {
 	add_role( 'nurse', 'Nurse', array( 'read' => TRUE ) );
 }
 
-/** Remove "Nurse" role on plugin deactivation */
-register_deactivation_hook( __FILE__, 'rja_remove_nurse_role' );
+register_deactivation_hook( __FILE__, 'rja_remove_nurse_role' ); // Remove "Nurse" role on deactivation
 
 function rja_remove_nurse_role()
 {
