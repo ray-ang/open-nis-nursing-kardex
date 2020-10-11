@@ -4,20 +4,20 @@
 
 ### Description
 
-A WordPress-based electronic patient care summary, or electronic nursing kardex. To conform with regulatory requirements, the plugin uses BasicPHP Class Library (https://github.com/ray-ang/basicphp) to maintain confidentiality (Advanced Encryption Standard - AES) and integrity (Keyed-Hash Message Authentication Code - HMAC) of data.
+A WordPress-based electronic patient care summary, or electronic nurse kardex. To conform with regulatory requirements, the plugin uses BasicPHP Class Library (https://github.com/ray-ang/basicphp) to maintain confidentiality (Advanced Encryption Standard - AES) and integrity (Keyed-Hash Message Authentication Code - HMAC) of data.
 
 The plugin automatically creates a "Nurse" role upon activation, and removes the role upon deactivation. Provide the user with the "Nurse" role so he/she can access the electronic kardex.
 
-### BasicPHP Encryption Middleware
+### Define 'KARDEX_PASS' in wp-config.php
 
-Activate BasicPHP Encryption middleware in the WordPress configuration file (wp-config.php), and provide pass phrase. Example can be found below.
+Define constant 'KARDEX_PASS' in the WordPress configuration file (wp-config.php), and provide pass phrase. Example can be found below.
 
-Basic::encryption('SecretPassPhrase123'); // BasicPHP Encryption middleware
+define('KARDEX_PASS', 'SecretPassPhrase123'); // Open-NIS Encryption and HMAC key
 
 ### Shortcodes
 
-[open-nis-add-patient]<br/>
+[open-nis-add-room]<br/>
 Add Patient page
 
-[open-nis-search-patient]<br/>
+[open-nis-search-room]<br/>
 Search Patient page
