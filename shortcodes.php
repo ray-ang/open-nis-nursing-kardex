@@ -228,7 +228,7 @@ function rja_page_search_room()
                 <p>Room Number: <a href="<?= get_the_permalink($room->ID); ?>"><?= $room->post_title; ?></a> - Patient Name: <?= Basic::decrypt($room->room_name);?></p>
             <?php endforeach ?>
             </div>
-        <?php elseif ( ( isset($_POST['search-room']) && $room !== true ) || ( isset($_POST['search-name']) && $room !== true ) ): ?>
+        <?php elseif ( ( isset($_POST['search-room']) && isset($rooms) && $room !== true ) || ( isset($_POST['search-name']) && $room !== true ) ): ?>
             <div style="clear: both; margin-top: 6rem;">No room was found on search.</div>
         <?php endif ?>
     <?php else: ?>
