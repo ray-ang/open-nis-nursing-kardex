@@ -12,7 +12,7 @@ The plugin automatically creates a "Nurse" role upon activation, and removes the
 
 Define constant 'KARDEX_PASS' in the WordPress configuration file (wp-config.php), and provide pass phrase. Example can be found below.
 
-define('KARDEX_PASS', 'SecretPassPhrase123'); // Open-NIS Encryption and HMAC key
+define('KARDEX_PASS', 'SecretPassPhrase123'); // Open-NIS encryption and HMAC key
 
 ### Shortcodes
 
