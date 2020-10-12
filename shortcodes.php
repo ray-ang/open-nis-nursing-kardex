@@ -169,29 +169,6 @@ function rja_page_search_room()
         
     }
 
-    // // Search by Name
-    // if ( isset($_POST['search-name']) && ! empty($_POST['room-name']) && stristr($_POST['room-name'], ' ') == false && preg_match('/[a-zA-Z]/i', $_POST['room-name']) ) {
-
-    //     $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-
-    //     $args = array(
-    //         'posts_per_page'    => 3,
-    //         'offset'            => 0,
-    //         'paged'             => $paged,
-    //         'orderby'           => 'room_name',
-    //         'order'             => 'ASC',
-    //         'include'           => array(),
-    //         'exclude'           => array(),
-    //         'meta_key'          => 'room_name',
-    //         'meta_value'        => Basic::encrypt($_POST['room-name']),
-    //         'meta_compare'      => 'LIKE',
-    //         'post_type'         => 'room',
-    //         'suppress_filters'  => true
-    //     );
-
-    //     $rooms = get_posts($args);
-        
-    // }
     ?>
     <?php if ( current_user_can('administrator') || current_user_can('nurse') ): ?>
         <div>
@@ -206,16 +183,6 @@ function rja_page_search_room()
                 </p>
                 <?php wp_nonce_field( 'token', 'token' ); ?>
             </form>
-            <!--<form method="post">
-                <p>
-                    <label for="room-name">Name</label><br />
-                    <input type="text" id="room-name" name="room-name" value="<?php // if ( isset($_POST['room-name']) ) echo esc_html($_POST['room-name']); ?>" />
-                </p>
-                <p>
-                    <input type="submit" id="search-name" name="search-name" value="Search Name" />
-                </p>
-                <?php // wp_nonce_field( 'token', 'token' ); ?>
-            </form>-->
         </div>
         <script>
             function clearSearch() {
