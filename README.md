@@ -1,6 +1,6 @@
 ## Open-NIS Patient Care Summary
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=open-nis-patient-care-summary&metric=alert_status)](https://sonarcloud.io/dashboard?id=open-nis-patient-care-summary)
+
 
 ### Description
 
