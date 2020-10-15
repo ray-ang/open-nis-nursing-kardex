@@ -28,15 +28,15 @@ function rja_register_room_cpt()
 
 	$args = array(
 	    'labels'             => $labels,
-	    'public'             => TRUE,
-	    'publicly_queryable' => TRUE,
-	    'show_ui'            => TRUE,
-	    'show_in_menu'       => TRUE,
-	    'query_var'          => TRUE,
+	    'public'             => true,
+	    'publicly_queryable' => true,
+	    'show_ui'            => true,
+	    'show_in_menu'       => true,
+	    'query_var'          => true,
 	    'rewrite'            => array( 'slug' => 'room' ),
 	    'capability_type'    => 'post',
-	    'has_archive'        => TRUE,
-	    'hierarchical'       => TRUE,
+	    'has_archive'        => true,
+	    'hierarchical'       => true,
 	    'menu_position'      => null,
 	    'supports'           => array( 'title', /*'editor',*/ 'author', 'custom-fields' )
 	);
@@ -44,8 +44,8 @@ function rja_register_room_cpt()
 	register_post_type( 'room', $args );
 }
 
-// Single Room Content Template - Before Header
-add_action( 'template_redirect', 'rja_single_room_content_header' );
+// Single Room - Before Header
+add_action( 'wp', 'rja_single_room_content_header' );
 
 function rja_single_room_content_header()
 {
@@ -118,7 +118,7 @@ function rja_single_room_header_script()
 	<?php
 }
 
-// Single Room Content Template
+// Single Room
 add_filter( 'the_content', 'rja_single_room_content' );
 
 function rja_single_room_content()

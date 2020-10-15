@@ -7,7 +7,7 @@
 */
 
 // Add Room Page - Before Header
-add_action( 'template_redirect', 'rja_page_add_room_header' );
+add_action( 'wp', 'rja_page_add_room_header' );
 
 function rja_page_add_room_header()
 {
