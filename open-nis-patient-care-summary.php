@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Open-NIS Patient Care Summary
-Plugin URI: https://open-nis.org/
-Description: A WordPress-based electronic patient care summary, or electronic nursing kardex
+Plugin URI: https://github.com/ray-ang/open-nis-patient-care-summary
+Description: A WordPress-based electronic patient care summary, or electronic nurse kardex
 Version: 0.9.6
 Author: Raymund John Ang
 License: GPL v2 or later
@@ -24,17 +24,23 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-require_once 'Basic.php'; // BasicPHP class library
-Basic::encryption(KARDEX_PASS); // BasicPHP Encryption middleware
+add_action( 'wp', 'rja_enable_basic' ); // Include BasicPHP
 
-require_once 'room.php'; // Room custom post type and template
-require_once 'shortcodes.php'; // Shortcodes
+function rja_enable_basic() {
+
+	if ( ! class_exists('Basic') ) {
+		require_once 'Basic.php'; // BasicPHP class library
+	}
+
+	Basic::encryption(KARDEX_PASS); // BasicPHP encryption middleware
+
+}
 
 register_activation_hook( __FILE__, 'rja_add_nurse_role' ); // Add "Nurse" role on activation
 
 function rja_add_nurse_role()
 {
-	add_role( 'nurse', 'Nurse', array( 'read' => TRUE ) );
+	add_role( 'nurse', 'Nurse', array( 'read' => true ) );
 }
 
 register_deactivation_hook( __FILE__, 'rja_remove_nurse_role' ); // Remove "Nurse" role on deactivation
@@ -43,3 +49,6 @@ function rja_remove_nurse_role()
 {
 	remove_role( 'nurse' );
 }
+
+require_once 'room.php'; // Room custom post type and template
+require_once 'shortcodes.php'; // Shortcodes
