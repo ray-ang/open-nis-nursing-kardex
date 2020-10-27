@@ -24,15 +24,77 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-add_action( 'wp', 'rja_enable_basic' ); // Include BasicPHP
+add_action( 'admin_init', 'rja_admin_front' ); // Admin - before headers sent
+add_action( 'wp', 'rja_admin_front' ); // Frontend - before headers sent
 
-function rja_enable_basic() {
+function rja_admin_front() {
 
 	if ( ! class_exists('Basic') ) {
 		require_once 'Basic.php'; // BasicPHP class library
 	}
 
-	Basic::encryption(KARDEX_PASS); // BasicPHP encryption middleware
+	if ( defined('KARDEX_PASS') ) {
+		Basic::encryption(KARDEX_PASS); // 'KARDEX_PASS' as passphrase
+	}
+
+}
+
+add_action( 'admin_init', 'rja_admin_encrypt_btn' ); // Encrypt and decrypt buttons
+
+function rja_admin_encrypt_btn() {
+
+	if( isset($_POST['encrypt']) && $_POST['encrypt'] === 'Encrypt' && ! empty($_POST) ) {
+
+		foreach ( $_POST['meta'] as $meta ) {
+
+			if ( ! stristr($meta['value'], 'enc-v') ) {
+				$index = array_search($meta, $_POST['meta']);
+				$_POST['meta'][$index]['value'] = Basic::encrypt($meta['value']);
+			}
+
+		}
+
+	}
+
+	if( isset($_POST['decrypt']) && $_POST['decrypt'] === 'Decrypt' && ! empty($_POST) ) {
+
+		foreach ( $_POST['meta'] as $meta ) {
+
+			if ( stristr($meta['value'], 'enc-v') ) {
+				$index = array_search($meta, $_POST['meta']);
+				$_POST['meta'][$index]['value'] = Basic::decrypt($meta['value']);
+			}
+
+		}
+
+	}
+
+}
+
+add_action( 'admin_footer', 'rja_admin_footer' ); // Admin - footer
+
+function rja_admin_footer() {
+
+	if ( is_admin() && ( stristr($_SERVER['REQUEST_URI'], 'post.php') || stristr($_SERVER['REQUEST_URI'], 'post-new.php') ) ) {
+		?>
+		<script>
+			// Render encrypt and decrypt buttons
+			const encryptBtn = document.createElement('input'); // Encrypt button
+			encryptBtn.classList.add('button', 'button-info', 'button-large');
+			encryptBtn.type = 'submit';
+			encryptBtn.name = 'encrypt';
+			encryptBtn.value = 'Encrypt';
+			document.querySelector('#publishing-action').appendChild(encryptBtn);
+
+			const decryptBtn = document.createElement('input'); // Decrypt button
+			decryptBtn.classList.add('button', 'button-info', 'button-large');
+			decryptBtn.type = 'submit';
+			decryptBtn.name = 'decrypt';
+			decryptBtn.value = 'Decrypt';
+			document.querySelector('#publishing-action').appendChild(decryptBtn);
+		</script>
+		<?php
+	}
 
 }
 
