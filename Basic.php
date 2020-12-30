@@ -13,6 +13,7 @@
  *          - include/require Basic.php.
  *
  * @package  BasicPHP
+ * @version  v0.9.6
  * @author   Raymund John Ang <raymund@open-nis.org>
  * @license  MIT License
  */
@@ -29,8 +30,9 @@ class Basic
 	/**
 	 * Get URI segment value
 	 *
-	 * @param integer $order - URI substring position from base URL
-	 *                       - Basic::segment(1) as first URI segment
+	 * @param int $order    - URI segment position from base URL
+	 *                      - Basic::segment(1) as first URI segment
+	 * @return string|false - URI segment string or error
 	 */
 
 	public static function segment($order)
@@ -38,12 +40,14 @@ class Basic
 		if (isset($_SERVER['REQUEST_URI'])) {
 			$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 			$uri = explode('/', $uri);
+		} else {
+			return FALSE;
 		}
 
 		// Number of subdirectories from hostname to index.php
 		$sub_dir = substr_count($_SERVER['SCRIPT_NAME'], '/') - 1;
 
-		if ( ! empty($uri[$order+$sub_dir]) ) {
+		if (! empty($uri[$order+$sub_dir])) {
 			return $uri[$order+$sub_dir];
 		} else {
 			return FALSE;
@@ -51,13 +55,13 @@ class Basic
 	}
 
 	/**
-	 * Run controller or closure based on HTTP method and URL path string
+	 * Controller or callable-based endpoint routing
 	 *
-	 * @param string $http_method - HTTP method (e.g. 'GET', 'POST', 'PUT', 'DELETE')
-	 * @param string $path        - URL path in the format '/url/string'
-	 *                            - Wildcard convention from CodeIgniter
-	 *                            - (:num) for number and (:any) for string
-	 * @param string $class_method - ClassController@method format
+	 * @param string $http_method           - HTTP method (e.g. 'GET', 'POST', 'PUT', 'DELETE')
+	 * @param string $path                  - URL path in the format '/url/path'
+	 *                                      - Wildcard convention from CodeIgniter
+	 *                                      - (:num) for number and (:any) for string
+	 * @param string|callable $class_method - 'ClassController@method' format or callable function
 	 */
 
 	public static function route($http_method, $path, $class_method)
@@ -65,28 +69,27 @@ class Basic
 		if ($_SERVER['REQUEST_METHOD'] === $http_method) {
 
 			// Convert '/' and wilcards (:num) and (:any) to RegEx
-			$pattern = str_ireplace( '/', '\/', $path );
-			$pattern = str_ireplace( '(:num)', '[0-9]+', $pattern );
-			$pattern = str_ireplace( '(:any)', '[^\/]+', $pattern );
+			$pattern = str_ireplace('/', '\/', $path);
+			$pattern = str_ireplace('(:num)', '[0-9]+', $pattern);
+			$pattern = str_ireplace('(:any)', '[^\/]+', $pattern);
 					
 			// Check for subfolders from DocumentRoot and include in endpoint
 			$sub = explode('/', dirname($_SERVER['SCRIPT_NAME']));
-			if (! empty($sub[1])) { $subfolder = implode('\/', $sub); } else { $subfolder = ''; }
+			$subfolder = (! empty($sub[1])) ? implode('\/', $sub) : '';
 
 			$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 			if ( preg_match('/^' . $subfolder . $pattern . '+$/i', $uri) )  {
-
 				if (is_string($class_method)) {
 					if (strstr($class_method, '@')) {
 						list($class, $method) = explode('@', $class_method);
 
 						$object = new $class();
 						$object->$method();
-						exit();
+						exit;
 					}
-				} else {
+				} elseif (is_callable($class_method)) {
 					$class_method();
-					exit();
+					exit;
 				}
 
 			}
@@ -97,17 +100,15 @@ class Basic
 	/**
 	 * Render view with data
 	 *
-	 * @param string $view - View file, excluding .php extension
+	 * @param string $view - View file inside 'views' folder (exclude .php extension)
 	 * @param array $data  - Data in array format
 	 */
 
 	public static function view($view, $data=NULL)
 	{
-		// Convert array keys to variables
-		if (isset($data)) { extract($data); }
-
-		// Render page view
-		require_once '../views/' . $view . '.php';
+		$file = '../views/' . $view . '.php';
+		if (! empty($data)) extract($data); // Convert array keys to variables
+		if (file_exists($file) && is_readable($file) && pathinfo($file)['extension'] === 'php') require_once $file; // Render page view
 	}
 
 	/**
@@ -116,11 +117,12 @@ class Basic
 	 * @param string $http_method - HTTP request method (e.g. 'GET', 'POST')
 	 * @param string $url         - URL of API endpoint
 	 * @param array $data         - Request body in array format
-	 * @param string $username    - Username
-	 * @param string $password    - Password
+	 * @param string $user_token  - Username or API token
+	 * @param string $password    - Password (no password for API token)
+	 * @return (int|string)[]     - HTTP response code and result of cURL execution
 	 */
 
-	public static function apiCall($http_method, $url, $data=NULL, $username=NULL, $password=NULL)
+	public static function apiCall($http_method, $url, $data=NULL, $user_token=NULL, $password=NULL)
 	{
 		$ch = curl_init(); // Initialize cURL
 		$data_json = json_encode($data); // Convert data to JSON
@@ -130,7 +132,7 @@ class Basic
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $http_method);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+		curl_setopt($ch, CURLOPT_USERPWD, "$user_token:$password");
 		// curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 		// 	'Content-Type: application/json',                                                                                
 		// 	'Content-Length: ' . strlen($data_json))                                                                       
@@ -146,12 +148,13 @@ class Basic
 	/**
 	 * Handle HTTP API response
 	 *
-	 * @param integer $code     - HTTP response code
-	 * @param string $data      - Data to transmit
-	 * @param string $message   - HTTP response message
+	 * @param integer $code        - HTTP response code
+	 * @param string $data         - Data to transmit
+	 * @param string $content_type - Header: Content-Type
+	 * @param string $message      - HTTP response message
 	 */
 
-	public static function apiResponse($code, $data=NULL, $message=NULL)
+	public static function apiResponse($code, $data=NULL, $content_type='text/plain', $message=NULL)
 	{
 		// OK response
 		if ($code > 199 && $code < 300) {
@@ -165,13 +168,28 @@ class Basic
 			header($_SERVER['SERVER_PROTOCOL'] . ' ' . $code . ' ' . $message); // Set HTTP response code and message
 		}
 
+		header('Content-Type: ' . $content_type);
 		exit($data); // Data in string format
+	}
+
+	/**
+	 * Base URL - Templating
+	 *
+	 * @return string - Base URL
+	 */
+
+	public static function baseUrl()
+	{
+		$http_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
+		$subfolder = (! empty(dirname($_SERVER['SCRIPT_NAME']))) ? dirname($_SERVER['SCRIPT_NAME']) : '';
+
+		return $http_protocol . $_SERVER['SERVER_NAME'] . $subfolder . '/';
 	}
 
 	/**
 	 * Prevent Cross-Site Request Forgery (CSRF)
 	 * Create a per request token to handle CSRF using sessions
-	 * Basic::firewall() should be executed. $verify_csrf_token = TRUE (default)
+	 * Basic::setFirewall() should be executed. $verify_csrf_token = TRUE (default)
 	 */
 
 	public static function csrfToken()
@@ -193,7 +211,7 @@ class Basic
 	{
 		// Require encryption middleware
 		if (! defined('PASS_PHRASE') || ! defined('CIPHER_METHOD')) {
-			self::apiResponse(501, 'Please activate Basic::encryption() middleware and set the pass phrase.');
+			self::apiResponse(501, 'Please activate Basic::setEncryption() middleware and set the pass phrase.');
 		}
 
 		// Encryption - Version 1
@@ -243,7 +261,7 @@ class Basic
 	{
 		// Require encryption middleware
 		if (! defined('PASS_PHRASE') || ! defined('CIPHER_METHOD')) {
-			self::apiResponse(501, 'Please activate Basic::encryption() middleware and set the pass phrase.');
+			self::apiResponse(501, 'Please activate Basic::setEncryption() middleware and set the pass phrase.');
 		}
 
 		// Decryption - Version 1
@@ -333,15 +351,24 @@ class Basic
 	 * @param boolean $boolean - TRUE or FALSE
 	 */
 
-	public static function errorReporting($boolean)
+	public static function setErrorReporting($boolean=TRUE)
 	{
 		if ($boolean === TRUE) {
 			error_reporting(E_ALL);
 		} elseif ($boolean === FALSE) {
 			error_reporting(0);
 		} else {
-			exit('Boolean parameter for Basic::errorReporting() can only be TRUE or FALSE.');
+			exit('Boolean parameter for Basic::setErrorReporting() can only be TRUE or FALSE.');
 		}
+	}
+
+	/**
+	 * JSON Request Body as $_POST - API Access
+	 */
+
+	public static function setJsonBodyAsPOST() {
+		$body = file_get_contents('php://input');
+		if ( ! empty($body) && is_array(json_decode($body, TRUE)) ) $_POST = json_decode($body, TRUE);
 	}
 
 	/**
@@ -353,7 +380,7 @@ class Basic
 	 * @param string $uri_whitelist        - Whitelisted URI RegEx characters
 	 */
 
-	public static function firewall($ip_blacklist=[], $verify_csrf_token=TRUE, $post_auto_escape=TRUE, $uri_whitelist='\w\/\.\-\_\?\=\&')
+	public static function setFirewall($ip_blacklist=[], $verify_csrf_token=TRUE, $post_auto_escape=TRUE, $uri_whitelist='\w\/\.\-\_\?\=\&')
 	{
 		// Deny access from blacklisted IP addresses
 		if (isset($_SERVER['REMOTE_ADDR']) && in_array($_SERVER['REMOTE_ADDR'], $ip_blacklist)) {
@@ -363,6 +390,7 @@ class Basic
 		// Verify CSRF token
 		if ($verify_csrf_token === TRUE) {
 			define('VERIFY_CSRF_TOKEN', TRUE); // Used for Basic::csrfToken()
+			session_set_cookie_params(NUL, NULL, NULL, NULL, TRUE); // Httponly session cookie
 			session_start(); // Require sessions
 
 			if (isset($_POST['csrf-token']) && isset($_SESSION['csrf-token']) && ! hash_equals($_POST['csrf-token'], $_SESSION['csrf-token'])) {
@@ -405,11 +433,11 @@ class Basic
 	 * Force application to use TLS/HTTPS
 	 */
 
-	public static function https()
+	public static function setHttps()
 	{
 		if (! isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
 			header('Location: https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
-			exit();
+			exit;
 		}
 	}
 
@@ -420,7 +448,7 @@ class Basic
 	 * @param string $cipher_method - Only AES-256 GCM, CTR or CBC
 	 */
 
-	public static function encryption($pass_phrase, $cipher_method='aes-256-gcm')
+	public static function setEncryption($pass_phrase, $cipher_method='aes-256-gcm')
 	{
 		if (! defined('PASS_PHRASE')) {
 			define('PASS_PHRASE', $pass_phrase);
@@ -448,7 +476,7 @@ class Basic
 	 * @param array $classes - Array of folders to autoload classes
 	 */
 
-	public static function autoloadClass($classes)
+	public static function setAutoloadClass($classes)
 	{
 		define('AUTOLOADED_FOLDERS', $classes);
 		spl_autoload_register(function ($class_name) {
@@ -461,33 +489,19 @@ class Basic
 	}
 
 	/**
-	 * Base URL - Templating
-	 * 
-	 * @param string $const_name - Base URL constant
-	 */
-
-	public static function baseUrl($const_name)
-	{
-		$http_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
-		$subfolder = (! empty(dirname($_SERVER['SCRIPT_NAME']))) ? dirname($_SERVER['SCRIPT_NAME']) : '';
-
-		define($const_name, $http_protocol . $_SERVER['SERVER_NAME'] . $subfolder . '/');
-	}
-
-	/**
 	 * Render Homepage
 	 * 
 	 * @param string $controller - 'HomeController@index' format
 	 */
 
-	public static function homePage($controller)
+	public static function setHomePage($controller)
 	{
 		if ( empty(self::segment(1)) ) {
 			list($class, $method) = explode('@', $controller);
 
 			$object = new $class();
 			$object->$method();
-			exit();
+			exit;
 		}
 	}
 
@@ -497,7 +511,7 @@ class Basic
 	 * 'index' as default method name
 	 */
 
-	public static function autoRoute()
+	public static function setAutoRoute()
 	{
 		if (self::segment(1) !== FALSE) { $class = ucfirst(strtolower(self::segment(1))) . 'Controller'; }
 		if (self::segment(2) !== FALSE) { $method = strtolower(self::segment(2)); } else { $method = 'index'; }
@@ -506,10 +520,10 @@ class Basic
 			$object = new $class();
 			if (method_exists($object, $method)) {
 				$object->$method();
-				exit();
+				exit;
 			} else {
 				self::apiResponse(404, 'The page you requested could not be found.');
-				exit();
+				exit;
 			}
 		}
 	}
@@ -519,7 +533,7 @@ class Basic
 	 * 'Controller' as default controller suffix
 	 */
 
-	public static function jsonRpc()
+	public static function setJsonRpc()
 	{
 		// Check if there is request body
 		if (file_get_contents('php://input') !== FALSE) {
@@ -549,7 +563,7 @@ class Basic
 						$object = new $class();
 						if (method_exists($object, $method)) {
 							$object->$method();
-							exit();
+							exit;
 						} else { exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => "Method not found."], 'id' => $json_rpc['id']])); }
 					} else { exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => "Class not found."], 'id' => $json_rpc['id']])); }
 				}

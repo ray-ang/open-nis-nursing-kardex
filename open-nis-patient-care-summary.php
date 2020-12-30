@@ -3,7 +3,7 @@
 Plugin Name: Open-NIS Patient Care Summary
 Plugin URI: https://github.com/ray-ang/open-nis-patient-care-summary
 Description: A WordPress-based electronic patient care summary, or electronic nurse kardex
-Version: 0.9.6
+Version: 0.9.7
 Author: Raymund John Ang
 License: GPL v2 or later
 Text Domain: open-nis
@@ -34,16 +34,19 @@ function rja_admin_front() {
 	}
 
 	if ( defined('KARDEX_PASS') ) {
-		Basic::encryption(KARDEX_PASS); // 'KARDEX_PASS' as passphrase
+		Basic::setEncryption(KARDEX_PASS); // 'KARDEX_PASS' as passphrase
 	}
 
 }
+
+require_once 'room.php'; // Room custom post type and template
+require_once 'shortcodes.php'; // Shortcodes
 
 add_action( 'admin_init', 'rja_admin_encrypt_btn' ); // Encrypt and decrypt buttons
 
 function rja_admin_encrypt_btn() {
 
-	if( isset($_POST['encrypt']) && $_POST['encrypt'] === 'Encrypt' && ! empty($_POST) ) {
+	if( is_admin() && ! wp_doing_ajax() && isset($_POST['encrypt']) && $_POST['encrypt'] === 'Encrypt' && ! empty($_POST) ) {
 
 		foreach ( $_POST['meta'] as $meta ) {
 
@@ -56,7 +59,7 @@ function rja_admin_encrypt_btn() {
 
 	}
 
-	if( isset($_POST['decrypt']) && $_POST['decrypt'] === 'Decrypt' && ! empty($_POST) ) {
+	if( is_admin() && ! wp_doing_ajax() && isset($_POST['decrypt']) && $_POST['decrypt'] === 'Decrypt' && ! empty($_POST) ) {
 
 		foreach ( $_POST['meta'] as $meta ) {
 
@@ -75,7 +78,7 @@ add_action( 'admin_footer', 'rja_admin_footer' ); // Admin - footer
 
 function rja_admin_footer() {
 
-	if ( is_admin() && ( stristr($_SERVER['REQUEST_URI'], 'post.php') || stristr($_SERVER['REQUEST_URI'], 'post-new.php') ) ) {
+	if ( is_admin() && ! wp_doing_ajax() && ( stristr($_SERVER['REQUEST_URI'], 'post.php') || stristr($_SERVER['REQUEST_URI'], 'post-new.php') ) ) {
 		?>
 		<script>
 			// Render encrypt and decrypt buttons
@@ -98,19 +101,52 @@ function rja_admin_footer() {
 
 }
 
-register_activation_hook( __FILE__, 'rja_add_nurse_role' ); // Add "Nurse" role on activation
+register_activation_hook( __FILE__, 'rja_add_nurse_roles' ); // Add nurse roles on activation
 
-function rja_add_nurse_role()
+function rja_add_nurse_roles()
 {
 	add_role( 'nurse', 'Nurse', array( 'read' => true ) );
+	add_role( 'nurse_admin', 'Nurse Admin', array( 'read' => true ) );
 }
 
-register_deactivation_hook( __FILE__, 'rja_remove_nurse_role' ); // Remove "Nurse" role on deactivation
+add_action( 'admin_init', 'add_room_caps'); // Room capabilities
 
-function rja_remove_nurse_role()
+function add_room_caps() {
+	$role = get_role( 'administrator' ); // Administrator
+	$role->add_cap( 'read_room' );
+	$role->add_cap( 'read_private_rooms' );
+	$role->add_cap( 'publish_room' );
+	$role->add_cap( 'publish_rooms' );
+	$role->add_cap( 'edit_room' ); 
+	$role->add_cap( 'edit_rooms' ); 
+	$role->add_cap( 'edit_others_room' );
+	$role->add_cap( 'edit_others_rooms' );   
+	$role->add_cap( 'delete_room' );
+	$role->add_cap( 'delete_rooms' ); 
+	$role->add_cap( 'delete_others_rooms' );
+	$role->add_cap( 'edit_published_rooms' );
+	$role->add_cap( 'delete_published_rooms' );
+
+	$role = get_role( 'nurse_admin' ); // Nurse Admin
+	$role->add_cap( 'read_room' );
+	$role->add_cap( 'read_private_rooms' );
+	$role->add_cap( 'publish_room' ); 
+	$role->add_cap( 'publish_rooms' ); 
+	$role->add_cap( 'edit_room' ); 
+	$role->add_cap( 'edit_rooms' ); 
+	$role->add_cap( 'edit_others_room' );
+	$role->add_cap( 'edit_others_rooms' );
+	$role->add_cap( 'delete_room' );
+	$role->add_cap( 'delete_rooms' ); 
+	$role->add_cap( 'delete_others_rooms' );
+	$role->add_cap( 'edit_published_rooms' );
+	$role->add_cap( 'delete_published_rooms' );
+}
+
+register_deactivation_hook( __FILE__, 'rja_remove_nurse_roles'); // Remove nurse roles on deactivation
+
+function rja_remove_nurse_roles()
 {
 	remove_role( 'nurse' );
+	remove_role( 'nurse_admin' );
 }
-
-require_once 'room.php'; // Room custom post type and template
-require_once 'shortcodes.php'; // Shortcodes
