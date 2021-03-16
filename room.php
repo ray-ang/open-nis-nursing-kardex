@@ -243,27 +243,27 @@ function rja_single_room_content()
 							</p>
 							<p>
 								<label for="diet">Diet</label><br />
-								<input type="text" id="diet" name="diet" value="<?= esc_html($room_diet);?>" required />
+								<input type="text" id="diet" name="diet" value="<?= esc_html($room_diet);?>" required /><br />
 								<small>Standing diet order and special instructions.</small>
 							</p>
 							<p>
 								<label for="iv-access">IV Access</label><br />
-								<textarea id="iv-access" name="iv-access" required><?= esc_html($room_iv_access); ?></textarea>
+								<textarea id="iv-access" name="iv-access" required><?= esc_html($room_iv_access); ?></textarea><br />
 								<small>Central and/or peripheral. Size, location, fluids or locked. New line each site.</small>
 							</p>
 							<p>
 								<label for="monitoring">Monitoring</label><br />
-								<input type="text" id="monitoring" name="monitoring" value="<?= esc_html($room_monitoring);?>" required />
+								<input type="text" id="monitoring" name="monitoring" value="<?= esc_html($room_monitoring);?>" required /><br />
 								<small>Vital signs, neurological, vascular checks, etc. and frequency.</small>
 							</p>
 							<p>
 								<label for="urine">Urine</label><br />
-								<input type="text" id="urine" name="urine" value="<?= esc_html($room_urine);?>" required />
+								<input type="text" id="urine" name="urine" value="<?= esc_html($room_urine);?>" required /><br />
 								<small>Description (i.e. color, transparency).</small>
 							</p>
 							<p>
 								<label for="bowel">Bowel Movement</label><br />
-								<input type="text" id="bowel" name="bowel" value="<?= esc_html($room_bowel);?>" required />
+								<input type="text" id="bowel" name="bowel" value="<?= esc_html($room_bowel);?>" required /><br />
 								<small>Last BM, description.</small>
 							</p>
 							<p>
@@ -272,17 +272,17 @@ function rja_single_room_content()
 							</p>
 							<p>
 								<label for="medical-notes">Medical Notes</label><br />
-								<textarea id="medical-notes" name="medical-notes" required><?= esc_html($room_medical_notes); ?></textarea>
+								<textarea id="medical-notes" name="medical-notes" required><?= esc_html($room_medical_notes); ?></textarea><br />
 								<small>Pertinent medical notes and plan of care.</small>
 							</p>
 							<p>
 								<label for="diagnostics">Laboratory and Diagnostics</label><br />
-								<textarea id="diagnostics" name="diagnostics" required><?= esc_html($room_diagnostics); ?></textarea>
+								<textarea id="diagnostics" name="diagnostics" required><?= esc_html($room_diagnostics); ?></textarea><br />
 								<small>Blood works, imaging and other diagnostics. Indicate if pending or done.</small>
 							</p>
 							<p>
 								<label for="nursing-plan">Nursing Plan of Care & Reminders</label><br />
-								<textarea id="nursing-plan" name="nursing-plan" required><?= esc_html($room_nursing_plan); ?></textarea>
+								<textarea id="nursing-plan" name="nursing-plan" required><?= esc_html($room_nursing_plan); ?></textarea><br />
 								<small>Nursing notes, plan of care & reminders.</small>
 							</p>
 							<p>
