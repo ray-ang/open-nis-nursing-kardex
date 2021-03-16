@@ -220,7 +220,7 @@ function rja_single_room_content()
 							</p>
 							<p>
 								<label for="sex">Sex</label><br />
-								<select id="sex" name="sex" size="2" required>
+								<select id="sex" name="sex" size="2" <?php echo ( (Basic::decrypt($room['room_sex'][0]) == '') ? '' : 'disabled' ); ?>>
 									<option value="M" <?php if (Basic::decrypt($room['room_sex'][0])=='M') echo 'selected="selected"'; ?>>Male</option>
 									<option value="F" <?php if (Basic::decrypt($room['room_sex'][0])=='F') echo 'selected="selected"'; ?>>Female</option>
 								</select>
