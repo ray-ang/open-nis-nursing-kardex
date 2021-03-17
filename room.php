@@ -241,6 +241,7 @@ function rja_single_room_content()
 							<p>
 								<label for="allergy">Allergy</label><br />
 								<input type="text" id="allergy" name="allergy" value="<?= esc_html($room_allergy);?>" required /><br />
+								<small>Food, drug and environmental allergies.</small>
 							</p>
 							<p>
 								<label for="diet">Diet</label><br />
