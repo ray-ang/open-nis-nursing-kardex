@@ -232,6 +232,7 @@ function rja_single_room_content()
 							<p>
 								<label for="doctor">Doctor</label><br />
 								<input type="text" id="doctor" name="doctor" value="<?= esc_html($room_doctor);?>" required /><br />
+								<small>Attending physician and consultants.</small>
 							</p>
 							<p>
 								<label for="reason">Reason for Admission</label><br />
