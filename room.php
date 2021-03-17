@@ -237,6 +237,7 @@ function rja_single_room_content()
 							<p>
 								<label for="reason">Reason for Admission</label><br />
 								<input type="text" id="reason" name="reason" value="<?= esc_html($room_reason);?>" required /><br />
+								<small>Signs, symptoms or brief history.</small>
 							</p>
 							<p>
 								<label for="allergy">Allergy</label><br />
