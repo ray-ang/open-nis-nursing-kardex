@@ -1,6 +1,6 @@
 ## Open-NIS Patient Care Summary (Nurse ekardex)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=open-nis-nurse-kardex&metric=alert_status)](https://sonarcloud.io/dashboard?id=open-nis-nurse-kardex)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ray-ang_open-nis-patient-care-summary&metric=alert_status)](https://sonarcloud.io/dashboard?id=ray-ang_open-nis-patient-care-summary)
 
 ### Description
 
