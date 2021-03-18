@@ -37,6 +37,12 @@ function rja_admin_front() {
 		Basic::setEncryption(KARDEX_PASS); // 'KARDEX_PASS' as passphrase
 	}
 
+	if ( ! is_admin() && ! wp_doing_ajax() && ! empty($_POST) ) {
+		foreach ($_POST as $key => $value) {
+			$_POST[$key] = str_replace( '\\', '', $value ); // Remove '\' (i.e. when saving "'")
+		}
+	}
+
 }
 
 require_once 'room.php'; // Room custom post type and template
