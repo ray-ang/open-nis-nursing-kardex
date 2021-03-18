@@ -30,7 +30,7 @@ add_action( 'wp', 'rja_admin_front' ); // Frontend - before headers sent
 function rja_admin_front() {
 
 	if ( ! class_exists('Basic') ) {
-		require_once 'Basic.php'; // BasicPHP class library
+		require_once __DIR__ . '/Basic.php'; // BasicPHP class library
 	}
 
 	if ( defined('KARDEX_PASS') ) {
@@ -45,8 +45,8 @@ function rja_admin_front() {
 
 }
 
-require_once 'room.php'; // Room custom post type and template
-require_once 'shortcodes.php'; // Shortcodes
+require_once __DIR__ . '/room.php'; // Room custom post type and template
+require_once __DIR__ . '/shortcodes.php'; // Shortcodes
 
 add_action( 'admin_init', 'rja_admin_encrypt_btn' ); // Encrypt and decrypt buttons
 
