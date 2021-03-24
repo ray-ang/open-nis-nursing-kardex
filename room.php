@@ -128,8 +128,11 @@ function rja_single_room_header_script()
 		}
 
 		function printKardex() {
-			const kardex = document.querySelector('#kardex').innerHTML;
-			document.body.innerHTML = kardex;
+			const kardex = document.querySelector('#kardex');
+			kardex.firstElementChild.style.float = 'left';
+			kardex.firstElementChild.style.width = '220px';
+			kardex.firstElementChild.style.marginRight = '120px';
+			document.body.innerHTML = kardex.innerHTML;
 			document.body.style.backgroundColor = 'white';
 			document.body.style.margin = '30px';
 			document.querySelector('#no-print').innerHTML = '';
@@ -174,7 +177,7 @@ function rja_single_room_content()
 
 			?>
 			<div id="kardex">
-				<div style="float: left; width: 220px; margin-right: 120px;">
+				<div>
 					<h3>Room: <?php esc_html(the_title()); ?></h3>
 					<p>Name: <?= esc_html($room_name); ?><br />
 					Age: <?= esc_html($room_age); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sex: <?= esc_html($room_sex); ?></p>
@@ -190,7 +193,7 @@ function rja_single_room_content()
 					Urine: <?= esc_html($room_urine); ?><br />
 					Bowel Movement: <?= esc_html($room_bowel); ?></p>
 				</div>
-				<div style="float: left; width: 340px;">
+				<div>
 					<p><em>History:</em><br /><?= nl2br(esc_html($room_history)); ?></p>
 					<p><em>Medical Notes:</em><br /><?= nl2br(esc_html($room_medical_notes)); ?></p>
 					<p><em>Laboratory & Diagnostics:</em><br /><?= nl2br(esc_html($room_diagnostics)); ?></p>
@@ -215,7 +218,8 @@ function rja_single_room_content()
 								<input type="text" id="room-name" name="room-name" value="<?= esc_html($room_name); ?>" pattern="[A-Za-z '-]+" title="Patient name" <?php echo ( ($room_name == '') ? 'required' : 'readonly' ); ?> />
 							</p>
 							<p>
-								<label for="age">Age </label><small>(In years.)</small><br />
+								<label for="age">Age </label><br />
+								<small>(In years.)</small><br />
 								<input type="number" id="age" name="age" value="<?= esc_html($room_age); ?>" <?php echo ( ($room_age == '') ? 'required' : 'readonly' ); ?> />
 							</p>
 							<p>
@@ -230,35 +234,43 @@ function rja_single_room_content()
 								<input type="date" id="admission-date" name="admission-date" value="<?= esc_html($room_date_admission); ?>" required />
 							</p>
 							<p>
-								<label for="doctor">Doctor </label><small>(Attending physician and consultants.)</small><br />
+								<label for="doctor">Doctor </label><br />
+								<small>(Attending physician and consultants.)</small><br />
 								<input type="text" id="doctor" name="doctor" value="<?= esc_html($room_doctor);?>" required /><br />
 							</p>
 							<p>
-								<label for="reason">Reason for Admission </label><small>(Signs, symptoms or brief history.)</small><br />
+								<label for="reason">Reason for Admission </label><br />
+								<small>(Signs, symptoms or brief history.)</small><br />
 								<input type="text" id="reason" name="reason" value="<?= esc_html($room_reason);?>" required /><br />
 							</p>
 							<p>
-								<label for="allergy">Allergy </label><small>(Food, drug and environmental allergies.)</small><br />
+								<label for="allergy">Allergy </label><br />
+								<small>(Food, drug and environmental allergies.)</small><br />
 								<input type="text" id="allergy" name="allergy" value="<?= esc_html($room_allergy);?>" required /><br />
 							</p>
 							<p>
-								<label for="diet">Diet </label><small>(Standing diet order and special instructions.)</small><br />
+								<label for="diet">Diet </label><br />
+								<small>(Standing diet order and special instructions.)</small><br />
 								<input type="text" id="diet" name="diet" value="<?= esc_html($room_diet);?>" required /><br />
 							</p>
 							<p>
-								<label for="iv-access">IV Access </label><small>(Central and/or peripheral. Size, location, fluids or locked. New line each site.)</small><br />
+								<label for="iv-access">IV Access </label><br />
+								<small>(Central and/or peripheral. Size, location, fluids or locked. New line each site.)</small><br />
 								<textarea id="iv-access" name="iv-access" required><?= esc_html($room_iv_access); ?></textarea><br />
 							</p>
 							<p>
-								<label for="monitoring">Monitoring </label><small>(Vital signs, neurological, vascular checks, etc. and frequency.)</small><br />
+								<label for="monitoring">Monitoring </label><br />
+								<small>(Vital signs, neurological, vascular checks, etc. and frequency.)</small><br />
 								<input type="text" id="monitoring" name="monitoring" value="<?= esc_html($room_monitoring);?>" required /><br />
 							</p>
 							<p>
-								<label for="urine">Urine </label><small>(Description - i.e. color, transparency.)</small><br />
+								<label for="urine">Urine </label><br />
+								<small>(Description - i.e. color, transparency.)</small><br />
 								<input type="text" id="urine" name="urine" value="<?= esc_html($room_urine);?>" required /><br />
 							</p>
 							<p>
-								<label for="bowel">Bowel Movement </label><small>(Last BM, description.)</small><br />
+								<label for="bowel">Bowel Movement </label><br />
+								<small>(Last BM, description.)</small><br />
 								<input type="text" id="bowel" name="bowel" value="<?= esc_html($room_bowel);?>" required /><br />
 							</p>
 							<p>
@@ -266,15 +278,18 @@ function rja_single_room_content()
 								<textarea id="history" name="history" required><?= esc_html($room_history); ?></textarea>
 							</p>
 							<p>
-								<label for="medical-notes">Medical Notes </label><small>(Pertinent medical notes and plan of care.)</small><br />
+								<label for="medical-notes">Medical Notes </label><br />
+								<small>(Pertinent medical notes and plan of care.)</small><br />
 								<textarea id="medical-notes" name="medical-notes" required><?= esc_html($room_medical_notes); ?></textarea><br />
 							</p>
 							<p>
-								<label for="diagnostics">Laboratory and Diagnostics </label><small>(Blood works, imaging and other diagnostics. Indicate if pending or done.)</small><br />
+								<label for="diagnostics">Laboratory and Diagnostics </label><br />
+								<small>(Blood works, imaging and other diagnostics. Indicate if pending or done.)</small><br />
 								<textarea id="diagnostics" name="diagnostics" required><?= esc_html($room_diagnostics); ?></textarea><br />
 							</p>
 							<p>
-								<label for="nursing-plan">Nursing Plan of Care & Reminders </label><small>(Nursing notes, plan of care & reminders.)</small><br />
+								<label for="nursing-plan">Nursing Plan of Care & Reminders </label><br />
+								<small>(Nursing notes, plan of care & reminders.)</small><br />
 								<textarea id="nursing-plan" name="nursing-plan" required><?= esc_html($room_nursing_plan); ?></textarea><br />
 							</p>
 							<p>
