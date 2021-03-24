@@ -1,10 +1,10 @@
-## Open-NIS Patient Care Summary (Nurse ekardex)
+## Open-NIS Patient Care Summary (Nursing ekardex)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ray-ang_open-nis-patient-care-summary&metric=alert_status)](https://sonarcloud.io/dashboard?id=ray-ang_open-nis-patient-care-summary)
 
 ### Description
 
-A WordPress-based open source electronic patient care summary, or nurse ekardex. To conform with regulatory requirements, the plugin uses BasicPHP Class Library (https://github.com/ray-ang/basicphp) to maintain confidentiality (Advanced Encryption Standard - AES) and integrity (Keyed-Hash Message Authentication Code - HMAC) of data.
+A WordPress-based open source electronic patient care summary, or nursing ekardex. To conform with regulatory requirements, the plugin uses BasicPHP Class Library (https://github.com/ray-ang/basicphp) to maintain confidentiality (Advanced Encryption Standard - AES) and integrity (Keyed-Hash Message Authentication Code - HMAC) of data.
 
 The plugin automatically creates the <em>"Nurse"</em> and <em>"Nurse Admin"</em> roles upon activation, and removes the roles upon deactivation. Provide the user with the "Nurse" or "Nurse Admin" role so he or she can access the electronic kardex.
 
