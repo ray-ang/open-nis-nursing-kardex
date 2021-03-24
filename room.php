@@ -213,12 +213,12 @@ function rja_single_room_content()
 							</p>
 							<p>
 								<label for="name">Name</label><br />
-								<input type="text" id="room-name" name="room-name" value="<?= esc_html($room_name); ?>" pattern="[A-Za-z '-]+" title="Patient name" <?php echo ( ($room_name == '') ? 'required' : 'readonly' ); ?> />
+								<input type="text" id="room-name" name="room-name" value="<?= esc_html($room_name); ?>" pattern="[A-Za-z '-]+" title="Patient name" <?php echo ($room_name == '') ? 'required' : 'readonly'; ?> />
 							</p>
 							<p>
 								<label for="age">Age </label><br />
 								<small>(In years.)</small><br />
-								<input type="number" id="age" name="age" value="<?= esc_html($room_age); ?>" <?php echo ( ($room_age == '') ? 'required' : 'readonly' ); ?> />
+								<input type="number" id="age" name="age" value="<?= esc_html($room_age); ?>" <?php echo ($room_age == '') ? 'required' : 'readonly'; ?> />
 							</p>
 							<p>
 								<label for="sex">Sex</label><br />
