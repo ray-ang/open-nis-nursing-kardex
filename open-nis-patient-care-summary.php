@@ -24,6 +24,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
+define('TIME_HISA', 'h:i:sa'); // Time output format
+
 add_action( 'admin_init', 'rja_admin_front' ); // Admin - before headers sent
 add_action( 'wp', 'rja_admin_front' ); // Frontend - before headers sent
 
