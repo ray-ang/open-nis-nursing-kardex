@@ -150,30 +150,30 @@ function rja_single_room_content()
 
 	if ( get_post_type() == 'room' ) {
 
+		$room = get_metadata( 'post', get_the_ID() );
+
+		$room_last_edit_user = Basic::decrypt($room['room_last_edit_user'][0]);
+		$room_last_edit_date = Basic::decrypt($room['room_last_edit_date'][0]);
+		$room_last_edit_time = Basic::decrypt($room['room_last_edit_time'][0]);
+		$room_name = Basic::decrypt($room['room_name'][0]);
+		$room_age = Basic::decrypt($room['room_age'][0]);
+		if ( Basic::decrypt($room['room_sex'][0]) == 'M' ) { $room_sex = 'Male'; }
+		if ( Basic::decrypt($room['room_sex'][0]) == 'F' ) { $room_sex = 'Female'; }
+		$room_date_admission = Basic::decrypt($room['room_date_admission'][0]);
+		$room_doctor = Basic::decrypt($room['room_doctor'][0]);
+		$room_reason = Basic::decrypt($room['room_reason'][0]);
+		$room_allergy = Basic::decrypt($room['room_allergy'][0]);
+		$room_diet = Basic::decrypt($room['room_diet'][0]);
+		$room_iv_access = Basic::decrypt($room['room_iv_access'][0]);
+		$room_monitoring = Basic::decrypt($room['room_monitoring'][0]);
+		$room_urine = Basic::decrypt($room['room_urine'][0]);
+		$room_bowel = Basic::decrypt($room['room_bowel'][0]);
+		$room_history = Basic::decrypt($room['room_history'][0]);
+		$room_medical_notes = Basic::decrypt($room['room_medical_notes'][0]);
+		$room_diagnostics = Basic::decrypt($room['room_diagnostics'][0]);
+		$room_nursing_plan = Basic::decrypt($room['room_nursing_plan'][0]);
+
 		if ( current_user_can('administrator') || current_user_can('nurse') ) {
-
-			$room = get_metadata( 'post', get_the_ID() );
-
-			$room_last_edit_user = Basic::decrypt($room['room_last_edit_user'][0]);
-			$room_last_edit_date = Basic::decrypt($room['room_last_edit_date'][0]);
-			$room_last_edit_time = Basic::decrypt($room['room_last_edit_time'][0]);
-			$room_name = Basic::decrypt($room['room_name'][0]);
-			$room_age = Basic::decrypt($room['room_age'][0]);
-			if ( Basic::decrypt($room['room_sex'][0]) == 'M' ) { $room_sex = 'Male'; }
-			if ( Basic::decrypt($room['room_sex'][0]) == 'F' ) { $room_sex = 'Female'; }
-			$room_date_admission = Basic::decrypt($room['room_date_admission'][0]);
-			$room_doctor = Basic::decrypt($room['room_doctor'][0]);
-			$room_reason = Basic::decrypt($room['room_reason'][0]);
-			$room_allergy = Basic::decrypt($room['room_allergy'][0]);
-			$room_diet = Basic::decrypt($room['room_diet'][0]);
-			$room_iv_access = Basic::decrypt($room['room_iv_access'][0]);
-			$room_monitoring = Basic::decrypt($room['room_monitoring'][0]);
-			$room_urine = Basic::decrypt($room['room_urine'][0]);
-			$room_bowel = Basic::decrypt($room['room_bowel'][0]);
-			$room_history = Basic::decrypt($room['room_history'][0]);
-			$room_medical_notes = Basic::decrypt($room['room_medical_notes'][0]);
-			$room_diagnostics = Basic::decrypt($room['room_diagnostics'][0]);
-			$room_nursing_plan = Basic::decrypt($room['room_nursing_plan'][0]);
 
 			?>
 			<div id="kardex">
@@ -313,30 +313,6 @@ function rja_single_room_content()
 			</div>
 			<?php			
 		} elseif ( current_user_can('nurse_admin') ) {
-
-			$room = get_metadata( 'post', get_the_ID() );
-
-			$room_last_edit_user = Basic::decrypt($room['room_last_edit_user'][0]);
-			$room_last_edit_date = Basic::decrypt($room['room_last_edit_date'][0]);
-			$room_last_edit_time = Basic::decrypt($room['room_last_edit_time'][0]);
-			$room_name = Basic::decrypt($room['room_name'][0]);
-			$room_age = Basic::decrypt($room['room_age'][0]);
-			if ( Basic::decrypt($room['room_sex'][0]) == 'M' ) { $room_sex = 'Male'; }
-			if ( Basic::decrypt($room['room_sex'][0]) == 'F' ) { $room_sex = 'Female'; }
-			$room_date_admission = Basic::decrypt($room['room_date_admission'][0]);
-			$room_doctor = Basic::decrypt($room['room_doctor'][0]);
-			$room_reason = Basic::decrypt($room['room_reason'][0]);
-			$room_allergy = Basic::decrypt($room['room_allergy'][0]);
-			$room_diet = Basic::decrypt($room['room_diet'][0]);
-			$room_iv_access = Basic::decrypt($room['room_iv_access'][0]);
-			$room_monitoring = Basic::decrypt($room['room_monitoring'][0]);
-			$room_urine = Basic::decrypt($room['room_urine'][0]);
-			$room_bowel = Basic::decrypt($room['room_bowel'][0]);
-			$room_history = Basic::decrypt($room['room_history'][0]);
-			$room_medical_notes = Basic::decrypt($room['room_medical_notes'][0]);
-			$room_diagnostics = Basic::decrypt($room['room_diagnostics'][0]);
-			$room_nursing_plan = Basic::decrypt($room['room_nursing_plan'][0]);
-			
 			?>
 			<div id="kardex">
 				<div style="float: left; width: 220px; margin-right: 120px;">
