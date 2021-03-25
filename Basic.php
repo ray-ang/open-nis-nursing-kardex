@@ -37,27 +37,21 @@ class Basic
 
 	public static function segment($order)
 	{
-		if (isset($_SERVER['REQUEST_URI'])) {
-			$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-			$uri = explode('/', $uri);
-		} else {
-			return FALSE;
-		}
+		$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+		$uri = explode('/', $uri);
 
 		// Number of subdirectories from hostname to index.php
 		$sub_dir = substr_count($_SERVER['SCRIPT_NAME'], '/') - 1;
 
-		if (! empty($uri[$order+$sub_dir])) {
-			return $uri[$order+$sub_dir];
-		} else {
-			return FALSE;
-		}
+		if (empty($uri[$order+$sub_dir])) return FALSE;
+
+		return $uri[$order+$sub_dir];
 	}
 
 	/**
 	 * Controller or callable-based endpoint routing
 	 *
-	 * @param string $http_method           - HTTP method (e.g. 'GET', 'POST', 'PUT', 'DELETE')
+	 * @param string $http_method           - HTTP method (e.g. 'ANY', 'GET', 'POST', 'PUT', 'DELETE')
 	 * @param string $path                  - URL path in the format '/url/path'
 	 *                                      - Wildcard convention from CodeIgniter
 	 *                                      - (:num) for number and (:any) for string
@@ -66,6 +60,8 @@ class Basic
 
 	public static function route($http_method, $path, $class_method)
 	{
+		if ($http_method === 'ANY') $http_method = $_SERVER['REQUEST_METHOD']; // Any HTTP Method
+
 		if ($_SERVER['REQUEST_METHOD'] === $http_method) {
 
 			// Convert '/' and wilcards (:num) and (:any) to RegEx
@@ -133,10 +129,12 @@ class Basic
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_USERPWD, "$user_token:$password");
-		// curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-		// 	'Content-Type: application/json',                                                                                
-		// 	'Content-Length: ' . strlen($data_json))                                                                       
-		// );
+		curl_setopt($ch, CURLOPT_HTTPHEADER,
+			array(
+			'Content-Type: text/plain', // Plain text string
+			'Content-Length: ' . strlen($data_json)
+			)
+		);
 
 		$result = curl_exec($ch); // Execute cURL
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE); // HTTP response code
@@ -194,7 +192,7 @@ class Basic
 
 	public static function csrfToken()
 	{
-		if (defined('VERIFY_CSRF_TOKEN') && VERIFY_CSRF_TOKEN === TRUE) {
+		if (defined('VERIFY_CSRF_TOKEN') && VERIFY_CSRF_TOKEN) {
 			$_SESSION['csrf-token'] = bin2hex(random_bytes(32));
 			return $_SESSION['csrf-token'];
 		}
@@ -203,29 +201,30 @@ class Basic
 	/**
 	 * Encrypt data using AES GCM, CTR-HMAC or CBC-HMAC
 	 *
-	 * @param string $plaintext - Plaintext to be encrypted
-	 * @return string           - contains based64-encoded ciphertext
+	 * @param string $plaintext   - Plaintext to be encrypted
+	 * @param string $pass_phrase - Encryption passphrase
+	 * @param string $cipher      - Cipher method
+	 *
+	 * @return string             - Contains based64-encoded ciphertext
 	 */
 
-	public static function encrypt($plaintext)
+	public static function encrypt($plaintext, $pass_phrase=NULL, $cipher='aes-256-gcm')
 	{
-		// Require encryption middleware
-		if (! defined('PASS_PHRASE') || ! defined('CIPHER_METHOD')) {
-			self::apiResponse(501, 'Please activate Basic::setEncryption() middleware and set the pass phrase.');
-		}
+		if (! isset($pass_phrase)) self::apiResponse(500, 'Set passphrase as a constant.'); 
+
+		if ($cipher !== 'aes-256-gcm' && $cipher !== 'aes-256-ctr' && $cipher !== 'aes-256-cbc') self::apiResponse(500, "Encryption cipher method should either be 'aes-256-gcm', 'aes-256-ctr' or 'aes-256-cbc'.");
 
 		// Encryption - Version 1
 		if (! function_exists('encrypt_v1')) {
 
-			function encrypt_v1($plaintext) {
+			function encrypt_v1($plaintext, $pass_phrase, $cipher) {
 
 				$version = 'enc-v1'; // Version
-				$cipher = CIPHER_METHOD; // Cipher method - GCM, CTR or CBC
 				$salt = random_bytes(16); // Salt
 				$iv = $salt; // Initialization Vector
 
 				// Derive keys
-				$masterKey = hash_pbkdf2('sha256', PASS_PHRASE, $salt, 10000); // Master key
+				$masterKey = hash_pbkdf2('sha256', $pass_phrase, $salt, 10000); // Master key
 				$encKey = hash_hkdf('sha256', $masterKey, 32, 'aes-256-encryption', $salt); // Encryption key
 				$hmacKey = hash_hkdf('sha256', $masterKey, 32, 'sha-256-authentication', $salt); // HMAC key
 
@@ -247,32 +246,32 @@ class Basic
 		}
 
 		/** Version-based encryption */
-		return encrypt_v1($plaintext); // Default encryption function
+		return encrypt_v1($plaintext, $pass_phrase, $cipher); // Default encryption function
 	}
 
 	/**
 	 * Decrypt data using AES GCM, CTR-HMAC or CBC-HMAC
 	 *
-	 * @param string $encrypted - contains base64-encoded ciphertext
-	 * @return string           - decrypted data
+	 * @param string $encrypted   - Contains base64-encoded ciphertext
+	 * @param string $pass_phrase - Encryption passphrase
+	 * @param string $cipher      - Cipher method
+	 *
+	 * @return string             - Decrypted data
 	 */
 
-	public static function decrypt($encrypted)
+	public static function decrypt($encrypted, $pass_phrase=NULL, $cipher='aes-256-gcm')
 	{
-		// Require encryption middleware
-		if (! defined('PASS_PHRASE') || ! defined('CIPHER_METHOD')) {
-			self::apiResponse(501, 'Please activate Basic::setEncryption() middleware and set the pass phrase.');
-		}
+		if (! isset($pass_phrase)) self::apiResponse(500, 'Set passphrase as a constant.');
+
+		if ($cipher !== 'aes-256-gcm' && $cipher !== 'aes-256-ctr' && $cipher !== 'aes-256-cbc') self::apiResponse(500, "Encryption cipher method should either be 'aes-256-gcm', 'aes-256-ctr' or 'aes-256-cbc'.");
 
 		// Decryption - Version 1
 		if (! function_exists('decrypt_v1')) {
 
-			function decrypt_v1($encrypted) {
+			function decrypt_v1($encrypted, $pass_phrase, $cipher) {
 
 				// Return empty if $encrypted is not set or empty.
 				if (! isset($encrypted) || empty($encrypted)) { return ''; }
-
-				$cipher = CIPHER_METHOD; // Cipher method - GCM, CTR or CBC
 
 				if ($cipher === 'aes-256-gcm') {
 
@@ -284,7 +283,7 @@ class Basic
 					$iv = $salt; // Initialization Vector
 
 					// Derive keys
-					$masterKey = hash_pbkdf2('sha256', PASS_PHRASE, $salt, 10000); // Master key
+					$masterKey = hash_pbkdf2('sha256', $pass_phrase, $salt, 10000); // Master key
 					$encKey = hash_hkdf('sha256', $masterKey, 32, 'aes-256-encryption', $salt); // Encryption key
 					$hmacKey = hash_hkdf('sha256', $masterKey, 32, 'sha-256-authentication', $salt); // HMAC key
 
@@ -307,7 +306,7 @@ class Basic
 					$iv = $salt; // Initialization Vector
 
 					// Derive keys
-					$masterKey = hash_pbkdf2('sha256', PASS_PHRASE, $salt, 10000); // Master key
+					$masterKey = hash_pbkdf2('sha256', $pass_phrase, $salt, 10000); // Master key
 					$encKey = hash_hkdf('sha256', $masterKey, 32, 'aes-256-encryption', $salt); // Encryption key
 					$hmacKey = hash_hkdf('sha256', $masterKey, 32, 'sha-256-authentication', $salt); // HMAC key
 
@@ -332,7 +331,7 @@ class Basic
 		/** Version-based decryption */
 		switch ($version) {
 			case 'enc-v1':
-				return decrypt_v1($encrypted);
+				return decrypt_v1($encrypted, $pass_phrase, $cipher);
 				break;
 			default:
 				return $encrypted; // Return $encrypted if no encryption detected.
@@ -358,7 +357,7 @@ class Basic
 		} elseif ($boolean === FALSE) {
 			error_reporting(0);
 		} else {
-			exit('Boolean parameter for Basic::setErrorReporting() can only be TRUE or FALSE.');
+			self::apiResponse(500, 'Boolean parameter for Basic::setErrorReporting() can only be TRUE or FALSE.');
 		}
 	}
 
@@ -380,7 +379,7 @@ class Basic
 	 * @param string $uri_whitelist        - Whitelisted URI RegEx characters
 	 */
 
-	public static function setFirewall($ip_blacklist=[], $verify_csrf_token=TRUE, $post_auto_escape=TRUE, $uri_whitelist='\w\/\.\-\_\?\=\&')
+	public static function setFirewall($ip_blacklist=[], $verify_csrf_token=TRUE, $post_auto_escape=TRUE, $uri_whitelist='\w\/\.\-\_\?\=\&\:')
 	{
 		// Deny access from blacklisted IP addresses
 		if (isset($_SERVER['REMOTE_ADDR']) && in_array($_SERVER['REMOTE_ADDR'], $ip_blacklist)) {
@@ -390,7 +389,7 @@ class Basic
 		// Verify CSRF token
 		if ($verify_csrf_token === TRUE) {
 			define('VERIFY_CSRF_TOKEN', TRUE); // Used for Basic::csrfToken()
-			session_set_cookie_params(NUL, NULL, NULL, NULL, TRUE); // Httponly session cookie
+			session_set_cookie_params(NULL, NULL, NULL, NULL, TRUE); // Httponly session cookie
 			session_start(); // Require sessions
 
 			if (isset($_POST['csrf-token']) && isset($_SESSION['csrf-token']) && ! hash_equals($_POST['csrf-token'], $_SESSION['csrf-token'])) {
@@ -442,35 +441,6 @@ class Basic
 	}
 
 	/**
-	 * Enable encryption
-	 * 
-	 * @param string $pass_phrase   - Pass phrase used for encryption
-	 * @param string $cipher_method - Only AES-256 GCM, CTR or CBC
-	 */
-
-	public static function setEncryption($pass_phrase, $cipher_method='aes-256-gcm')
-	{
-		if (! defined('PASS_PHRASE')) {
-			define('PASS_PHRASE', $pass_phrase);
-		}
-
-		if (! defined('CIPHER_METHOD')) {
-			define('CIPHER_METHOD', $cipher_method);
-		}
-
-		switch ($cipher_method) {
-			case 'aes-256-gcm':
-				return;
-			case 'aes-256-ctr':
-				return;
-			case 'aes-256-cbc':
-				return;
-			default:
-				self::apiResponse(501, "Encryption cipher method should either be 'aes-256-gcm', 'aes-256-ctr' or 'aes-256-cbc'.");
-		}
-	}
-
-	/**
 	 * Autoload Classes
 	 * 
 	 * @param array $classes - Array of folders to autoload classes
@@ -497,11 +467,18 @@ class Basic
 	public static function setHomePage($controller)
 	{
 		if ( empty(self::segment(1)) ) {
-			list($class, $method) = explode('@', $controller);
+			if (is_string($controller)) {
+				if (strstr($controller, '@')) {
+					list($class, $method) = explode('@', $controller);
 
-			$object = new $class();
-			$object->$method();
-			exit;
+					$object = new $class();
+					$object->$method();
+					exit;
+				}
+			} elseif (is_callable($controller)) {
+				$controller();
+				exit;
+			}
 		}
 	}
 
@@ -513,8 +490,8 @@ class Basic
 
 	public static function setAutoRoute()
 	{
-		if (self::segment(1) !== FALSE) { $class = ucfirst(strtolower(self::segment(1))) . 'Controller'; }
-		if (self::segment(2) !== FALSE) { $method = strtolower(self::segment(2)); } else { $method = 'index'; }
+		if (self::segment(1)) { $class = ucfirst(strtolower(self::segment(1))) . 'Controller'; }
+		if (self::segment(2)) { $method = strtolower(self::segment(2)); } else { $method = 'index'; }
 
 		if (class_exists($class)) {
 			$object = new $class();
@@ -529,52 +506,41 @@ class Basic
 	}
 
 	/**
-	 * JSON-RPC v2.0 middleware with 'method' member as 'class.method'
+	 * JSON-RPC v2.0 middleware with request Method member as 'class.method'
 	 * 'Controller' as default controller suffix
 	 */
 
 	public static function setJsonRpc()
 	{
-		// Check if there is request body
-		if (file_get_contents('php://input') !== FALSE) {
+		$body = file_get_contents('php://input'); // Request body
+		$array = json_decode($body, TRUE); // JSON body to array
 
-			// If data in request body is in JSON format
-			if (json_decode(file_get_contents('php://input'), TRUE) !== NULL) {
+		header('Content-Type: application/json'); // Set content type as JSON
 
-				$json_rpc = json_decode(file_get_contents('php://input'), TRUE);
+		if (! $body) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => "Request should have a request body."]])); // Require request body
 
-				// Send error message if server request method is not 'POST'.
-				if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'POST') { exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "Server request method should be 'POST'."]])); }
-				// Send error message if 'jsonrpc' and 'method' members are not set.
-				if (! isset($json_rpc['jsonrpc']) || ! isset($json_rpc['method']) ) { exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'version' and 'method' members should be set."]])); }
-				// Send error message if JSON-RPC version is not '2.0'.
-				if (isset($json_rpc['jsonrpc']) && $json_rpc['jsonrpc'] !== '2.0') { exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC version should be a string set to '2.0'."]])); }
-				// Send error message if 'method' member is not in the format 'class.method'.
-				if (isset($json_rpc['method']) && substr_count($json_rpc['method'], '.') !== 1) { exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32602, 'message' => "The JSON-RPC 'method' member should have the format 'class.method'."]])); }
+		if ($body && ! $array) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => "Provide request body data in valid JSON format."]])); // Require valid JSON
 
-				// Require 'jsonrpc' and 'method' members as minimum for the request object.
-				if (isset($json_rpc['jsonrpc']) && isset($json_rpc['method'])) {
+		if (! isset($array['jsonrpc']) || $array['jsonrpc'] !== '2.0') exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'version' member should be set, and assigned a value of '2.0'."]])); // JSON-RPC (version) member
 
-					list($class, $method) = explode('.', $json_rpc['method']);
-					$class = $class . 'Controller';
+		if (! isset($array['method']) || ! strstr($array['method'], '.')) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'method' member should be set with the format 'class.method'."]])); // Method member
 
-					// Respond if class exists and 'id' member is set.
-					if (class_exists($class) && isset($json_rpc['id'])) {
-						$object = new $class();
-						if (method_exists($object, $method)) {
-							$object->$method();
-							exit;
-						} else { exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => "Method not found."], 'id' => $json_rpc['id']])); }
-					} else { exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => "Class not found."], 'id' => $json_rpc['id']])); }
-				}
+		list($class, $method) = explode('.', $array['method']); // Method member as 'class.method'
+		$class = $class . 'Controller'; // Default controller suffix
 
+		// If class exists
+		if (class_exists($class)) {
+			if (! isset($array['id'])) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'id' member should be set."]])); // Require ID member
+
+			$object = new $class();
+			if (method_exists($object, $method)) {
+				$object->$method();
+				exit;
 			} else {
-				
-				// If data in request body is not in JSON format
-				exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => "Please provide data in valid JSON format."]]));
-			
+				exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => "Method not found."], 'id' => $array['id']]));
 			}
-		
+		} else {
+			exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => "Class not found."], 'id' => $array['id']]));
 		}
 	}
 

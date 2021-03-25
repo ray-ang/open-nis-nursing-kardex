@@ -35,10 +35,6 @@ function rja_admin_front() {
 		require_once __DIR__ . '/Basic.php'; // BasicPHP class library
 	}
 
-	if ( defined('KARDEX_PASS') ) {
-		Basic::setEncryption(KARDEX_PASS); // 'KARDEX_PASS' as passphrase
-	}
-
 	if ( ! is_admin() && ! wp_doing_ajax() && ! empty($_POST) ) {
 		foreach ($_POST as $key => $value) {
 			$_POST[$key] = str_replace( '\\', '', $value ); // Remove '\' (i.e. when saving " ' ")
@@ -60,7 +56,7 @@ function rja_admin_encrypt_btn() {
 
 			if ( ! stristr($meta['value'], 'enc-v') ) {
 				$index = array_search($meta, $_POST['meta']);
-				$_POST['meta'][$index]['value'] = Basic::encrypt($meta['value']);
+				$_POST['meta'][$index]['value'] = Basic::encrypt($meta['value'], KARDEX_PASS);
 			}
 
 		}
@@ -73,7 +69,7 @@ function rja_admin_encrypt_btn() {
 
 			if ( stristr($meta['value'], 'enc-v') ) {
 				$index = array_search($meta, $_POST['meta']);
-				$_POST['meta'][$index]['value'] = Basic::decrypt($meta['value']);
+				$_POST['meta'][$index]['value'] = Basic::decrypt($meta['value'], KARDEX_PASS);
 			}
 
 		}

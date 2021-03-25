@@ -77,25 +77,25 @@ function rja_single_room_content_header()
 		$pid = wp_update_post($room);
 		$current_user = wp_get_current_user();
 
-		update_post_meta( $pid, 'room_last_edit_user', Basic::encrypt($current_user->display_name) );
-		update_post_meta( $pid, 'room_last_edit_date', Basic::encrypt(date("Y-m-d")) );
-		update_post_meta( $pid, 'room_last_edit_time', Basic::encrypt(date(TIME_HISA)) );
-		update_post_meta( $pid, 'room_name', Basic::encrypt($_POST['room-name']) );
-		update_post_meta( $pid, 'room_age', Basic::encrypt($_POST['age']) );
-		update_post_meta( $pid, 'room_sex', Basic::encrypt($_POST['sex']) );
-		update_post_meta( $pid, 'room_date_admission', Basic::encrypt($_POST['admission-date']) );
-		update_post_meta( $pid, 'room_doctor', Basic::encrypt($_POST['doctor']) );
-		update_post_meta( $pid, 'room_reason', Basic::encrypt($_POST['reason']) );
-		update_post_meta( $pid, 'room_allergy', Basic::encrypt($_POST['allergy']) );
-		update_post_meta( $pid, 'room_diet', Basic::encrypt($_POST['diet']) );
-		update_post_meta( $pid, 'room_iv_access', Basic::encrypt($_POST['iv-access']) );
-		update_post_meta( $pid, 'room_monitoring', Basic::encrypt($_POST['monitoring']) );
-		update_post_meta( $pid, 'room_urine', Basic::encrypt($_POST['urine']) );
-		update_post_meta( $pid, 'room_bowel', Basic::encrypt($_POST['bowel']) );
-		update_post_meta( $pid, 'room_history', Basic::encrypt($_POST['history']) );
-		update_post_meta( $pid, 'room_medical_notes', Basic::encrypt($_POST['medical-notes']) );
-		update_post_meta( $pid, 'room_diagnostics', Basic::encrypt($_POST['diagnostics']) );
-		update_post_meta( $pid, 'room_nursing_plan', Basic::encrypt($_POST['nursing-plan']) );
+		update_post_meta( $pid, 'room_last_edit_user', Basic::encrypt($current_user->display_name, KARDEX_PASS) );
+		update_post_meta( $pid, 'room_last_edit_date', Basic::encrypt(date("Y-m-d"), KARDEX_PASS) );
+		update_post_meta( $pid, 'room_last_edit_time', Basic::encrypt(date(TIME_HISA), KARDEX_PASS) );
+		update_post_meta( $pid, 'room_name', Basic::encrypt($_POST['room-name'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_age', Basic::encrypt($_POST['age'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_sex', Basic::encrypt($_POST['sex'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_date_admission', Basic::encrypt($_POST['admission-date'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_doctor', Basic::encrypt($_POST['doctor'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_reason', Basic::encrypt($_POST['reason'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_allergy', Basic::encrypt($_POST['allergy'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_diet', Basic::encrypt($_POST['diet'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_iv_access', Basic::encrypt($_POST['iv-access'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_monitoring', Basic::encrypt($_POST['monitoring'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_urine', Basic::encrypt($_POST['urine'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_bowel', Basic::encrypt($_POST['bowel'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_history', Basic::encrypt($_POST['history'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_medical_notes', Basic::encrypt($_POST['medical-notes'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_diagnostics', Basic::encrypt($_POST['diagnostics'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_nursing_plan', Basic::encrypt($_POST['nursing-plan'], KARDEX_PASS) );
 
 		$link = get_permalink($pid);
 		wp_redirect($link);
@@ -152,26 +152,26 @@ function rja_single_room_content()
 
 		$room = get_metadata( 'post', get_the_ID() );
 
-		$room_last_edit_user = Basic::decrypt($room['room_last_edit_user'][0]);
-		$room_last_edit_date = Basic::decrypt($room['room_last_edit_date'][0]);
-		$room_last_edit_time = Basic::decrypt($room['room_last_edit_time'][0]);
-		$room_name = Basic::decrypt($room['room_name'][0]);
-		$room_age = Basic::decrypt($room['room_age'][0]);
-		if ( Basic::decrypt($room['room_sex'][0]) == 'M' ) { $room_sex = 'Male'; }
-		if ( Basic::decrypt($room['room_sex'][0]) == 'F' ) { $room_sex = 'Female'; }
-		$room_date_admission = Basic::decrypt($room['room_date_admission'][0]);
-		$room_doctor = Basic::decrypt($room['room_doctor'][0]);
-		$room_reason = Basic::decrypt($room['room_reason'][0]);
-		$room_allergy = Basic::decrypt($room['room_allergy'][0]);
-		$room_diet = Basic::decrypt($room['room_diet'][0]);
-		$room_iv_access = Basic::decrypt($room['room_iv_access'][0]);
-		$room_monitoring = Basic::decrypt($room['room_monitoring'][0]);
-		$room_urine = Basic::decrypt($room['room_urine'][0]);
-		$room_bowel = Basic::decrypt($room['room_bowel'][0]);
-		$room_history = Basic::decrypt($room['room_history'][0]);
-		$room_medical_notes = Basic::decrypt($room['room_medical_notes'][0]);
-		$room_diagnostics = Basic::decrypt($room['room_diagnostics'][0]);
-		$room_nursing_plan = Basic::decrypt($room['room_nursing_plan'][0]);
+		$room_last_edit_user = Basic::decrypt($room['room_last_edit_user'][0], KARDEX_PASS);
+		$room_last_edit_date = Basic::decrypt($room['room_last_edit_date'][0], KARDEX_PASS);
+		$room_last_edit_time = Basic::decrypt($room['room_last_edit_time'][0], KARDEX_PASS);
+		$room_name = Basic::decrypt($room['room_name'][0], KARDEX_PASS);
+		$room_age = Basic::decrypt($room['room_age'][0], KARDEX_PASS);
+		if ( Basic::decrypt($room['room_sex'][0], KARDEX_PASS) == 'M' ) { $room_sex = 'Male'; }
+		if ( Basic::decrypt($room['room_sex'][0], KARDEX_PASS) == 'F' ) { $room_sex = 'Female'; }
+		$room_date_admission = Basic::decrypt($room['room_date_admission'][0], KARDEX_PASS);
+		$room_doctor = Basic::decrypt($room['room_doctor'][0], KARDEX_PASS);
+		$room_reason = Basic::decrypt($room['room_reason'][0], KARDEX_PASS);
+		$room_allergy = Basic::decrypt($room['room_allergy'][0], KARDEX_PASS);
+		$room_diet = Basic::decrypt($room['room_diet'][0], KARDEX_PASS);
+		$room_iv_access = Basic::decrypt($room['room_iv_access'][0], KARDEX_PASS);
+		$room_monitoring = Basic::decrypt($room['room_monitoring'][0], KARDEX_PASS);
+		$room_urine = Basic::decrypt($room['room_urine'][0], KARDEX_PASS);
+		$room_bowel = Basic::decrypt($room['room_bowel'][0], KARDEX_PASS);
+		$room_history = Basic::decrypt($room['room_history'][0], KARDEX_PASS);
+		$room_medical_notes = Basic::decrypt($room['room_medical_notes'][0], KARDEX_PASS);
+		$room_diagnostics = Basic::decrypt($room['room_diagnostics'][0], KARDEX_PASS);
+		$room_nursing_plan = Basic::decrypt($room['room_nursing_plan'][0], KARDEX_PASS);
 		?>
 			<div id="kardex">
 				<div>
@@ -223,8 +223,8 @@ function rja_single_room_content()
 							<p>
 								<label for="sex">Sex</label><br />
 								<select id="sex" name="sex" size="2" required>
-									<option value="M" <?php if (Basic::decrypt($room['room_sex'][0])=='M') echo 'selected="selected"'; ?>>Male</option>
-									<option value="F" <?php if (Basic::decrypt($room['room_sex'][0])=='F') echo 'selected="selected"'; ?>>Female</option>
+									<option value="M" <?php if (Basic::decrypt($room['room_sex'][0], KARDEX_PASS)=='M') echo 'selected="selected"'; ?>>Male</option>
+									<option value="F" <?php if (Basic::decrypt($room['room_sex'][0], KARDEX_PASS)=='F') echo 'selected="selected"'; ?>>Female</option>
 								</select>
 							</p>
 							<p>

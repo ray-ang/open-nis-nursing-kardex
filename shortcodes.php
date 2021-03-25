@@ -28,22 +28,22 @@ function rja_page_add_room_header()
 
             $pid = wp_insert_post($room);
 
-            add_metadata( 'post', $pid, 'room_name', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_age', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_sex', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_date_admission', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_doctor', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_reason', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_allergy', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_diet', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_iv_access', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_monitoring', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_urine', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_bowel', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_history', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('') );
-            add_metadata( 'post', $pid, 'room_nursing_plan', Basic::encrypt('') );
+            add_metadata( 'post', $pid, 'room_name', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_age', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_sex', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_date_admission', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_doctor', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_reason', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_allergy', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_diet', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_iv_access', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_monitoring', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_urine', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_bowel', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_history', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
+            add_metadata( 'post', $pid, 'room_nursing_plan', Basic::encrypt('', KARDEX_PASS) );
 
             $link = get_permalink($pid);
             wp_redirect($link);
@@ -132,7 +132,7 @@ function rja_page_search_room()
         <?php if ( isset($rooms) && $rooms == true ): ?>
             <div style="clear: both; margin-top: 6rem;">
             <?php foreach( $rooms as $room ): ?>
-                <p>Room Number: <a href="<?= get_the_permalink($room->ID); ?>"><?= $room->post_title; ?></a> - Patient Name: <a href="<?= get_the_permalink($room->ID); ?>"><?= Basic::decrypt($room->room_name);?></a></p>
+                <p>Room Number: <a href="<?= get_the_permalink($room->ID); ?>"><?= $room->post_title; ?></a> - Patient Name: <a href="<?= get_the_permalink($room->ID); ?>"><?= Basic::decrypt($room->room_name, KARDEX_PASS);?></a></p>
             <?php endforeach ?>
             </div>
         <?php elseif ( isset($rooms) && $rooms !== true ): ?>
