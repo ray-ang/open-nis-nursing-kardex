@@ -11,11 +11,10 @@ add_action( 'wp', 'rja_page_add_room_header' );
 
 function rja_page_add_room_header()
 {
-
 	if ( isset($_POST['add-room']) && ( current_user_can('administrator') || current_user_can('nurse') || current_user_can('nurse_admin') ) ) {
 
         if ( ! wp_verify_nonce($_POST['token'], 'token') ) Basic::apiResponse(400, 'Please verify authenticity of the form token.', 'text/html');
-        if ( get_page_by_title( esc_html($_POST['room']), OBJECT, 'room' ) !== null ) Basic::apiResponse(409, 'Room already exists', 'text/html');
+        if ( get_page_by_title( esc_html($_POST['room']), OBJECT, 'room' ) !== null ) Basic::apiResponse(409, 'Room already exists.', 'text/html');
 
         $room = array(
             'post_title' => esc_html($_POST['room']),
@@ -46,7 +45,6 @@ function rja_page_add_room_header()
         wp_redirect($link);
 
     }
-
 }
 
 // Add Room Page
@@ -93,12 +91,10 @@ function rja_page_search_room()
     // Search by Room
     if ( isset($_POST['search-room']) && ! empty($_POST['room-room']) && preg_match('/[a-zA-Z0-9 _#-]/i', $_POST['room-room']) ) {
 
-        try {
-            if ( ! wp_verify_nonce($_POST['token'], 'token') ) throw new Exception('Please verify authenticity of the form token.');
-        } catch(Exception $e) {
-            echo 'Message: ' .$e->getMessage();
-            return;
-        }
+        $err_token = ( ! wp_verify_nonce($_POST['token'], 'token') ) ? 'Warning: Please verify authenticity of the form token.' : false;
+        echo $err_token;
+
+        $error = ( $err_token ) ? true : false;
 
         $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
@@ -138,13 +134,13 @@ function rja_page_search_room()
                 document.querySelector('#room-room').value = '';
             }
         </script>
-        <?php if ( isset($rooms) && $rooms == true ): ?>
+        <?php if ( isset($rooms) && ! $error && $rooms == true ): ?>
             <div style="clear: both; margin-top: 6rem;">
             <?php foreach( $rooms as $room ): ?>
                 <p>Room Number: <a href="<?= get_the_permalink($room->ID); ?>"><?= $room->post_title; ?></a> - Patient Name: <a href="<?= get_the_permalink($room->ID); ?>"><?= Basic::decrypt($room->room_name, KARDEX_PASS);?></a></p>
             <?php endforeach ?>
             </div>
-        <?php elseif ( isset($rooms) && $rooms !== true ): ?>
+        <?php elseif ( isset($rooms) && ! $error && $rooms !== true ): ?>
             <div style="clear: both; margin-top: 6rem;">No room was found on search.</div>
         <?php endif ?>
     <?php
