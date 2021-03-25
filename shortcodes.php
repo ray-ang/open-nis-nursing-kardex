@@ -12,43 +12,38 @@ add_action( 'wp', 'rja_page_add_room_header' );
 function rja_page_add_room_header()
 {
 
-	if ( isset($_POST['add-room']) && wp_verify_nonce($_POST['token'], 'token') && ( current_user_can('administrator') || current_user_can('nurse') || current_user_can('nurse_admin') ) ) {
+	if ( isset($_POST['add-room']) && ( current_user_can('administrator') || current_user_can('nurse') || current_user_can('nurse_admin') ) ) {
 
-        if ( get_page_by_title( esc_html($_POST['room']), OBJECT, 'room' ) !== null ) {
+        if ( ! wp_verify_nonce($_POST['token'], 'token') ) Basic::apiResponse(400, 'Please verify authenticity of the form token.', 'text/html');
+        if ( get_page_by_title( esc_html($_POST['room']), OBJECT, 'room' ) !== null ) Basic::apiResponse(409, 'Room already exists', 'text/html');
 
-            Basic::apiResponse( 409, 'Room already exists.' );
+        $room = array(
+            'post_title' => esc_html($_POST['room']),
+            'post_type' => 'room',
+            'post_status' => 'Publish'
+        );
 
-        } else {
+        $pid = wp_insert_post($room);
 
-            $room = array(
-                'post_title' => esc_html($_POST['room']),
-                'post_type' => 'room',
-                'post_status' => 'Publish'
-                );
+        add_metadata( 'post', $pid, 'room_name', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_age', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_sex', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_date_admission', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_doctor', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_reason', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_allergy', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_diet', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_iv_access', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_monitoring', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_urine', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_bowel', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_history', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
+        add_metadata( 'post', $pid, 'room_nursing_plan', Basic::encrypt('', KARDEX_PASS) );
 
-            $pid = wp_insert_post($room);
-
-            add_metadata( 'post', $pid, 'room_name', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_age', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_sex', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_date_admission', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_doctor', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_reason', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_allergy', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_diet', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_iv_access', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_monitoring', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_urine', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_bowel', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_history', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
-            add_metadata( 'post', $pid, 'room_nursing_plan', Basic::encrypt('', KARDEX_PASS) );
-
-            $link = get_permalink($pid);
-            wp_redirect($link);
-
-        }
+        $link = get_permalink($pid);
+        wp_redirect($link);
 
     }
 
@@ -59,8 +54,13 @@ add_shortcode( 'open-nis-add-room', 'rja_page_add_room' );
 
 function rja_page_add_room()
 {
+    if ( ! current_user_can('administrator') && ! current_user_can('nurse') && ! current_user_can('nurse_admin') ) {
+        ?>
+        <p>You do not have permission to add a room.</p>
+        <?php
+        return;
+    }
     ?>
-    <?php if ( current_user_can('administrator') || current_user_can('nurse') || current_user_can('nurse_admin') ): ?>
         <div>
             <form id="add-room-form" method="post">
                 <p>
@@ -75,9 +75,6 @@ function rja_page_add_room()
                 <?php wp_nonce_field( 'token', 'token' ); ?>
             </form>
         </div>
-    <?php else: ?>
-        <p>You do not have permission to add a room.</p>
-    <?php endif ?>
     <?php
 }
 
@@ -86,9 +83,22 @@ add_shortcode( 'open-nis-search-room', 'rja_page_search_room' );
 
 function rja_page_search_room()
 {
+    if ( ! current_user_can('administrator') && ! current_user_can('nurse') && ! current_user_can('nurse_admin') ) {
+        ?>
+        <p>You do not have permission to search rooms.</p>
+        <?php
+        return;
+    }
 
     // Search by Room
-    if ( isset($_POST['search-room']) && wp_verify_nonce($_POST['token'], 'token') && ! empty($_POST['room-room']) && preg_match('/[a-zA-Z0-9 _#-]/i', $_POST['room-room']) && ( current_user_can('administrator') || current_user_can('nurse') || current_user_can('nurse_admin') ) ) {
+    if ( isset($_POST['search-room']) && ! empty($_POST['room-room']) && preg_match('/[a-zA-Z0-9 _#-]/i', $_POST['room-room']) ) {
+
+        try {
+            if ( ! wp_verify_nonce($_POST['token'], 'token') ) throw new Exception('Please verify authenticity of the form token.');
+        } catch(Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+            return;
+        }
 
         $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
@@ -110,7 +120,6 @@ function rja_page_search_room()
     }
 
     ?>
-    <?php if ( current_user_can('administrator') || current_user_can('nurse') || current_user_can('nurse_admin') ): ?>
         <div>
             <form method="post">
                 <p>
@@ -138,8 +147,5 @@ function rja_page_search_room()
         <?php elseif ( isset($rooms) && $rooms !== true ): ?>
             <div style="clear: both; margin-top: 6rem;">No room was found on search.</div>
         <?php endif ?>
-    <?php else: ?>
-        <p>You do not have permission to search rooms.</p>
-    <?php endif ?>
     <?php
 }

@@ -24,7 +24,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-define('TIME_HISA', 'h:i:sa'); // Time output format
+define( 'TIME_HISA', 'h:i:sa' ); // Time output format
 
 add_action( 'admin_init', 'rja_admin_front' ); // Admin - before headers sent
 add_action( 'wp', 'rja_admin_front' ); // Frontend - before headers sent
@@ -36,7 +36,7 @@ function rja_admin_front() {
 	}
 
 	if ( ! is_admin() && ! wp_doing_ajax() && ! empty($_POST) ) {
-		foreach ($_POST as $key => $value) {
+		foreach ( $_POST as $key => $value ) {
 			$_POST[$key] = str_replace( '\\', '', $value ); // Remove '\' (i.e. when saving " ' ")
 		}
 	}
@@ -147,7 +147,7 @@ function add_room_caps() {
 	$role->add_cap( 'delete_published_rooms' );
 }
 
-register_deactivation_hook( __FILE__, 'rja_remove_nurse_roles'); // Remove nurse roles on deactivation
+register_deactivation_hook( __FILE__, 'rja_remove_nurse_roles' ); // Remove nurse roles on deactivation
 
 function rja_remove_nurse_roles()
 {
