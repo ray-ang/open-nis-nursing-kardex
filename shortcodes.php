@@ -24,22 +24,22 @@ function rja_page_add_room_header()
 
         $pid = wp_insert_post($room);
 
-        add_metadata( 'post', $pid, 'room_name', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_age', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_sex', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_date_admission', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_doctor', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_reason', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_allergy', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_diet', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_iv_access', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_monitoring', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_urine', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_bowel', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_history', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
-        add_metadata( 'post', $pid, 'room_nursing_plan', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_name', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_age', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_sex', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_date_admission', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_doctor', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_reason', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_allergy', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_diet', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_iv_access', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_monitoring', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_urine', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_bowel', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_history', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_nursing_plan', Basic::encrypt('', KARDEX_PASS) );
 
         $link = get_permalink($pid);
         wp_redirect($link);
