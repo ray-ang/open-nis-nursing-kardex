@@ -54,6 +54,9 @@ function rja_register_room_cpt()
 	    'has_archive'        => true,
 	    'hierarchical'       => true,
 	    'menu_position'      => null,
+	    'show_in_rest'       => false,
+	    'rest_base'          => 'rooms',
+	    'rest_controller_class' => 'WP_REST_Posts_Controller',
 	    'supports'           => array( 'title', /*'editor',*/ 'author', 'custom-fields' )
 	);
 
