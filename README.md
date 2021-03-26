@@ -14,6 +14,10 @@ Define constant 'KARDEX_PASS' in the WordPress configuration file (wp-config.php
 
 define('KARDEX_PASS', 'SecretPassPhrase123'); // Open-NIS encryption and HMAC key
 
+#### Security
+
+Set CPT configuration argument 'show_in_rest' to <em>false</em> to prevent exposure to REST API.
+
 #### Permalink Settings
 
 Make sure to set <em>Common Settings</em> under <em>Permalink Settings</em> to <strong>"Post name"</strong>.
