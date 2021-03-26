@@ -24,16 +24,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-define( 'TIME_HISA', 'h:i:sa' ); // Time output format
+define('TIME_HISA', 'h:i:sa'); // Time output format
+
+if (! class_exists('Basic')) require_once __DIR__ . '/Basic.php'; // BasicPHP class library
 
 add_action( 'admin_init', 'rja_admin_front' ); // Admin - before headers sent
 add_action( 'wp', 'rja_admin_front' ); // Frontend - before headers sent
 
 function rja_admin_front() {
-
-	if ( ! class_exists('Basic') ) {
-		require_once __DIR__ . '/Basic.php'; // BasicPHP class library
-	}
 
 	if ( ! is_admin() && ! wp_doing_ajax() && ! empty($_POST) ) {
 		foreach ( $_POST as $key => $value ) {
@@ -43,8 +41,9 @@ function rja_admin_front() {
 
 }
 
-require_once __DIR__ . '/room.php'; // Room custom post type and template
-require_once __DIR__ . '/shortcodes.php'; // Shortcodes
+// Require only after '\' is removed from $_POST
+if (class_exists('Basic')) require_once __DIR__ . '/room.php'; // Room custom post type and template
+if (class_exists('Basic')) require_once __DIR__ . '/shortcodes.php'; // Shortcodes
 
 add_action( 'admin_init', 'rja_admin_encrypt_btn' ); // Encrypt and decrypt buttons
 
@@ -53,12 +52,10 @@ function rja_admin_encrypt_btn() {
 	if( is_admin() && ! wp_doing_ajax() && isset($_POST['encrypt']) && $_POST['encrypt'] === 'Encrypt' && ! empty($_POST) ) {
 
 		foreach ( $_POST['meta'] as $meta ) {
-
 			if ( ! stristr($meta['value'], 'enc-v') ) {
 				$index = array_search($meta, $_POST['meta']);
 				$_POST['meta'][$index]['value'] = Basic::encrypt($meta['value'], KARDEX_PASS);
 			}
-
 		}
 
 	}
@@ -66,12 +63,10 @@ function rja_admin_encrypt_btn() {
 	if( is_admin() && ! wp_doing_ajax() && isset($_POST['decrypt']) && $_POST['decrypt'] === 'Decrypt' && ! empty($_POST) ) {
 
 		foreach ( $_POST['meta'] as $meta ) {
-
 			if ( stristr($meta['value'], 'enc-v') ) {
 				$index = array_search($meta, $_POST['meta']);
 				$_POST['meta'][$index]['value'] = Basic::decrypt($meta['value'], KARDEX_PASS);
 			}
-
 		}
 
 	}
@@ -153,4 +148,28 @@ function rja_remove_nurse_roles()
 {
 	remove_role( 'nurse' );
 	remove_role( 'nurse_admin' );
+}
+
+add_action( 'rest_api_init', 'api_room_meta_fields' ); // Expose room meta fields to REST API
+
+function api_room_meta_fields() {
+	if ( is_numeric(Basic::segment(5)) ) {
+		register_rest_field( 'room', 'meta', array(
+			'get_callback' => 'get_room_meta_api',
+			'schema'       => null,
+			)
+		);
+	}
+}
+
+function get_room_meta_api( $room ) {
+	$room_id = $room['id']; // Room ID
+	$room_meta = get_post_meta( $room_id ); // Room meta array
+
+	$decrypted = array();
+	foreach ($room_meta as $key => $value) {
+		$decrypted[$key] = Basic::decrypt($value[0], KARDEX_PASS); // Decrypt meta values
+	}
+
+	return $decrypted; // Decrypted room meta array
 }
