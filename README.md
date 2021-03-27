@@ -16,7 +16,7 @@ define('KARDEX_PASS', 'SecretPassPhrase123'); // Open-NIS encryption and HMAC ke
 
 #### Security
 
-Set CPT configuration argument 'show_in_rest' to <em>false</em> to prevent exposure to REST API.
+Set Custom Post Type (CPT) configuration argument <em>'show_in_rest'</em> to <em>false</em> in <strong>room.php</strong> to prevent exposure to REST API.
 
 #### Permalink Settings
 
