@@ -147,7 +147,7 @@ function rja_page_search_room()
                     <div style="float: left; margin-right: 2rem;"><input type="submit" id="search-room" name="search-room" value="Search Room" /></div>
                     <div style="float: left;"><input type="button" value="Clear" id="reset" name="reset" onclick="clearSearch()" /></div>
                 </p>
-            <?php if ( isset($_POST['offset']) && isset($rooms) && ! $error ): ?>
+            <?php if ( isset($_POST['offset']) && isset($rooms) && ! $error && $rooms == true ): ?>
                 <p>
                     <div style="float: left; margin-right: 2rem;"><input type="submit" value="<< Previous" id="previous" name="previous" /></div>
                     <div style="float: left; margin-right: 2rem;"><input type="submit" value="Next >>" id="next" name="next" /></div>
