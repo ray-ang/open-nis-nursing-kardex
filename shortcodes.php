@@ -89,35 +89,56 @@ function rja_page_search_room()
     }
 
     // Search by Room
-    if ( isset($_POST['search-room']) && ! empty($_POST['room-room']) && preg_match('/[a-zA-Z0-9 _#-]/i', $_POST['room-room']) ) {
+    if ( ! empty($_POST['room-room']) && preg_match('/[a-zA-Z0-9 _#-]/i', $_POST['room-room']) ) {
+        if ( isset($_POST['search-room']) || isset($_POST['next']) || isset($_POST['previous']) ) {
 
-        $err_token = ( ! wp_verify_nonce($_POST['token'], 'token') ) ? 'Warning: Please verify authenticity of the form token.' : false;
-        echo $err_token;
+            // Errors
+            $err_token = ( ! wp_verify_nonce($_POST['token'], 'token') ) ? 'Warning: Please verify authenticity of the form token.' : false;
+            echo $err_token;
+            $error = ( $err_token ) ? true : false;
 
-        $error = ( $err_token ) ? true : false;
+            // Maximum offset
+            $count_rooms = get_posts( ['post_type' => 'room', 's' => esc_html($_POST['room-room'])] );
+            $total = count($count_rooms);
+            $max_offset = $total - 1;
 
-        $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+            // Calculate offset
+            if ( isset($_POST['search-room']) ) $_POST['offset'] = 0;
+            if ( isset($_POST['next']) ) {
+                if ($_POST['offset'] > $max_offset) $_POST['offset'] = $max_offset;
+                $_POST['offset'] = $_POST['offset'] + 3;
+            }
+            if ( isset($_POST['previous']) ) {
+                $_POST['offset'] = $_POST['offset'] - 3;
+                if ($_POST['offset'] < 0) $_POST['offset'] = 0;
+            }
+            $offset = $_POST['offset'];
 
-        $args = array(
-            'posts_per_page'    => 3,
-            'offset'            => 0,
-            'paged'             => $paged,
-            's'                 => esc_html($_POST['room-room']),
-            'orderby'           => 'post_title',
-            'order'             => 'ASC',
-            'include'           => array(),
-            'exclude'           => array(),
-            'post_type'         => 'room',
-            'suppress_filters'  => true
-        );
+            $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
-        $rooms = get_posts($args);
-        
+            $args = array(
+                'posts_per_page'    => 3,
+                'offset'            => $offset,
+                'paged'             => $paged,
+                's'                 => esc_html($_POST['room-room']),
+                'orderby'           => 'post_title',
+                'order'             => 'ASC',
+                'include'           => array(),
+                'exclude'           => array(),
+                'post_type'         => 'room',
+                'suppress_filters'  => true
+            );
+
+            $rooms = get_posts( $args );
+            
+        }
     }
 
     ?>
         <div>
             <form method="post">
+                <?php wp_nonce_field( 'token', 'token' ); ?>
+                <input type="hidden" name="offset" value="<?php if ( isset($_POST['offset']) ) echo esc_html($_POST['offset']); ?>" />
                 <p>
                     <label for="room-room">Room</label><br />
                     <input type="text" id="room-room" name="room-room" value="<?php if ( isset($_POST['room-room']) ) echo esc_html($_POST['room-room']); ?>" required />
@@ -126,7 +147,12 @@ function rja_page_search_room()
                     <div style="float: left; margin-right: 2rem;"><input type="submit" id="search-room" name="search-room" value="Search Room" /></div>
                     <div style="float: left;"><input type="button" value="Clear" id="reset" name="reset" onclick="clearSearch()" /></div>
                 </p>
-                <?php wp_nonce_field( 'token', 'token' ); ?>
+            <?php if ( isset($_POST['offset']) && isset($rooms) && ! $error ): ?>
+                <p>
+                    <div style="float: left; margin-right: 2rem;"><input type="submit" value="<< Previous" id="previous" name="previous" /></div>
+                    <div style="float: left; margin-right: 2rem;"><input type="submit" value="Next >>" id="next" name="next" /></div>
+                </p>
+            <?php endif; ?>
             </form>
         </div>
         <script>
