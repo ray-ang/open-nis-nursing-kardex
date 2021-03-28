@@ -82,6 +82,7 @@ function rja_admin_footer() {
 			encryptBtn.type = 'submit';
 			encryptBtn.name = 'encrypt';
 			encryptBtn.value = 'Encrypt';
+			encryptBtn.style.marginRight = '3px';
 			document.querySelector('#publishing-action').appendChild(encryptBtn);
 
 			const decryptBtn = document.createElement('input'); // Decrypt button
