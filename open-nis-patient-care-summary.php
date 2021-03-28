@@ -7,18 +7,14 @@ Version: 0.9.7
 Author: Raymund John Ang
 License: GPL v2 or later
 Text Domain: open-nis
-
 Copyright 2019 Raymund John Ang (email: raymund@open-nis.org)
-
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as
 published by the Free Software Foundation.
-
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
@@ -52,7 +48,7 @@ function rja_admin_encrypt_btn() {
 	if( is_admin() && ! wp_doing_ajax() && isset($_POST['encrypt']) && $_POST['encrypt'] === 'Encrypt' && ! empty($_POST) ) {
 
 		foreach ( $_POST['meta'] as $meta ) {
-			if ( ! stristr($meta['value'], 'enc-v') ) {
+			if ( ! stristr($meta['value'], 'encv') ) {
 				$index = array_search($meta, $_POST['meta']);
 				$_POST['meta'][$index]['value'] = Basic::encrypt($meta['value'], KARDEX_PASS);
 			}
@@ -63,7 +59,7 @@ function rja_admin_encrypt_btn() {
 	if( is_admin() && ! wp_doing_ajax() && isset($_POST['decrypt']) && $_POST['decrypt'] === 'Decrypt' && ! empty($_POST) ) {
 
 		foreach ( $_POST['meta'] as $meta ) {
-			if ( stristr($meta['value'], 'enc-v') ) {
+			if ( stristr($meta['value'], 'encv') ) {
 				$index = array_search($meta, $_POST['meta']);
 				$_POST['meta'][$index]['value'] = Basic::decrypt($meta['value'], KARDEX_PASS);
 			}

@@ -213,7 +213,7 @@ class Basic
 
 	public static function encrypt($plaintext, $pass_phrase=NULL, $cipher='aes-256-gcm')
 	{
-		if (! isset($pass_phrase)) self::apiResponse(500, 'Set passphrase as a constant.'); 
+		if (! isset($pass_phrase)) self::apiResponse(500, 'Set passphrase as a constant.');
 
 		if ($cipher !== 'aes-256-gcm' && $cipher !== 'aes-256-ctr' && $cipher !== 'aes-256-cbc') self::apiResponse(500, "Encryption cipher method should either be 'aes-256-gcm', 'aes-256-ctr' or 'aes-256-cbc'.");
 
@@ -222,7 +222,7 @@ class Basic
 
 			function encrypt_v1($plaintext, $pass_phrase, $cipher) {
 
-				$version = 'enc-v1'; // Version
+				$version = 'encv1'; // Version
 				$salt = random_bytes(16); // Salt
 				$iv = $salt; // Initialization Vector
 
@@ -249,7 +249,8 @@ class Basic
 		}
 
 		/** Version-based encryption */
-		return encrypt_v1($plaintext, $pass_phrase, $cipher); // Default encryption function
+		if ( substr( ltrim($plaintext), 0, 5 ) !== 'encv1' ) return encrypt_v1($plaintext, $pass_phrase, $cipher);
+		return $plaintext;
 	}
 
 	/**
@@ -272,9 +273,6 @@ class Basic
 		if (! function_exists('decrypt_v1')) {
 
 			function decrypt_v1($encrypted, $pass_phrase, $cipher) {
-
-				// Return empty if $encrypted is not set or empty.
-				if (! isset($encrypted) || empty($encrypted)) { return ''; }
 
 				if ($cipher === 'aes-256-gcm') {
 
@@ -329,16 +327,10 @@ class Basic
 
 		}
 
-		$version = explode('.', $encrypted)[0]; // Retrieve encryption version
-
 		/** Version-based decryption */
-		switch ($version) {
-			case 'enc-v1':
-				return decrypt_v1($encrypted, $pass_phrase, $cipher);
-				break;
-			default:
-				return $encrypted; // Return $encrypted if no encryption detected.
-		}
+		if ( substr( ltrim($encrypted), 0, 5 ) === 'encv1' ) return decrypt_v1($encrypted, $pass_phrase, $cipher);
+		if (! isset($encrypted) || empty($encrypted)) { return ''; } // Return empty if $encrypted is not set or empty.
+		return $encrypted;
 	}
 
 	/*
@@ -520,30 +512,36 @@ class Basic
 
 		header('Content-Type: application/json'); // Set content type as JSON
 
-		if (! $body) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => "Request should have a request body."]])); // Require request body
+		if ( $_SERVER['REQUEST_METHOD'] !== 'GET' && $_SERVER['REQUEST_METHOD'] !== 'POST' ) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => 'Only GET and POST methods allowed.'], 'id' => NULL])); // Only GET and POST
 
-		if ($body && ! $array) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => "Provide request body data in valid JSON format."]])); // Require valid JSON
+		if ( $_SERVER['HTTP_CONTENT_TYPE'] !== 'application/json' ) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => "Request content type should be 'application/json'."], 'id' => NULL])); // Accept only JSON request content type
 
-		if (! isset($array['jsonrpc']) || $array['jsonrpc'] !== '2.0') exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'version' member should be set, and assigned a value of '2.0'."]])); // JSON-RPC (version) member
+		if (! $body) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => 'Request should have a request body.'], 'id' => NULL])); // Require request body
 
-		if (! isset($array['method']) || ! strstr($array['method'], '.')) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'method' member should be set with the format 'class.method'."]])); // Method member
+		if ($body && ! $array) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => 'Provide request body data in valid JSON format.'], 'id' => NULL])); // Require valid JSON
+
+		if ( strpos(ltrim($body), '[') === 0 ) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32700, 'message' => 'Batch processing not supported at this time.'], 'id' => NULL])); // No batch processing
+
+		if (! isset($array['jsonrpc']) || $array['jsonrpc'] !== '2.0') exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'version' member should be set, and assigned a value of '2.0'."], 'id' => NULL])); // JSON-RPC (version) member
+
+		if (! isset($array['method']) || ! strstr($array['method'], '.')) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'method' member should be set with the format 'class.method'."], 'id' => NULL])); // Method member
 
 		list($class, $method) = explode('.', $array['method']); // Method member as 'class.method'
 		$class = $class . 'Controller'; // Default controller suffix
 
 		// If class exists
 		if (class_exists($class)) {
-			if (! isset($array['id'])) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'id' member should be set."]])); // Require ID member
+			if (! isset($array['id'])) exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32600, 'message' => "JSON-RPC 'id' member should be set."], 'id' => NULL])); // Require ID member
 
 			$object = new $class();
 			if (method_exists($object, $method)) {
 				$object->$method();
 				exit;
 			} else {
-				exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => "Method not found."], 'id' => $array['id']]));
+				exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => 'Method not found.'], 'id' => NULL]));
 			}
 		} else {
-			exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => "Class not found."], 'id' => $array['id']]));
+			exit(json_encode(['jsonrpc' => '2.0', 'error' => ['code' => -32601, 'message' => 'Class not found.'], 'id' => NULL]));
 		}
 	}
 
