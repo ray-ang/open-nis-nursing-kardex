@@ -147,7 +147,7 @@ function rja_page_search_room()
                     <div style="float: left; margin-right: 2rem;"><input type="submit" id="search-room" name="search-room" value="Search Room" /></div>
                     <div style="float: left;"><input type="button" value="Clear" id="reset" name="reset" onclick="clearSearch()" /></div>
                 </p>
-            <?php if ( isset($_POST['offset']) && isset($rooms) && ! $error && $rooms == true ): ?>
+            <?php if ( isset($_POST['offset']) && $rooms && ! $error ): ?>
                 <p>
                     <div style="float: left; margin-right: 2rem;"><input type="submit" value="<< Previous" id="previous" name="previous" /></div>
                     <div style="float: left; margin-right: 2rem;"><input type="submit" value="Next >>" id="next" name="next" /></div>
@@ -160,13 +160,13 @@ function rja_page_search_room()
                 document.querySelector('#room-room').value = '';
             }
         </script>
-        <?php if ( isset($rooms) && ! $error && $rooms == true ): ?>
+        <?php if ( $rooms && ! $error ): ?>
             <div style="clear: both; margin-top: 6rem;">
             <?php foreach( $rooms as $room ): ?>
                 <p>Room Number: <a href="<?= get_the_permalink($room->ID); ?>"><?= $room->post_title; ?></a> - Patient Name: <a href="<?= get_the_permalink($room->ID); ?>"><?= Basic::decrypt($room->room_name, KARDEX_PASS);?></a></p>
             <?php endforeach ?>
             </div>
-        <?php elseif ( isset($rooms) && ! $error && $rooms !== true ): ?>
+        <?php elseif ( isset($rooms) && ! $error ): ?>
             <div style="clear: both; margin-top: 6rem;">No room was found on search.</div>
         <?php endif ?>
     <?php
