@@ -162,7 +162,7 @@ function rja_single_room_content()
 		return;
 	}
 
-	$room = get_metadata( 'post', get_the_ID() );
+	$room = get_post_custom( get_the_ID() );
 
 	$room_last_edit_user = Basic::decrypt($room['room_last_edit_user'][0], KARDEX_PASS);
 	$room_last_edit_date = Basic::decrypt($room['room_last_edit_date'][0], KARDEX_PASS);
