@@ -180,10 +180,10 @@ function rja_single_room_content()
 	$room_allergy = Basic::decrypt($room['room_allergy'][0], KARDEX_PASS);
 	$room_diet = Basic::decrypt($room['room_diet'][0], KARDEX_PASS);
 	$room_activity = Basic::decrypt($room['room_activity'][0], KARDEX_PASS);
-	$room_iv_access = Basic::decrypt($room['room_iv_access'][0], KARDEX_PASS);
 	$room_monitoring = Basic::decrypt($room['room_monitoring'][0], KARDEX_PASS);
 	$room_urine = Basic::decrypt($room['room_urine'][0], KARDEX_PASS);
 	$room_bowel = Basic::decrypt($room['room_bowel'][0], KARDEX_PASS);
+	$room_iv_access = Basic::decrypt($room['room_iv_access'][0], KARDEX_PASS);
 	$room_history = Basic::decrypt($room['room_history'][0], KARDEX_PASS);
 	$room_medical_notes = Basic::decrypt($room['room_medical_notes'][0], KARDEX_PASS);
 	$room_diagnostics = Basic::decrypt($room['room_diagnostics'][0], KARDEX_PASS);
@@ -193,19 +193,18 @@ function rja_single_room_content()
 			<div>
 				<h3>Room: <?php esc_html(the_title()); ?></h3>
 				<p>Name: <?= esc_html($room_name); ?><br />
-				Age: <?= esc_html($room_age); ?>&nbsp;&nbsp;&nbsp;Sex: <?= esc_html($room_sex); ?>&nbsp;&nbsp;&nbsp;Code Status: <?= esc_html($room_code); ?></p>
+				Age: <?= esc_html($room_age); ?>&nbsp;&nbsp;&nbsp;Sex: <?= esc_html($room_sex); ?>&nbsp;&nbsp;&nbsp;Code: <?= esc_html($room_code); ?></p>
 				<p>Admission Date: <?= esc_html($room_date_admission); ?><br />
 				Providers: <?= esc_html($room_provider); ?><br />
 				Reason: <?= esc_html($room_reason); ?><br />
 				Allergy: <?= esc_html($room_allergy); ?><br />
 				Diet: <?= esc_html($room_diet); ?><br />
-				Activity: <?= esc_html($room_activity); ?></p>
-				<p>IV Access:<br />
-				<?= nl2br(esc_html($room_iv_access)); ?><br />
-				<br />
+				Activity: <?= esc_html($room_activity); ?><br />
 				Monitoring: <?= esc_html($room_monitoring); ?><br />
 				Urine: <?= esc_html($room_urine); ?><br />
 				Bowel Movement: <?= esc_html($room_bowel); ?></p>
+				<p>IV Access:<br />
+				<?= nl2br(esc_html($room_iv_access)); ?></p>
 			</div>
 			<div>
 				<p><em>History:</em><br /><?= nl2br(esc_html($room_history)); ?></p>
@@ -279,11 +278,6 @@ function rja_single_room_content()
 							<input type="text" id="activity" name="activity" value="<?= esc_html($room_activity);?>" required /><br />
 						</p>
 						<p>
-							<label for="iv-access">IV Access </label><br />
-							<small>(Central and/or peripheral. Size, location, fluids or locked. New line each site.)</small><br />
-							<textarea id="iv-access" name="iv-access" required><?= esc_html($room_iv_access); ?></textarea><br />
-						</p>
-						<p>
 							<label for="monitoring">Monitoring & Frequency </label><br />
 							<small>(i.e. vital signs, blood sugar, neuro VS)</small><br />
 							<input type="text" id="monitoring" name="monitoring" value="<?= esc_html($room_monitoring);?>" required /><br />
@@ -297,6 +291,11 @@ function rja_single_room_content()
 							<label for="bowel">Bowel Movement </label><br />
 							<small>(i.e. date of last BM, description)</small><br />
 							<input type="text" id="bowel" name="bowel" value="<?= esc_html($room_bowel);?>" required /><br />
+						</p>
+						<p>
+							<label for="iv-access">IV Access </label><br />
+							<small>(Central and/or peripheral. Size, location, fluids or locked. New line each site.)</small><br />
+							<textarea id="iv-access" name="iv-access" required><?= esc_html($room_iv_access); ?></textarea><br />
 						</p>
 						<p>
 							<label for="history">History</label><br />

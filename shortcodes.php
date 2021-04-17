@@ -34,10 +34,10 @@ function rja_page_add_room_header()
         update_post_meta( $pid, 'room_allergy', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_diet', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_activity', Basic::encrypt('', KARDEX_PASS) );
-        update_post_meta( $pid, 'room_iv_access', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_monitoring', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_urine', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_bowel', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_iv_access', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_history', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_medical_notes', Basic::encrypt('', KARDEX_PASS) );
