@@ -262,8 +262,8 @@ function rja_single_room_content()
 							<input type="text" id="allergy" name="allergy" value="<?= esc_html($room_allergy);?>" required /><br />
 						</p>
 						<p>
-							<label for="diet">Diet </label><br />
-							<small>(Standing diet order and special instructions.)</small><br />
+							<label for="diet">Diet & Restrictions </label><br />
+							<small>(Diet order & restrictions - e.g. NPO, fluid restrictions)</small><br />
 							<input type="text" id="diet" name="diet" value="<?= esc_html($room_diet);?>" required /><br />
 						</p>
 						<p>
