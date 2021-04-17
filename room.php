@@ -88,6 +88,7 @@ function rja_single_room_content_header()
 		update_post_meta( $pid, 'room_name', Basic::encrypt($_POST['room-name'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_age', Basic::encrypt($_POST['age'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_sex', Basic::encrypt($_POST['sex'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_code', Basic::encrypt($_POST['code'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_date_admission', Basic::encrypt($_POST['admission-date'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_provider', Basic::encrypt($_POST['provider'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_reason', Basic::encrypt($_POST['reason'], KARDEX_PASS) );
@@ -172,6 +173,7 @@ function rja_single_room_content()
 	$room_age = Basic::decrypt($room['room_age'][0], KARDEX_PASS);
 	if ( Basic::decrypt($room['room_sex'][0], KARDEX_PASS) == 'M' ) { $room_sex = 'Male'; }
 	if ( Basic::decrypt($room['room_sex'][0], KARDEX_PASS) == 'F' ) { $room_sex = 'Female'; }
+	$room_code = Basic::decrypt($room['room_code'][0], KARDEX_PASS);
 	$room_date_admission = Basic::decrypt($room['room_date_admission'][0], KARDEX_PASS);
 	$room_provider = Basic::decrypt($room['room_provider'][0], KARDEX_PASS);
 	$room_reason = Basic::decrypt($room['room_reason'][0], KARDEX_PASS);
@@ -191,7 +193,7 @@ function rja_single_room_content()
 			<div>
 				<h3>Room: <?php esc_html(the_title()); ?></h3>
 				<p>Name: <?= esc_html($room_name); ?><br />
-				Age: <?= esc_html($room_age); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sex: <?= esc_html($room_sex); ?></p>
+				Age: <?= esc_html($room_age); ?>&nbsp;&nbsp;&nbsp;Sex: <?= esc_html($room_sex); ?>&nbsp;&nbsp;&nbsp;Code Status: <?= esc_html($room_code); ?></p>
 				<p>Admission Date: <?= esc_html($room_date_admission); ?><br />
 				Providers: <?= esc_html($room_provider); ?><br />
 				Reason: <?= esc_html($room_reason); ?><br />
@@ -241,6 +243,11 @@ function rja_single_room_content()
 								<option value="M" <?php if (Basic::decrypt($room['room_sex'][0], KARDEX_PASS)=='M') echo 'selected="selected"'; ?>>Male</option>
 								<option value="F" <?php if (Basic::decrypt($room['room_sex'][0], KARDEX_PASS)=='F') echo 'selected="selected"'; ?>>Female</option>
 							</select>
+						</p>
+						<p>
+							<label for="code">Code Status</label><br />
+							<small>(e.g. Full code, DNR, Limited - specify)</small><br />
+							<input type="text" id="code" name="code" value="<?= esc_html($room_code); ?>" required />
 						</p>
 						<p>
 							<label for="admission-date">Date of Admission</label><br />
