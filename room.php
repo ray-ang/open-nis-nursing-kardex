@@ -277,8 +277,8 @@ function rja_single_room_content()
 							<textarea id="iv-access" name="iv-access" required><?= esc_html($room_iv_access); ?></textarea><br />
 						</p>
 						<p>
-							<label for="monitoring">Monitoring </label><br />
-							<small>(Vital signs, neurological, vascular checks, etc. and frequency.)</small><br />
+							<label for="monitoring">Monitoring & Frequency </label><br />
+							<small>(i.e. vital signs, blood sugar, neuro VS, etc.)</small><br />
 							<input type="text" id="monitoring" name="monitoring" value="<?= esc_html($room_monitoring);?>" required /><br />
 						</p>
 						<p>
