@@ -170,3 +170,9 @@ function get_room_meta_api( $room ) {
 
 	return $decrypted; // Decrypted room meta array
 }
+
+add_filter( 'login_redirect', 'redirect_after_login' ); // Redirect after login
+
+function redirect_after_login() {
+	return home_url(); // Homepage
+}
