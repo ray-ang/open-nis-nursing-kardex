@@ -301,8 +301,8 @@ function rja_single_room_content()
 							<textarea id="medical-notes" name="medical-notes" required><?= esc_html($room_medical_notes); ?></textarea><br />
 						</p>
 						<p>
-							<label for="diagnostics">Laboratory and Diagnostics </label><br />
-							<small>(Blood works, imaging and other diagnostics. Indicate if pending or done.)</small><br />
+							<label for="diagnostics">Laboratory & Diagnostics </label><br />
+							<small>(Pertinent laboratory, imaging and other diagnostic results)</small><br />
 							<textarea id="diagnostics" name="diagnostics" required><?= esc_html($room_diagnostics); ?></textarea><br />
 						</p>
 						<p>
