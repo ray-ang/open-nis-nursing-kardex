@@ -28,7 +28,7 @@ function rja_page_add_room_header()
         update_post_meta( $pid, 'room_age', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_sex', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_date_admission', Basic::encrypt('', KARDEX_PASS) );
-        update_post_meta( $pid, 'room_doctor', Basic::encrypt('', KARDEX_PASS) );
+        update_post_meta( $pid, 'room_provider', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_reason', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_allergy', Basic::encrypt('', KARDEX_PASS) );
         update_post_meta( $pid, 'room_diet', Basic::encrypt('', KARDEX_PASS) );

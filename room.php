@@ -89,7 +89,7 @@ function rja_single_room_content_header()
 		update_post_meta( $pid, 'room_age', Basic::encrypt($_POST['age'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_sex', Basic::encrypt($_POST['sex'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_date_admission', Basic::encrypt($_POST['admission-date'], KARDEX_PASS) );
-		update_post_meta( $pid, 'room_doctor', Basic::encrypt($_POST['doctor'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_provider', Basic::encrypt($_POST['provider'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_reason', Basic::encrypt($_POST['reason'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_allergy', Basic::encrypt($_POST['allergy'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_diet', Basic::encrypt($_POST['diet'], KARDEX_PASS) );
@@ -173,7 +173,7 @@ function rja_single_room_content()
 	if ( Basic::decrypt($room['room_sex'][0], KARDEX_PASS) == 'M' ) { $room_sex = 'Male'; }
 	if ( Basic::decrypt($room['room_sex'][0], KARDEX_PASS) == 'F' ) { $room_sex = 'Female'; }
 	$room_date_admission = Basic::decrypt($room['room_date_admission'][0], KARDEX_PASS);
-	$room_doctor = Basic::decrypt($room['room_doctor'][0], KARDEX_PASS);
+	$room_provider = Basic::decrypt($room['room_provider'][0], KARDEX_PASS);
 	$room_reason = Basic::decrypt($room['room_reason'][0], KARDEX_PASS);
 	$room_allergy = Basic::decrypt($room['room_allergy'][0], KARDEX_PASS);
 	$room_diet = Basic::decrypt($room['room_diet'][0], KARDEX_PASS);
@@ -193,7 +193,7 @@ function rja_single_room_content()
 				<p>Name: <?= esc_html($room_name); ?><br />
 				Age: <?= esc_html($room_age); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sex: <?= esc_html($room_sex); ?></p>
 				<p>Admission Date: <?= esc_html($room_date_admission); ?><br />
-				Doctor: <?= esc_html($room_doctor); ?><br />
+				Providers: <?= esc_html($room_provider); ?><br />
 				Reason: <?= esc_html($room_reason); ?><br />
 				Allergy: <?= esc_html($room_allergy); ?><br />
 				Diet: <?= esc_html($room_diet); ?><br />
@@ -247,9 +247,9 @@ function rja_single_room_content()
 							<input type="date" id="admission-date" name="admission-date" value="<?= esc_html($room_date_admission); ?>" required />
 						</p>
 						<p>
-							<label for="doctor">Doctor </label><br />
-							<small>(Attending physician and consultants.)</small><br />
-							<input type="text" id="doctor" name="doctor" value="<?= esc_html($room_doctor);?>" required /><br />
+							<label for="provider">Providers & Referrals </label><br />
+							<small>(Attending, consultants & other referrals. Separate by commas.)</small><br />
+							<input type="text" id="provider" name="provider" value="<?= esc_html($room_provider);?>" required /><br />
 						</p>
 						<p>
 							<label for="reason">Reason for Admission </label><br />
