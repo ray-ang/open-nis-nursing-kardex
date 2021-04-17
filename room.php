@@ -234,7 +234,7 @@ function rja_single_room_content()
 						</p>
 						<p>
 							<label for="age">Age </label><br />
-							<small>(In years.)</small><br />
+							<small>(In Years)</small><br />
 							<input type="number" id="age" name="age" value="<?= esc_html($room_age); ?>" <?php echo ($room_age == '') ? 'required' : 'readonly'; ?> />
 						</p>
 						<p>
@@ -260,22 +260,22 @@ function rja_single_room_content()
 						</p>
 						<p>
 							<label for="reason">Reason for Admission </label><br />
-							<small>(Signs, symptoms or brief history.)</small><br />
+							<small>(Signs, symptoms or brief history)</small><br />
 							<input type="text" id="reason" name="reason" value="<?= esc_html($room_reason);?>" required /><br />
 						</p>
 						<p>
 							<label for="allergy">Allergy </label><br />
-							<small>(Food, drug and environmental allergies.)</small><br />
+							<small>(Food, drug and environmental allergies)</small><br />
 							<input type="text" id="allergy" name="allergy" value="<?= esc_html($room_allergy);?>" required /><br />
 						</p>
 						<p>
 							<label for="diet">Diet & Restrictions </label><br />
-							<small>(Diet order & restrictions - e.g. NPO, fluid restrictions)</small><br />
+							<small>(e.g. Regular, NPO, fluid restrictions)</small><br />
 							<input type="text" id="diet" name="diet" value="<?= esc_html($room_diet);?>" required /><br />
 						</p>
 						<p>
-							<label for="activity">Activity </label><br />
-							<small>(Activity - e.g. Activity as tolerated, Bedrest, etc.)</small><br />
+							<label for="activity">Activity & Mobility </label><br />
+							<small>(e.g. Activity as tolerated, Bedrest)</small><br />
 							<input type="text" id="activity" name="activity" value="<?= esc_html($room_activity);?>" required /><br />
 						</p>
 						<p>
@@ -285,17 +285,17 @@ function rja_single_room_content()
 						</p>
 						<p>
 							<label for="monitoring">Monitoring & Frequency </label><br />
-							<small>(i.e. vital signs, blood sugar, neuro VS, etc.)</small><br />
+							<small>(i.e. vital signs, blood sugar, neuro VS)</small><br />
 							<input type="text" id="monitoring" name="monitoring" value="<?= esc_html($room_monitoring);?>" required /><br />
 						</p>
 						<p>
-							<label for="urine">Urine </label><br />
-							<small>(Description - i.e. color, transparency.)</small><br />
+							<label for="urine">Urine Description </label><br />
+							<small>(i.e. color, transparency)</small><br />
 							<input type="text" id="urine" name="urine" value="<?= esc_html($room_urine);?>" required /><br />
 						</p>
 						<p>
 							<label for="bowel">Bowel Movement </label><br />
-							<small>(Last BM, description.)</small><br />
+							<small>(i.e. date of last BM, description)</small><br />
 							<input type="text" id="bowel" name="bowel" value="<?= esc_html($room_bowel);?>" required /><br />
 						</p>
 						<p>
@@ -304,7 +304,7 @@ function rja_single_room_content()
 						</p>
 						<p>
 							<label for="medical-notes">Medical Notes </label><br />
-							<small>(Pertinent medical notes and plan of care.)</small><br />
+							<small>(Pertinent medical notes and plan of care)</small><br />
 							<textarea id="medical-notes" name="medical-notes" required><?= esc_html($room_medical_notes); ?></textarea><br />
 						</p>
 						<p>
@@ -314,7 +314,7 @@ function rja_single_room_content()
 						</p>
 						<p>
 							<label for="nursing-plan">Nursing Plan of Care & Reminders </label><br />
-							<small>(Nursing notes, plan of care & reminders.)</small><br />
+							<small>(Nursing notes, plan of care & reminders)</small><br />
 							<textarea id="nursing-plan" name="nursing-plan" required><?= esc_html($room_nursing_plan); ?></textarea><br />
 						</p>
 						<p>
