@@ -93,6 +93,7 @@ function rja_single_room_content_header()
 		update_post_meta( $pid, 'room_reason', Basic::encrypt($_POST['reason'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_allergy', Basic::encrypt($_POST['allergy'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_diet', Basic::encrypt($_POST['diet'], KARDEX_PASS) );
+		update_post_meta( $pid, 'room_activity', Basic::encrypt($_POST['activity'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_iv_access', Basic::encrypt($_POST['iv-access'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_monitoring', Basic::encrypt($_POST['monitoring'], KARDEX_PASS) );
 		update_post_meta( $pid, 'room_urine', Basic::encrypt($_POST['urine'], KARDEX_PASS) );
@@ -176,6 +177,7 @@ function rja_single_room_content()
 	$room_reason = Basic::decrypt($room['room_reason'][0], KARDEX_PASS);
 	$room_allergy = Basic::decrypt($room['room_allergy'][0], KARDEX_PASS);
 	$room_diet = Basic::decrypt($room['room_diet'][0], KARDEX_PASS);
+	$room_activity = Basic::decrypt($room['room_activity'][0], KARDEX_PASS);
 	$room_iv_access = Basic::decrypt($room['room_iv_access'][0], KARDEX_PASS);
 	$room_monitoring = Basic::decrypt($room['room_monitoring'][0], KARDEX_PASS);
 	$room_urine = Basic::decrypt($room['room_urine'][0], KARDEX_PASS);
@@ -194,7 +196,8 @@ function rja_single_room_content()
 				Doctor: <?= esc_html($room_doctor); ?><br />
 				Reason: <?= esc_html($room_reason); ?><br />
 				Allergy: <?= esc_html($room_allergy); ?><br />
-				Diet: <?= esc_html($room_diet); ?></p>
+				Diet: <?= esc_html($room_diet); ?><br />
+				Activity: <?= esc_html($room_activity); ?></p>
 				<p>IV Access:<br />
 				<?= nl2br(esc_html($room_iv_access)); ?><br />
 				<br />
@@ -262,6 +265,11 @@ function rja_single_room_content()
 							<label for="diet">Diet </label><br />
 							<small>(Standing diet order and special instructions.)</small><br />
 							<input type="text" id="diet" name="diet" value="<?= esc_html($room_diet);?>" required /><br />
+						</p>
+						<p>
+							<label for="activity">Activity </label><br />
+							<small>(Activity - e.g. Activity as tolerated, Bedrest, etc.)</small><br />
+							<input type="text" id="activity" name="activity" value="<?= esc_html($room_activity);?>" required /><br />
 						</p>
 						<p>
 							<label for="iv-access">IV Access </label><br />
