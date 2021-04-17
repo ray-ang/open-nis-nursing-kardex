@@ -20,8 +20,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-define('TIME_HISA', 'h:i:sa'); // Time output format
-
 if (! class_exists('Basic')) require_once __DIR__ . '/Basic.php'; // BasicPHP class library
 
 add_action( 'admin_init', 'rja_admin_front' ); // Admin - before headers sent
