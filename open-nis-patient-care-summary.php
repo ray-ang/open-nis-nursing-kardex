@@ -20,7 +20,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA02110-1301USA
 */
 
-if (! class_exists('Basic')) require_once __DIR__ . '/Basic.php'; // BasicPHP class library
+if (! class_exists('Basic')) require_once __DIR__ . '/libs/basic/Basic.php'; // BasicPHP class library
 
 add_action( 'admin_init', 'rja_admin_front' ); // Admin - before headers sent
 add_action( 'wp', 'rja_admin_front' ); // Frontend - before headers sent
