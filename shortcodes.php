@@ -107,7 +107,6 @@ function rja_page_search_room()
             // Calculate offset
             if ( isset($_POST['search-room']) ) $_POST['offset'] = 0;
             if ( isset($_POST['next']) ) {
-                if ($_POST['offset'] > $max_offset) $_POST['offset'] = $max_offset;
                 $_POST['offset'] = $_POST['offset'] + 3;
             }
             if ( isset($_POST['previous']) ) {
