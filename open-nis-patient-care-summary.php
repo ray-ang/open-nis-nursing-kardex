@@ -29,7 +29,7 @@ function rja_admin_front() {
 
 	if ( ! is_admin() && ! wp_doing_ajax() && ! empty($_POST) ) {
 		foreach ( $_POST as $key => $value ) {
-			$_POST[$key] = str_replace( '\\', '', $value ); // Remove '\' (i.e. when saving " ' ")
+			$_POST[$key] = stripslashes($value); // Remove '\' (i.e. when saving " ' ")
 		}
 	}
 
