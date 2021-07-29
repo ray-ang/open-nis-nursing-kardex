@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Open-NIS Nursing ekardex
-Plugin URI: https://github.com/ray-ang/open-nis-patient-care-summary
-Description: A WordPress-based electronic nursing kardex or patient care summary
-Version: 0.9.7
+Plugin Name: Open-NIS Electronic Nursing Kardex
+Plugin URI: https://github.com/ray-ang/open-nis-nursing-kardex
+Description: A WordPress-based electronic nursing kardex
+Version: 0.9.8
 Author: Raymund John Ang
 License: GPL v2 or later
 Text Domain: open-nis
