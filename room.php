@@ -121,9 +121,9 @@ function rja_single_room_content_header()
 }
 
 // Custom JavaScript
-add_action( 'wp_footer', 'rja_single_room_header_script' );
+add_action( 'wp_footer', 'rja_single_room_script' );
 
-function rja_single_room_header_script()
+function rja_single_room_script()
 {
 	?>
 	<script>
@@ -146,6 +146,37 @@ function rja_single_room_header_script()
 			document.body.style.margin = '30px';
 			document.querySelector('#no-print').innerHTML = '';
 			window.print();
+		}
+
+		function clearData() {
+			const roomValue = document.querySelector('#room').value;
+			const pidValue = document.querySelector('#pid').value;
+			const tokenValue = document.querySelector('#token').value;
+
+			const input = document.querySelectorAll('input');
+			input.forEach((field) => {
+				field.value = '';
+			});
+
+			const select = document.querySelectorAll('select');
+			select.forEach((field) => {
+				field.value = '';
+			});
+
+			const textarea = document.querySelectorAll('textarea');
+			textarea.forEach((field) => {
+				field.innerHTML = '';
+			});
+
+			document.querySelector('#room').value = roomValue;
+			document.querySelector('#pid').value = pidValue;
+			document.querySelector('#token').value = tokenValue;
+			document.querySelector('#room-name').removeAttribute('readonly');
+			document.querySelector('#room-name').setAttribute('required', true);
+			document.querySelector('#age').removeAttribute('readonly');
+			document.querySelector('#age').setAttribute('required', true);
+			document.querySelector('#edit-room').value = 'Edit Patient';
+			document.querySelector('#delete-room').value = 'Delete Room';
 		}
 	</script>
 	<?php
@@ -318,6 +349,7 @@ function rja_single_room_content()
 						</p>
 						<p>
 							<input type="submit" value="Edit Patient" id="edit-room" name="edit-room" />
+							<button type="button" onclick="clearData()">Clear Data</button>
 						</p>
 						<!-- <p><input type="reset" value="Clear Details" id="reset-form" name="reset-form" /></p> -->
 						<?php wp_nonce_field( 'token', 'token' ); ?>
