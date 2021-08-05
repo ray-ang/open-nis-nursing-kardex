@@ -169,7 +169,7 @@ function rja_single_room_script()
 			document.querySelector('#room-name').setAttribute('required', true);
 			document.querySelector('#age').removeAttribute('readonly');
 			document.querySelector('#age').setAttribute('required', true);
-			document.querySelector('#edit-room').value = 'Edit Patient';
+			document.querySelector('#edit-room').value = 'Save Changes';
 			document.querySelector('#delete-room').value = 'Delete Room';
 		}
 	</script>
@@ -342,7 +342,7 @@ function rja_single_room_content()
 							<textarea id="nursing-plan" name="nursing-plan" required><?= esc_html($room_nursing_plan); ?></textarea><br />
 						</p>
 						<p>
-							<input type="submit" value="Edit Patient" id="edit-room" name="edit-room" />
+							<input type="submit" value="Save Changes" id="edit-room" name="edit-room" />
 							<button type="button" onclick="clearData()">Clear Data</button>
 						</p>
 						<!-- <p><input type="reset" value="Clear Details" id="reset-form" name="reset-form" /></p> -->
