@@ -154,19 +154,13 @@ function rja_single_room_script()
 			const tokenValue = document.querySelector('#token').value;
 
 			const input = document.querySelectorAll('input');
-			input.forEach((field) => {
-				field.value = '';
-			});
+			input.forEach(field => field.value = '');
 
 			const select = document.querySelectorAll('select');
-			select.forEach((field) => {
-				field.value = '';
-			});
+			select.forEach(field => field.value = '');
 
 			const textarea = document.querySelectorAll('textarea');
-			textarea.forEach((field) => {
-				field.innerHTML = '';
-			});
+			textarea.forEach(field => field.innerHTML = '');
 
 			document.querySelector('#room').value = roomValue;
 			document.querySelector('#pid').value = pidValue;
